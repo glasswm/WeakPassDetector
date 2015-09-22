@@ -1,60 +1,37 @@
 __author__ = 'wm'
 
-from sqlalchemy import create_engine, Table, Column, Integer, String, Text, MetaData, ForeignKey
+from sqlalchemy import create_engine, Table, Column, String, MetaData
 from sqlalchemy.sql import select
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy_enum34 import EnumType
+from sqlalchemy.orm import sessionmaker
 
-from base import singleton, DatabaseType, EncryptAlgorithmType
-
-Base = declarative_base()
-
-@singleton
-class DBUtil(object):
-    pass
-
-class SystemInfo(Base):
-    __tablename__ = 'systems'
-    id = Column(Integer, primary_key=True)
-    sys_name = Column(String, nullable=False)
-    db_type = Column(EnumType(DatabaseType), nullable=False)
-    db_ip = Column(String, nullable=False)
-    db_port = Column(String, nullable=False)
-    db_name = Column(String, nullable=False)
-    db_table_name = Column(String, nullable=False)
-    db_column_username = Column(String, nullable=False)
-    db_column_password = Column(String, nullable=False)
-    db_password_encrypt_algorithm = Column(EnumType(EncryptAlgorithmType), nullable=False)
+from common import DatabaseType, EncryptAlgorithmType
+from models import SystemInfo, Base
 
 
-    def __repr__(self):
-       return "<SystemInfo(sys_name='%s', db_type='%s', db_name='%s')>" % (self.sys_name, self.db_type, self.db_name)
+def db_init():
+    sysinfo_db_engine = create_engine('sqlite:///:memory:', echo=False)
+    Base.metadata.create_all(sysinfo_db_engine)
+    Session = sessionmaker(bind=sysinfo_db_engine)
+    session = Session()
+    demo_system = SystemInfo(sys_name='oa', db_type=DatabaseType.oracle, db_ip='127.0.0.1',
+                         db_port='1521', db_name='db', db_table_name='accounts', db_column_username='username',
+                         db_column_password='password', db_password_encrypt_algorithm=EncryptAlgorithmType.md5)
+    session.add(demo_system)
+    session.commit()
 
-sysinfo_db_engine = create_engine('sqlite:///:memory:', echo=True)
-Base.metadata.create_all(sysinfo_db_engine)
+if __name__ == '__main__':
+    db_init()
+    engine = create_engine('mysql+mysqlconnector://root:7410@localhost:3306/wpd', echo=False)
+    conn = engine.connect()
+    metadata = MetaData()
 
+    users = Table('user_table', metadata,
+                  Column('user_id', String),
+                  Column('user_password', String),
+                  )
 
-engine = create_engine('mysql+mysqlconnector://root:7410@localhost:3306/wpd', echo=True)
-conn = engine.connect()
-metadata = MetaData()
-
-
-# users = Table('user_table', metadata,
-#               Column('id', Integer, primary_key=True),
-#               Column('user_id', String),
-#               Column('user_password', String),
-#               Column('other', Text),
-#               )
-
-users = Table('user_table', metadata,
-              Column('user_id', String),
-              Column('user_password', String),
-              )
-
-
-s = select([users])
-result = conn.execute(s)
-for row in result:
-    print row
-
-result.close()
+    s = select([users])
+    result = conn.execute(s)
+    for row in result:
+        print row
+    result.close()
