@@ -24,28 +24,44 @@ class SystemInfo(Base):
     db_password_encrypt_algorithm = Column(EnumType(EncryptAlgorithmType), nullable=False)
 
     def __repr__(self):
-       return "<SystemInfo(sys_name='%s', db_type='%s', db_name='%s')>" % (self.sys_name, self.db_type, self.db_name)
+       return "<SystemInfo(id=%d, sys_name='%s', db_type='%s', db_name='%s')>" % (self.id, self.sys_name, self.db_type, self.db_name)
 
 
 @singleton
 class DBUtil(object):
 
-    Session = None
+    session = None
 
     def __init__(self):
         sysinfo_db_engine = create_engine('sqlite:///' + LOCAL_DB_File, echo=False)
         Base.metadata.create_all(sysinfo_db_engine)
-        self.Session = sessionmaker(bind=sysinfo_db_engine)
+        Session = sessionmaker(bind=sysinfo_db_engine)
+        self.session = Session()
 
     def add_system(self, system_info):
-        session =  self.Session()
-        session.add(system_info)
-        session.commit()
-        session.close()
+        self.session.add(system_info)
+        self.session.commit()
 
     def get_all_system(self):
+        res = self.session.query(SystemInfo).all()
+        return res
 
-        pass
 
     def get_system_by_id(self, id):
-        pass
+        res = self.session.query(SystemInfo).filter(SystemInfo.id==id).first()
+        return res
+
+    def update_system(self, SystemInfo):
+        self.commit()
+
+    def del_system_by_id(self, id):
+        sys_info = self.session.query(SystemInfo).filter(SystemInfo.id==id)
+        self.session.delete(sys_info)
+        self.session.commit()
+
+    def del_system(self, sys_info):
+        self.session.delete(sys_info)
+        self.session.commit()
+
+    def __del__(self):
+        self.session.close()
