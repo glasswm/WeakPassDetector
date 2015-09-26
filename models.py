@@ -1,6 +1,9 @@
+from sqlalchemy.orm import sessionmaker
+from __setting__ import LOCAL_DB_File
+
 __author__ = 'wm'
 
-from sqlalchemy import Column, Integer, Sequence, String
+from sqlalchemy import Column, Integer, Sequence, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_enum34 import EnumType
 from common import DatabaseType, EncryptAlgorithmType, singleton
@@ -26,4 +29,23 @@ class SystemInfo(Base):
 
 @singleton
 class DBUtil(object):
-    pass
+
+    Session = None
+
+    def __init__(self):
+        sysinfo_db_engine = create_engine('sqlite:///' + LOCAL_DB_File, echo=False)
+        Base.metadata.create_all(sysinfo_db_engine)
+        self.Session = sessionmaker(bind=sysinfo_db_engine)
+
+    def add_system(self, system_info):
+        session =  self.Session()
+        session.add(system_info)
+        session.commit()
+        session.close()
+
+    def get_all_system(self):
+
+        pass
+
+    def get_system_by_id(self, id):
+        pass
