@@ -1,13 +1,7 @@
-from __setting__ import LOCAL_DB_File
-
 __author__ = 'wm'
 
-from sqlalchemy import create_engine, Table, Column, String, MetaData
-from sqlalchemy.sql import select
-from sqlalchemy.orm import sessionmaker
-
 from common import DatabaseType, EncryptAlgorithmType
-from models import SystemInfo, Base, DBUtil
+from models import SystemInfo, DBUtil
 
 
 def test():
