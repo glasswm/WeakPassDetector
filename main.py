@@ -4,16 +4,19 @@ from common import DatabaseType, EncryptAlgorithmType
 from models import SystemInfo, DBUtil
 
 
-def test():
+def test_get_account_data():
     db_util = DBUtil()
-    id = 12
-    print '____________________%d' % id
-    s =  db_util.get_system_by_id(id)
-    print s
-    s.get_account_data(username='root', password='7410')
+
+    test_system = SystemInfo(sys_name='test_system', db_type=DatabaseType.mysql, db_ip='127.0.0.1',
+                         db_port='3306', db_name='wpd', db_table_name='user_table', db_column_username='user_id',
+                         db_column_password='user_password', db_password_encrypt_algorithm=EncryptAlgorithmType.md5)
+
+    db_util.add_system(test_system)
+    print '____________________%d' % test_system.id
+    test_system.get_account_data(username='root', password='7410')
 
 
-def demotest():
+def test_sysinfo_manage():
     db_util = DBUtil()
 
     #create
