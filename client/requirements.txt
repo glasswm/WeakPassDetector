@@ -3,4 +3,5 @@ SQLAlchemy==1.0.8
 SQLAlchemy-Enum34==1.0.1
 enum34==1.0.4
 json-rpc==1.10.2
+requests==2.7.0
 mysql-connector-python=2.0.4 #may be failed, use "pip install mysql-connector-python --allow-external mysql-connector-python"
