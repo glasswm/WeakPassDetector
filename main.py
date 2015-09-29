@@ -44,4 +44,4 @@ def test_sysinfo_manage():
     print s
 
 if __name__ == '__main__':
-    test()
+    test_sysinfo_manage()
