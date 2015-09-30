@@ -4,7 +4,7 @@ from common import DatabaseType, EncryptAlgorithmType
 from models import SystemInfo, DBUtil
 
 
-def test_get_account_data():
+def test_get_account_data_mysql():
     db_util = DBUtil()
 
     test_system = SystemInfo(sys_name='test_system', db_type=DatabaseType.mysql, db_ip='127.0.0.1',
@@ -14,6 +14,17 @@ def test_get_account_data():
     db_util.add_system(test_system)
     print '____________________%d' % test_system.id
     test_system.get_account_data(username='root', password='7410')
+
+def test_get_account_data_oracle():
+    db_util = DBUtil()
+
+    test_system = SystemInfo(sys_name='test_system2', db_type=DatabaseType.oracle, db_ip='192.168.238.130',
+                         db_port='1521', db_name='ora11g', db_table_name='PM_BID_PROJECT_INFO', db_column_username='PRJ_NO',
+                         db_column_password='BID_NAME', db_password_encrypt_algorithm=EncryptAlgorithmType.md5)
+
+    db_util.add_system(test_system)
+    print '____________________%d' % test_system.id
+    test_system.get_account_data(username='SGCIS', password='sgcis')
 
 
 def test_sysinfo_manage():
@@ -44,4 +55,4 @@ def test_sysinfo_manage():
     print s
 
 if __name__ == '__main__':
-    test_sysinfo_manage()
+    test_get_account_data_oracle()

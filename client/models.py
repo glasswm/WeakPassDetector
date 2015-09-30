@@ -34,7 +34,7 @@ class SystemInfo(Base):
             driver = 'mysqlconnector'
         elif (self.db_type == DatabaseType.oracle):
             dialect = 'oracle'
-            driver = ''
+            driver = 'cx_oracle'
         else:
             logging.error(('unknown database type %s' % self.db_type))
             exit()
