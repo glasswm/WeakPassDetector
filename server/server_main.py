@@ -1,4 +1,4 @@
-from server.dboperator import askDB
+from dboperator import askDB
 
 __author__ = 'wm'
 
@@ -45,4 +45,4 @@ def application(request):
 
 
 if __name__ == '__main__':
-    run_simple('localhost', 4000, application)
+    run_simple('0.0.0.0', 4000, application)
