@@ -1,6 +1,8 @@
+from server.dboperator import askDB
+
 __author__ = 'wm'
 
-
+import logging
 from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
 
@@ -9,7 +11,26 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 
 @dispatcher.add_method
 def foobar(**kwargs):
-    return kwargs["foo"] + kwargs["bar"]
+    return kwargs['foo'] + kwargs['bar']
+
+@dispatcher.add_method
+def check_weak_pass(**kwargs):
+    support_encrypt_algorithm = ('md5', 'sha1')
+    if ('encrypt_algorithm' not in kwargs or 'cipher_list' not in kwargs):
+        logging.warning('invalid params')
+        return 'invalid params'
+
+    encrypt_algorithm = kwargs['encrypt_algorithm']
+    cipher_list = kwargs['cipher_list']
+
+    if encrypt_algorithm not in support_encrypt_algorithm:
+        logging.warning('unsupport encrypt algorithm')
+        return 'unsupport encrypt algorithm'
+    elif cipher_list == None or len(cipher_list)==0:
+        logging.warning('cipher list is empty')
+        return 'cipher list is empty'
+    else:
+        return askDB(encrypt_algorithm, cipher_list)
 
 
 @Request.application
