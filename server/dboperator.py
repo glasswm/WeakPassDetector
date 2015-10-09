@@ -6,7 +6,7 @@ def askDB(dataType,dataList):
     if dataType == "md5":
         return askMd5DB(dataList)
     elif dataType == "sha1":
-        return askSha1DB(sha1List)
+        return askSha1DB(dataList)
     else:
         return -1,-1,-1    
 
