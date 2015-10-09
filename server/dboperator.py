@@ -1,7 +1,19 @@
 import sqlite3
 import os
 
-def askDB(md5List):    
+def askDB(dataType,dataList):
+    if dataType == "md5":
+        return askMd5DB(dataList)
+    elif dataType == "sha1":
+        return askSha1DB(sha1List)
+    else:
+        return -1,-1,-1
+    
+
+def askSha1DB(sha1List):
+    pass
+
+def askMd5DB(md5List):
     weakList = []
     strongList = []
     unknowList = []    
@@ -15,7 +27,9 @@ def askDB(md5List):
             strongList.append(md5Str)
         else:
             unknowList.append(md5Str)
-    return weakList,strongList,unknowList
+    return weakList,strongList,unknowList    
+    
+
 
 def isInTable(md5Str,tableName,cur):
     sql = "select count(*) from " + tableName + " where md5=\"" + md5Str + "\""
