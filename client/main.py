@@ -57,4 +57,4 @@ def test_sysinfo_manage():
 if __name__ == '__main__':
     test_get_account_data_oracle()
 
-    #test end by jack
+    #test end by jack,new test
