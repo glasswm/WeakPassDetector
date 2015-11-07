@@ -1,199 +1,208 @@
-#-*-coding:utf-8-*-
-import wx
-import wx.lib.masked as masked
+# -*- coding: utf-8 -*-
+import  wx
+import wx.lib.masked as masked 
+from newSysDlg import TestDialog
 
-#def button
-# def bt_start(event):
-#     print "IPµÿ÷∑              is  ", m_Text_IP.GetAddress()
-#     print "∂Àø⁄                   is  ", m_Text_Port.GetValue()
-#     print " ˝æ›ø‚¿‡–Õ    is  ", m_Choice_DBType.GetStringSelection()
-#     print "º”√‹À„∑®         is  ", m_Choice_Cyptype.GetStringSelection()
-#     print " ˝æ›ø‚√˚         is  ", m_Text_DBname.GetValue()
-#     print "±Ì√˚                   is  ", m_Text_Sheetname.GetValue()
-#     print "’À∫≈◊÷∂Œ√˚    is  ", m_Text_Username.GetValue()
-#     print "√‹¬Î◊÷∂Œ√˚    is  ", m_Text_Pswname.GetValue()
-#     m_Text_SumNum.SetValue("801")
-#     m_Text_WeakNum.SetValue("80")
-#     m_Text_List.SetValue("geng\nhai\nyang\nhello")
-    
+
+#---------------------------------------------------------------------------
+# Create and set a help provider.  Normally you would do this in
+# the app's OnInit as it must be done before any SetHelpText calls.
+provider = wx.SimpleHelpProvider()
+wx.HelpProvider.Set(provider)
+#---------------------------------------------------------------------------
  
-app = wx.App()
-win = wx.Frame(None,title="»ıø⁄¡ÓºÏ≤‚π§æﬂ",size=(500,600))
+class TestPanel(wx.Panel):
+    def __init__(self, parent, log):
+        self.log = log
+        wx.Panel.__init__(self, parent, -1)
+ 
+ 
 
-bkg = wx.Panel(win)
-
-m_Panel1 = wx.Panel(bkg,wx.ID_ANY)
-m_Panel2 = wx.Panel(bkg,wx.ID_ANY)
-m_Panel3 = wx.Panel(bkg,wx.ID_ANY)
+        m_Panel1 = wx.Panel(self,wx.ID_ANY)
+        m_Panel2 = wx.Panel(self,wx.ID_ANY)
+        m_Panel3 = wx.Panel(self,wx.ID_ANY)
 
  
-bSizer1 = wx.BoxSizer(wx.VERTICAL)
-bSizer1.Add(m_Panel1,proportion=4,flag=wx.EXPAND)
-bSizer1.Add(m_Panel2,proportion=1,flag=wx.EXPAND)
-bSizer1.Add(m_Panel3,proportion=4,flag=wx.EXPAND)
+        bSizer1 = wx.BoxSizer(wx.VERTICAL)
+        bSizer1.Add(m_Panel1,proportion=4,flag=wx.EXPAND)
+        bSizer1.Add(m_Panel2,proportion=1,flag=wx.EXPAND)
+        bSizer1.Add(m_Panel3,proportion=4,flag=wx.EXPAND)
 
 
-# m_Label_1 = wx.StaticBox(m_Panel1, label="ª˘±æ–≈œ¢")  
-# bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_1, wx.HORIZONTAL)  
+        m_Panel11 = wx.Panel(m_Panel1)
+        m_Panel12 = wx.Panel(m_Panel1)
 
-m_Panel11 = wx.Panel(m_Panel1)
-m_Panel12 = wx.Panel(m_Panel1)
+        bSizer_Panel1 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel1.Add(m_Panel11,proportion=2,flag=wx.EXPAND)
+        bSizer_Panel1.Add(m_Panel12,proportion=1,flag=wx.EXPAND)
+        m_Panel1.SetSizer(bSizer_Panel1)
 
-bSizer_Panel1 = wx.BoxSizer(wx.HORIZONTAL)
-bSizer_Panel1.Add(m_Panel11,proportion=2,flag=wx.EXPAND)
-bSizer_Panel1.Add(m_Panel12,proportion=1,flag=wx.EXPAND)
-m_Panel1.SetSizer(bSizer_Panel1)
-
-m_Label_11 = wx.StaticBox(m_Panel11, label="œµÕ≥–≈œ¢")
-bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
+        m_Label_11 = wx.StaticBox(m_Panel11, label="Á≥ªÁªü‰ø°ÊÅØ")
+        bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
 
-sampleList = ['‘ÀŒ¨œµÕ≥','π´≥µœµÕ≥','π‹¿ÌœµÕ≥']
-listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),sampleList,wx.LB_SINGLE)
-bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
-bSizer_Panel11.Add(listBox)
-bSizerBox_Panel1.Add(bSizer_Panel11,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
-m_Panel11.SetSizer(bSizerBox_Panel1)
+        sampleList = ['ËΩ¶ËæÜÁÆ°ÁêÜÁ≥ªÁªü','ÂçèÂêåÂäûÂÖ¨ÁÆ°ÁêÜÁ≥ªÁªü','ÈÇÆ‰ª∂ÁÆ°ÁêÜÁ≥ªÁªü']
+        self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),sampleList,wx.LB_SINGLE)
+        bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
+        bSizer_Panel11.Add(self.listBox)
+        bSizerBox_Panel1.Add(bSizer_Panel11,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
+        m_Panel11.SetSizer(bSizerBox_Panel1)
 
-bSizer_Panel12 = wx.BoxSizer(wx.VERTICAL)
-bt_New = wx.Button(m_Panel12,wx.ID_ANY,label="–¬‘ˆœµÕ≥–≈œ¢")
-bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label="±‡º≠œµÕ≥–≈œ¢")
-bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label="»ıø⁄¡ÓºÏ≤‚")
-bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label="∂®∆⁄–ﬁ∏ƒºÏ≤‚")
+        bSizer_Panel12 = wx.BoxSizer(wx.VERTICAL)
+        bt_New = wx.Button(m_Panel12,wx.ID_ANY,label="Êñ∞Â¢ûÁ≥ªÁªü‰ø°ÊÅØ")
+        bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label="ÁºñËæëÁ≥ªÁªü‰ø°ÊÅØ")
+        bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label="Âº±Âè£‰ª§Ê£ÄÊµã")
+        bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label="ÂÆöÊúü‰øÆÊîπÊ£ÄÊµã")
 
-bSizer_Panel12 = wx.GridBagSizer(0,0)
+        bSizer_Panel12 = wx.GridBagSizer(0,0)
+        
+        bSizer_Panel12.Add(bt_New, pos=(1, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Edit, pos=(4, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Wstart, pos=(8, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Rstart, pos=(11, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.AddGrowableCol(3)
+        m_Panel12.SetSizer(bSizer_Panel12)
+ 
+ 
+         #panel 2
+        bSizer_Panel2 = wx.BoxSizer(wx.VERTICAL)
+        m_Panel22 = wx.Panel(m_Panel2)
+        m_Panel23 = wx.Panel(m_Panel2)
+        
+        bSizer_Panel2.Add(m_Panel22,proportion=1,flag=wx.EXPAND)
+        bSizer_Panel2.Add(m_Panel23,proportion=1,flag=wx.EXPAND)
+        m_Panel2.SetSizer(bSizer_Panel2)
+        
+        m_Panel221 = wx.Panel(m_Panel22)
+        m_Panel222 = wx.Panel(m_Panel22)
+        
+        m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,"Âè£‰ª§ÊÄªÊù°Êï∞")
+        m_Text_SumNum = wx.TextCtrl(m_Panel221)
+        m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,"Âº±Âè£‰ª§Êù°Êï∞")
+        m_Text_WeakNum = wx.TextCtrl(m_Panel222)
+        
+        bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
+        bSizer_Panel22.Add(m_Panel222,proportion=1,flag=wx.EXPAND)
+        m_Panel22.SetSizer(bSizer_Panel22)
+        
+        bSizer_Panel221 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel221.Add(m_Label_SumNum,proportion=1,flag=wx.LEFT,border=30)
+        bSizer_Panel221.Add(m_Text_SumNum,proportion=1,flag=wx.RIGHT,border=30)
+        m_Panel221.SetSizer(bSizer_Panel221)
+        
+        bSizer_Panel222 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel222.Add(m_Label_WeakNum,proportion=1,flag=wx.LEFT,border=30)
+        bSizer_Panel222.Add(m_Text_WeakNum,proportion=1,flag=wx.RIGHT,border=30)
+        m_Panel222.SetSizer(bSizer_Panel222)
+        
+        m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
+        bSizer_Panel23 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel23.Add(m_Gauge,proportion=1,flag=wx.LEFT|wx.RIGHT,border=10)
+        m_Panel23.SetSizer(bSizer_Panel23)
+        #panel 3
+        #m_Text_List = wx.TextCtrl(m_Panel3)
+        # m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
+        m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        m_ListCtrl.InsertColumn(0,'Â∫èÂè∑')
+        m_ListCtrl.InsertColumn(1,'Âº±Âè£‰ª§Áî®Êà∑Âêç')
+        m_ListCtrl.InsertColumn(2,'Â§áÊ≥®')
+        # bSizer_Panel3 = wx.BoxSizer(wx.HORIZONTAL)
+        # bSizer_Panel3.Add(m_Text_List,proportion = 1,flag=wx.Left|wx.RIGHT|wx.EXPAND)
+        m_Label_3 = wx.StaticBox(m_Panel3, label="Ê£ÄÊµãÁªìÊûú")  
+        bSizer_Panel3 = wx.StaticBoxSizer(m_Label_3, wx.HORIZONTAL)  
+        bSizer_Panel3.Add(m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
+        m_Panel3.SetSizer(bSizer_Panel3)
+        
+        m_ListCtrl.InsertStringItem(0,"hello")
+        m_ListCtrl.SetStringItem(0,1,"‰ø°ÊÅØÁ≥ªÁªü")
+        
+        m_ListCtrl.InsertStringItem(1,"hello")
+        m_ListCtrl.SetStringItem(1,1,"ÈÄö‰ø°Á≥ªÁªü")
+        
+        self.SetSizer(bSizer1) 
+        
+        self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
+        self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
+        
 
-bSizer_Panel12.Add(bt_New, pos=(1, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-bSizer_Panel12.Add(bt_Edit, pos=(4, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-bSizer_Panel12.Add(bt_Wstart, pos=(8, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-bSizer_Panel12.Add(bt_Rstart, pos=(11, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-bSizer_Panel12.AddGrowableCol(3)
-m_Panel12.SetSizer(bSizer_Panel12)
-
-# m_Label_1 = wx.StaticBox(m_Panel1, label="ª˘±æ–≈œ¢")  
-# bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_1, wx.HORIZONTAL)  
-# 
-# 
-# m_Panel11 = wx.Panel(m_Panel1)
-# m_Panel12 = wx.Panel(m_Panel1)
-# bSizer_Panel1 = wx.BoxSizer(wx.HORIZONTAL)
-# bSizer_Panel1.Add(m_Panel11,proportion=1,flag=wx.EXPAND)
-# bSizer_Panel1.Add(m_Panel12,proportion=1,flag=wx.EXPAND)
-# #m_Panel1.SetSizer(bSizer_Panel1)
-# 
-# bSizerBox_Panel1.Add(bSizer_Panel1,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
-# m_Panel1.SetSizer(bSizerBox_Panel1)
-# 
-# m_Panel111 = wx.Panel(m_Panel11)
-# m_Panel112 = wx.Panel(m_Panel11)
-# m_Panel113 = wx.Panel(m_Panel11)
-# m_Panel114 = wx.Panel(m_Panel11)
-# bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
-# bSizer_Panel11.Add(m_Panel111,proportion=1,flag=wx.EXPAND)
-# bSizer_Panel11.Add(m_Panel112,proportion=1,flag=wx.EXPAND)
-# bSizer_Panel11.Add(m_Panel113,proportion=1,flag=wx.EXPAND)
-# bSizer_Panel11.Add(m_Panel114,proportion=1,flag=wx.EXPAND)
-# m_Panel11.SetSizer(bSizer_Panel11)
-
-
-
-# listBox = wx.ListBox(m_Panel11,-1,sampleList,wx.LB_SINGLE)
-# bSizer_Panel11.Add(listBox)
-#m_Panel11.SetSizer(bSizer_Panel11)
-
-# 
-# bSizer_Panel11 = wx.StaticBoxSizer(m_Label_11, wx.HORIZONTAL)  
-# bSizer_Panel11.Add(listBox,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
-# m_Panel11.SetSizer(bSizer_Panel11)
-
-
-#panel 2
-bSizer_Panel2 = wx.BoxSizer(wx.VERTICAL)
-m_Panel22 = wx.Panel(m_Panel2)
-m_Panel23 = wx.Panel(m_Panel2)
-
-bSizer_Panel2.Add(m_Panel22,proportion=1,flag=wx.EXPAND)
-bSizer_Panel2.Add(m_Panel23,proportion=1,flag=wx.EXPAND)
-m_Panel2.SetSizer(bSizer_Panel2)
-
-
-
-# bSizer_Panel21 = wx.BoxSizer(wx.HORIZONTAL)
-# m_Panel211 = wx.Panel(m_Panel21)
-# m_Panel212 = wx.Panel(m_Panel21)
-# m_Panel213 = wx.Panel(m_Panel21)
-# 
-# bt_Start = wx.Button(m_Panel212,wx.ID_ANY,label="ø™ º")
-# 
-# bt_Start.Bind(wx.EVT_BUTTON, bt_start)
-# 
-# bSizer_Panel212 = wx.BoxSizer(wx.HORIZONTAL)
-# bSizer_Panel212.Add(bt_Start,proportion=1,flag=wx.CENTER)
-# m_Panel212.SetSizer(bSizer_Panel212)
-# 
-# bSizer_Panel21.Add(m_Panel211,proportion=1,flag=wx.CENTER)
-# bSizer_Panel21.Add(m_Panel212,proportion=1,flag=wx.CENTER)
-# bSizer_Panel21.Add(m_Panel213,proportion=1,flag=wx.CENTER)
-# 
-# m_Panel21.SetSizer(bSizer_Panel21)
-
-
-
-m_Panel221 = wx.Panel(m_Panel22)
-m_Panel222 = wx.Panel(m_Panel22)
-
-m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,"ø⁄¡Ó◊‹Ãı ˝")
-m_Text_SumNum = wx.TextCtrl(m_Panel221)
-m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,"»ıø⁄¡ÓÃı ˝")
-m_Text_WeakNum = wx.TextCtrl(m_Panel222)
-
-bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
-bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
-bSizer_Panel22.Add(m_Panel222,proportion=1,flag=wx.EXPAND)
-m_Panel22.SetSizer(bSizer_Panel22)
-
-bSizer_Panel221 = wx.BoxSizer(wx.HORIZONTAL)
-bSizer_Panel221.Add(m_Label_SumNum,proportion=1,flag=wx.LEFT,border=30)
-bSizer_Panel221.Add(m_Text_SumNum,proportion=1,flag=wx.RIGHT,border=30)
-m_Panel221.SetSizer(bSizer_Panel221)
-
-bSizer_Panel222 = wx.BoxSizer(wx.HORIZONTAL)
-bSizer_Panel222.Add(m_Label_WeakNum,proportion=1,flag=wx.LEFT,border=30)
-bSizer_Panel222.Add(m_Text_WeakNum,proportion=1,flag=wx.RIGHT,border=30)
-m_Panel222.SetSizer(bSizer_Panel222)
-
-m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
-bSizer_Panel23 = wx.BoxSizer(wx.HORIZONTAL)
-bSizer_Panel23.Add(m_Gauge,proportion=1,flag=wx.LEFT|wx.RIGHT,border=10)
-m_Panel23.SetSizer(bSizer_Panel23)
-#panel 3
-#m_Text_List = wx.TextCtrl(m_Panel3)
-# m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
-m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
-m_ListCtrl.InsertColumn(0,'–Ú∫≈')
-m_ListCtrl.InsertColumn(1,'»ıø⁄¡Ó”√ªß√˚')
-m_ListCtrl.InsertColumn(2,'±∏◊¢')
-# bSizer_Panel3 = wx.BoxSizer(wx.HORIZONTAL)
-# bSizer_Panel3.Add(m_Text_List,proportion = 1,flag=wx.Left|wx.RIGHT|wx.EXPAND)
-m_Label_3 = wx.StaticBox(m_Panel3, label="ºÏ≤‚Ω·π˚")  
-bSizer_Panel3 = wx.StaticBoxSizer(m_Label_3, wx.HORIZONTAL)  
-bSizer_Panel3.Add(m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
-m_Panel3.SetSizer(bSizer_Panel3)
-
-m_ListCtrl.InsertStringItem(0,"hello")
-m_ListCtrl.SetStringItem(0,1,"–≈œ¢œµÕ≥ ")
-
-m_ListCtrl.InsertStringItem(1,"hello")
-m_ListCtrl.SetStringItem(1,1,"Õ®–≈œµÕ≥ ")
-
-#       line = "Line %s" % self.index
-#         self.list_ctrl.InsertStringItem(self.index, line)
-#         self.list_ctrl.SetStringItem(self.index, 1, "01/19/2010")
-#         self.list_ctrl.SetStringItem(self.index, 2, "USA")
-
-bkg.SetSizer(bSizer1) 
-
-
-win.Show()
-
-app.MainLoop()
+#         b = wx.Button(self, -1, "Create and Show a custom Dialog", (50,50))
+#         self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+ 
+#         if 'wxMac' in wx.PlatformInfo:
+#             self.cb = wx.CheckBox(self, -1, "Set Metal appearance", (50,90))
+ 
+#     def GetSysInf(): 
+#         print("")          
+ 
+    def NewSysButton(self, evt):
+        useMetal = False
+        if 'wxMac' in wx.PlatformInfo:
+            useMetal = self.cb.IsChecked()
+             
+        dlg = TestDialog(self, -1, "Êñ∞Â¢ûÁ≥ªÁªü‰ø°ÊÅØ", size=(350, 200),
+                         #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+                         style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                         useMetal=useMetal,
+                         )
+        dlg.CenterOnScreen()
+ 
+        # this does not return until the dialog is closed.
+        val = dlg.ShowModal()
+     
+        if val == wx.ID_OK:
+            print("You pressed OK\n")
+        else:
+            print("You pressed Cancel\n")
+  
+        dlg.Destroy()
+        
+    def EditSysButton(self, evt):
+        print self.listBox.GetStringSelection()
+        if self.listBox.GetStringSelection() == '':
+            dlg = wx.MessageDialog(None, u"ËØ∑Âú®Âè≥‰æßÈÄâÊã©Á≥ªÁªü!", u"ÊèêÁ§∫", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.Close(True)
+                dlg.Destroy()
+        else:
+            print("ÂÅöÂæóÂ•ΩÔºÅ")
+#            GetSysInf()
+            
+ 
+def runTest(frame, nb, log):
+    win = TestPanel(nb, log)
+    return win
+ 
+ 
+#---------------------------------------------------------------------------
+ 
+ 
+overview = """\
+wxPython offers quite a few general purpose dialogs for useful data input from
+the user; they are all based on the wx.Dialog class, which you can also subclass
+to create custom dialogs to suit your needs.
+ 
+The Dialog class, in addition to dialog-like behaviors, also supports the full
+wxWindows layout featureset, which means that you can incorporate sizers or
+layout constraints as needed to achieve the look and feel desired. It even supports
+context-sensitive help, which is illustrated in this example.
+ 
+The example is very simple; in real world situations, a dialog that had input
+fields such as this would no doubt be required to deliver those values back to
+the calling function. The Dialog class supports data retrieval in this manner.
+<b>However, the data must be retrieved prior to the dialog being destroyed.</b>
+The example shown here is <i>modal</i>; non-modal dialogs are possible as well.
+ 
+See the documentation for the <code>Dialog</code> class for more details.
+ 
+"""
+ 
+if __name__ == '__main__':
+    import sys,os
+    #import run
+    #run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
+    app = wx.App(False)
+    frame = wx.Frame(None, -1, 'Âº±Âè£‰ª§Ê£ÄÊµãÂ∑•ÂÖ∑',size=(500,600))
+    win = TestPanel(frame, None)
+    frame.Show()
+    app.MainLoop()
