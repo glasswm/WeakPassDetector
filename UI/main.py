@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import  wx
 import wx.lib.masked as masked 
-from newSysDlg import TestDialog
+from newSysDlg import NewSysDialog
+from editSysDlg import EditSysDialog
+from verifDlg import VerifDialog
 
 
 #---------------------------------------------------------------------------
@@ -124,23 +126,14 @@ class TestPanel(wx.Panel):
         
         self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
-        
-
-#         b = wx.Button(self, -1, "Create and Show a custom Dialog", (50,50))
-#         self.Bind(wx.EVT_BUTTON, self.OnButton, b)
- 
-#         if 'wxMac' in wx.PlatformInfo:
-#             self.cb = wx.CheckBox(self, -1, "Set Metal appearance", (50,90))
- 
-#     def GetSysInf(): 
-#         print("")          
+        self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)  
  
     def NewSysButton(self, evt):
         useMetal = False
         if 'wxMac' in wx.PlatformInfo:
             useMetal = self.cb.IsChecked()
              
-        dlg = TestDialog(self, -1, "新增系统信息", size=(350, 200),
+        dlg = NewSysDialog(self, -1, "新增系统信息", size=(350, 200),
                          #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
                          style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                          useMetal=useMetal,
@@ -166,9 +159,47 @@ class TestPanel(wx.Panel):
                 dlg.Destroy()
         else:
             print("做得好！")
+            useMetal = False
+            if 'wxMac' in wx.PlatformInfo:
+                useMetal = self.cb.IsChecked()
+            dlg = EditSysDialog(self, -1, "编辑系统信息", size=(350, 200),
+                             style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                             useMetal=useMetal,
+                             )
+        dlg.CenterOnScreen()
+        val = dlg.ShowModal()
+     
+        if val == wx.ID_OK:
+            print("You pressed OK\n")
+        else:
+            print("You pressed Cancel\n")
+  
+        dlg.Destroy()
+        #fill this panel
 #            GetSysInf()
             
+    def WeakCheckStartButton(self,evt):
+        useMetal = False
+        if 'wxMac' in wx.PlatformInfo:
+            useMetal = self.cb.IsChecked()
+             
+        dlg = VerifDialog(self, -1, "输入口令", size=(350, 200),
+                         #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+                         style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                         useMetal=useMetal,
+                         )
+        dlg.CenterOnScreen()
  
+        # this does not return until the dialog is closed.
+        val = dlg.ShowModal()
+     
+        if val == wx.ID_OK:
+            print("You pressed OK\n")
+        else:
+            print("You pressed Cancel\n")
+  
+        dlg.Destroy()
+        
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
     return win
