@@ -1,4 +1,4 @@
-from dboperator import askDB
+from famer import askDB
 
 __author__ = 'wm'
 
@@ -30,7 +30,7 @@ def check_weak_pass(**kwargs):
         logging.warning('cipher list is empty')
         return 'cipher list is empty'
     else:
-        return askDB(encrypt_algorithm, cipher_list)
+        return askDB(cipher_list, encrypt_algorithm)
 
 
 @Request.application

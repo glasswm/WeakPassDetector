@@ -41,7 +41,7 @@ class raintableoperator:
     
     def askRaintable(self,DataList,HashType):
         weakList = []
-        tempFilename = "temp.txt"        
+        tempFilename = "/tmp/temp.txt"
         if HashType == "md5":
             self.writeListToFile(DataList,tempFilename)
             cmdStr = "./rcrack" + self.getMd5FilelistStr() + "-l " + tempFilename + "|grep \"plaintext of\" "
