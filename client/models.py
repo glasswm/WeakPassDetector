@@ -38,7 +38,7 @@ class SystemInfo(Base):
         else:
             logging.error(('unknown database type %s' % self.db_type))
             exit()
-        sql_schema = '%s+%s://%s:%s@%s:%s/%s' % (dialect, driver, username, password, self.db_ip, self.db_port, self.db_name)
+        sql_schema = '%s+%s://%s:%s@%s:%s/%s' % (dialect, driver, username, password, self.db_ip.replace(' ',''), self.db_port, self.db_name)
         engine = create_engine(sql_schema, echo=False)
         conn = engine.connect()
         metadata = MetaData()
@@ -84,7 +84,7 @@ class DBUtil(object):
         return res
 
     def update_system(self, SystemInfo):
-        self.commit()
+        self.session.commit()
 
     def del_system_by_id(self, id):
         sys_info = self.session.query(SystemInfo).filter(SystemInfo.id==id)

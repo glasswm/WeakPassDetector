@@ -2,6 +2,9 @@ __author__ = 'wm'
 
 from enum import Enum
 
+db_type_list = ['mysql', 'oracle']
+crypt_type_list = ['md5', 'sha1']
+
 def singleton(cls, *args, **kw):
     instances = {}
     def _singleton():

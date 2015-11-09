@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import  wx
-import wx.lib.masked as masked 
+import wx.lib.masked as masked
+from client.models import DBUtil
 from newSysDlg import NewSysDialog
 from editSysDlg import EditSysDialog
 from verifDlg import VerifDialog
@@ -15,8 +16,13 @@ from interface import initDlg
 provider = wx.SimpleHelpProvider()
 wx.HelpProvider.Set(provider)
 #---------------------------------------------------------------------------
- 
+idList = []
 class TestPanel(wx.Panel):
+
+    selected_sys = None
+    m_Text_SumNum = None
+    m_Text_WeakNum = None
+
     def __init__(self, parent, log):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
@@ -45,8 +51,15 @@ class TestPanel(wx.Panel):
         m_Label_11 = wx.StaticBox(m_Panel11, label=u"系统信息")
         bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
+        sampleList = []
 
-        sampleList = [u'车辆管理系统',u'协同办公管理系统',u'邮件管理系统']
+        db_util = DBUtil()
+        res = db_util.get_all_system()
+        print(len(res))
+        for i in res:
+            sampleList.append(i.sys_name)
+            idList.append(i.id)
+
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),sampleList,wx.LB_SINGLE)
         bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
         bSizer_Panel11.Add(self.listBox)
@@ -82,9 +95,11 @@ class TestPanel(wx.Panel):
         m_Panel222 = wx.Panel(m_Panel22)
         
         m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,u"口令总条数")
-        m_Text_SumNum = wx.TextCtrl(m_Panel221)
+        self.m_Text_SumNum = wx.TextCtrl(m_Panel221)
+        self.m_Text_SumNum.SetEditable(False)
         m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,u"弱口令条数")
-        m_Text_WeakNum = wx.TextCtrl(m_Panel222)
+        self.m_Text_WeakNum = wx.TextCtrl(m_Panel222)
+        self.m_Text_WeakNum.SetEditable(False)
         
         bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
@@ -93,12 +108,12 @@ class TestPanel(wx.Panel):
         
         bSizer_Panel221 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel221.Add(m_Label_SumNum,proportion=1,flag=wx.LEFT,border=30)
-        bSizer_Panel221.Add(m_Text_SumNum,proportion=1,flag=wx.RIGHT,border=30)
+        bSizer_Panel221.Add(self.m_Text_SumNum,proportion=1,flag=wx.RIGHT,border=30)
         m_Panel221.SetSizer(bSizer_Panel221)
         
         bSizer_Panel222 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel222.Add(m_Label_WeakNum,proportion=1,flag=wx.LEFT,border=30)
-        bSizer_Panel222.Add(m_Text_WeakNum,proportion=1,flag=wx.RIGHT,border=30)
+        bSizer_Panel222.Add(self.m_Text_WeakNum,proportion=1,flag=wx.RIGHT,border=30)
         m_Panel222.SetSizer(bSizer_Panel222)
         
         m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
@@ -124,15 +139,16 @@ class TestPanel(wx.Panel):
         
         m_ListCtrl.InsertStringItem(1,"2")
         m_ListCtrl.SetStringItem(1,1,u"通信系统")
-        
+
         self.SetSizer(bSizer1) 
         
         self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
         self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)  
-        
-        initDlg()
- 
+
+
+    # def RefreshButton(self,evt):
+
     def NewSysButton(self, evt):
         useMetal = False
         if 'wxMac' in wx.PlatformInfo:
@@ -167,9 +183,9 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑系统信息", size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=idList[self.listBox.GetSelection()], size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-                             useMetal=useMetal,
+                             useMetal=useMetal
                              )
             dlg.CenterOnScreen()
             val = dlg.ShowModal()
@@ -195,7 +211,7 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
              
-            dlg = VerifDialog(self, -1, u"输入口令", size=(350, 200),
+            dlg = VerifDialog(self, -1, u"输入口令", idx=idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
                               )

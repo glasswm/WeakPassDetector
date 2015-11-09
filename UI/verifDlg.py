@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
 import  wx
-import wx.lib.masked as masked 
+import wx.lib.masked as masked
+from client.client_test import check_weakpass
+from client.common import EncryptAlgorithmType
+from client.models import DBUtil
+
 
 class VerifDialog(wx.Dialog):
+
+    cur_sys_info = None
+    parent = None
+
     def __init__(
-            self, parent, ID, title, size=wx.DefaultSize, pos=wx.DefaultPosition, 
+            self, parent, ID, title, idx, size=wx.DefaultSize, pos=wx.DefaultPosition,
             style=wx.DEFAULT_DIALOG_STYLE,
             useMetal=False,
             ):
- 
+        self.parent = parent
         pre = wx.PreDialog()
         pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
         pre.Create(parent, ID, title, pos, size, style)
@@ -54,17 +62,28 @@ class VerifDialog(wx.Dialog):
                 
         self.Bind(wx.EVT_BUTTON, self.OK_button, bt_Ok)
         self.Bind(wx.EVT_BUTTON, self.Cancel_Button, bt_Cancel)
+
+        db_util = DBUtil()
+        self.cur_sys_info = db_util.get_system_by_id(idx)
         
     def OK_button(self, evt):
         print("ok!")
-#         if self.m_Text_SysName.GetValue() == "" or self.m_Text_IP.GetValue() == "   .   .   .   " or self.m_Text_Port.GetValue() == "" or self.m_Choice_DBType.GetSelection() == -1 or self.m_Choice_Cyptype.GetSelection() == -1 or self.m_Text_DBname.getText() == "" or self.m_Text_Sheetname.GetValue() == "" or self.m_Text_Username.GetValue() == "" or self.m_Text_Pswname.GetValue() == "":
-#             dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
-#             if dlg.ShowModal() == wx.ID_YES:
-#                 #self.Close(True)
-#                 dlg.Destroy()
-#         else:
-#             dlg.Destroy()
-              
+        up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
+        username_list = []
+        crypt_list = []
+        for i in up_pair:
+            username_list.append(i[0])
+            crypt_list.append(i[1])
+        print username_list
+        print crypt_list
+        if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
+            crypt_type = 'md5'
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
+            crypt_type = 'sha1'
+        (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
+        self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
+        self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
+
     def Cancel_Button(self, evt):
         print("cancel!")
 #         self.Destroy()

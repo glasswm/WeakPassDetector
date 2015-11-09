@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import  wx
-import wx.lib.masked as masked 
+import wx.lib.masked as masked
+from client.common import EncryptAlgorithmType, DatabaseType, db_type_list, crypt_type_list
+from client.models import DBUtil, SystemInfo
 
 
 class NewSysDialog(wx.Dialog):
@@ -59,10 +61,10 @@ class NewSysDialog(wx.Dialog):
         
         box = wx.BoxSizer(wx.HORIZONTAL)
         m_Label_DBType = wx.StaticText(self,wx.ID_ANY,u"数据库类型")
-        sampleList = ['mysql', 'oracle','sqlserver','sqlite']
-        self.m_Choice_DBType = wx.Choice(self, choices=sampleList) 
+        sampleList = db_type_list
+        self.m_Choice_DBType = wx.Choice(self, choices=sampleList)
         m_Label_Cyptype = wx.StaticText(self,wx.ID_ANY,u"加密算法")
-        sampleList1 = ['md5', 'sha1', 'sha256', 'plaintext']
+        sampleList1 = crypt_type_list
         self.m_Choice_Cyptype = wx.Choice(self,choices=sampleList1)
 
         box.Add(m_Label_DBType, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -113,25 +115,32 @@ class NewSysDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.Cancel_Button, bt_Cancel)
         
     def OK_button(self, evt):
-#         print("ok!")
-#         print self.m_Text_SysName.GetValue()
-#         print self.m_Text_IP.GetValue()
-#         print self.m_Choice_Cyptype.GetSelection()
-#         if self.m_Text_IP.GetValue() == "   .   .   .   ":
-#             print ("thank!")
-#         if self.m_Choice_Cyptype.GetSelection() == "":
-#             print("great!")
-        if self.m_Text_SysName.GetValue() == "" or self.m_Text_IP.GetValue() == "   .   .   .   " or self.m_Text_Port.GetValue() == "" or self.m_Choice_DBType.GetSelection() == -1 or self.m_Choice_Cyptype.GetSelection() == -1 or self.m_Text_DBname.getText() == "" or self.m_Text_Sheetname.GetValue() == "" or self.m_Text_Username.GetValue() == "" or self.m_Text_Pswname.GetValue() == "":
+        if self.m_Text_SysName.GetValue() == "" or self.m_Text_IP.GetValue() == "   .   .   .   " or self.m_Text_Port.GetValue() == "" or self.m_Choice_DBType.GetSelection() == -1 or self.m_Choice_Cyptype.GetSelection() == -1 or self.m_Text_DBname.GetValue() == "" or self.m_Text_Sheetname.GetValue() == "" or self.m_Text_Username.GetValue() == "" or self.m_Text_Pswname.GetValue() == "":
             dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 #self.Close(True)
                 dlg.Destroy()
         else:
-                    #todo
-        #write the db
-            #self.Destroy()
-            dlg.Destroy()
-              
+            db_util = DBUtil()
+            if self.m_Choice_Cyptype.GetSelection() == 0:
+                cyp_type = EncryptAlgorithmType.md5
+            elif self.m_Choice_Cyptype.GetSelection() == 1:
+                cyp_type = EncryptAlgorithmType.sha1
+
+            if self.m_Choice_DBType.GetSelection() == 0:
+                db_type = DatabaseType.mysql
+            elif self.m_Choice_DBType.GetSelection() == 1:
+                db_type = DatabaseType.oracle
+
+            demo_system = SystemInfo(sys_name=self.m_Text_SysName.GetValue(), db_type=db_type, db_ip=self.m_Text_IP.GetValue(),
+                         db_port=self.m_Text_Port.GetValue(), db_name=self.m_Text_DBname.GetValue(), db_table_name=self.m_Text_Sheetname.GetValue(), db_column_username=self.m_Text_Username.GetValue(),
+                         db_column_password=self.m_Text_Pswname.GetValue(), db_password_encrypt_algorithm=cyp_type)
+            db_util.add_system(demo_system)
+            dlg = wx.MessageDialog(None, u"添加成功!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+                self.Destroy()
+
     def Cancel_Button(self, evt):
         print("cancel!")
         self.Destroy()
