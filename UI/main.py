@@ -6,7 +6,7 @@ from editSysDlg import EditSysDialog
 from verifDlg import VerifDialog
 import logging
 from interface import initDlg
-#from sqlalchemy import Column
+
 
 
 #---------------------------------------------------------------------------
