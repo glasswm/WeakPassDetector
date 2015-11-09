@@ -4,6 +4,9 @@ import wx.lib.masked as masked
 from newSysDlg import NewSysDialog
 from editSysDlg import EditSysDialog
 from verifDlg import VerifDialog
+import logging
+from interface import initDlg
+#from sqlalchemy import Column
 
 
 #---------------------------------------------------------------------------
@@ -39,11 +42,11 @@ class TestPanel(wx.Panel):
         bSizer_Panel1.Add(m_Panel12,proportion=1,flag=wx.EXPAND)
         m_Panel1.SetSizer(bSizer_Panel1)
 
-        m_Label_11 = wx.StaticBox(m_Panel11, label="系统信息")
+        m_Label_11 = wx.StaticBox(m_Panel11, label=u"系统信息")
         bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
 
-        sampleList = ['车辆管理系统','协同办公管理系统','邮件管理系统']
+        sampleList = [u'车辆管理系统',u'协同办公管理系统',u'邮件管理系统']
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),sampleList,wx.LB_SINGLE)
         bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
         bSizer_Panel11.Add(self.listBox)
@@ -51,10 +54,10 @@ class TestPanel(wx.Panel):
         m_Panel11.SetSizer(bSizerBox_Panel1)
 
         bSizer_Panel12 = wx.BoxSizer(wx.VERTICAL)
-        bt_New = wx.Button(m_Panel12,wx.ID_ANY,label="新增系统信息")
-        bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label="编辑系统信息")
-        bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label="弱口令检测")
-        bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label="定期修改检测")
+        bt_New = wx.Button(m_Panel12,wx.ID_ANY,label=u"新增系统信息")
+        bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label=u"编辑系统信息")
+        bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"弱口令检测")
+        bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"定期修改检测")
 
         bSizer_Panel12 = wx.GridBagSizer(0,0)
         
@@ -78,9 +81,9 @@ class TestPanel(wx.Panel):
         m_Panel221 = wx.Panel(m_Panel22)
         m_Panel222 = wx.Panel(m_Panel22)
         
-        m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,"口令总条数")
+        m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,u"口令总条数")
         m_Text_SumNum = wx.TextCtrl(m_Panel221)
-        m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,"弱口令条数")
+        m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,u"弱口令条数")
         m_Text_WeakNum = wx.TextCtrl(m_Panel222)
         
         bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
@@ -106,34 +109,36 @@ class TestPanel(wx.Panel):
         #m_Text_List = wx.TextCtrl(m_Panel3)
         # m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
         m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
-        m_ListCtrl.InsertColumn(0,'序号')
-        m_ListCtrl.InsertColumn(1,'弱口令用户名')
-        m_ListCtrl.InsertColumn(2,'备注')
+        m_ListCtrl.InsertColumn(0,u'序号')
+        m_ListCtrl.InsertColumn(1,u'弱口令用户名')
+        m_ListCtrl.InsertColumn(2,u'备注')
         # bSizer_Panel3 = wx.BoxSizer(wx.HORIZONTAL)
         # bSizer_Panel3.Add(m_Text_List,proportion = 1,flag=wx.Left|wx.RIGHT|wx.EXPAND)
-        m_Label_3 = wx.StaticBox(m_Panel3, label="检测结果")  
+        m_Label_3 = wx.StaticBox(m_Panel3, label=u"检测结果")  
         bSizer_Panel3 = wx.StaticBoxSizer(m_Label_3, wx.HORIZONTAL)  
         bSizer_Panel3.Add(m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel3.SetSizer(bSizer_Panel3)
         
-        m_ListCtrl.InsertStringItem(0,"hello")
-        m_ListCtrl.SetStringItem(0,1,"信息系统")
+        m_ListCtrl.InsertStringItem(0,"1")
+        m_ListCtrl.SetStringItem(0,1,u"信息系统")
         
-        m_ListCtrl.InsertStringItem(1,"hello")
-        m_ListCtrl.SetStringItem(1,1,"通信系统")
+        m_ListCtrl.InsertStringItem(1,"2")
+        m_ListCtrl.SetStringItem(1,1,u"通信系统")
         
         self.SetSizer(bSizer1) 
         
         self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
         self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)  
+        
+        initDlg()
  
     def NewSysButton(self, evt):
         useMetal = False
         if 'wxMac' in wx.PlatformInfo:
             useMetal = self.cb.IsChecked()
              
-        dlg = NewSysDialog(self, -1, "新增系统信息", size=(350, 200),
+        dlg = NewSysDialog(self, -1, u"新增系统信息", size=(350, 200),
                          #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
                          style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                          useMetal=useMetal,
@@ -155,50 +160,57 @@ class TestPanel(wx.Panel):
         if self.listBox.GetStringSelection() == '':
             dlg = wx.MessageDialog(None, u"请在右侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
-                self.Close(True)
+                #self.Close(True)
                 dlg.Destroy()
         else:
-            print("做得好！")
+            print(u"做得好！")
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, "编辑系统信息", size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑系统信息", size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal,
                              )
-        dlg.CenterOnScreen()
-        val = dlg.ShowModal()
+            dlg.CenterOnScreen()
+            val = dlg.ShowModal()
      
-        if val == wx.ID_OK:
-            print("You pressed OK\n")
-        else:
-            print("You pressed Cancel\n")
+            if val == wx.ID_OK:
+                print("You pressed OK\n")
+            else:
+                print("You pressed Cancel\n")
   
-        dlg.Destroy()
+            dlg.Destroy()
         #fill this panel
 #            GetSysInf()
             
     def WeakCheckStartButton(self,evt):
-        useMetal = False
-        if 'wxMac' in wx.PlatformInfo:
-            useMetal = self.cb.IsChecked()
-             
-        dlg = VerifDialog(self, -1, "输入口令", size=(350, 200),
-                         #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
-                         style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-                         useMetal=useMetal,
-                         )
-        dlg.CenterOnScreen()
- 
-        # this does not return until the dialog is closed.
-        val = dlg.ShowModal()
-     
-        if val == wx.ID_OK:
-            print("You pressed OK\n")
+        print self.listBox.GetStringSelection()
+        if self.listBox.GetStringSelection() == '':
+            dlg = wx.MessageDialog(None, u"请在右侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                #self.Close(True)
+                dlg.Destroy()
         else:
-            print("You pressed Cancel\n")
+            useMetal = False
+            if 'wxMac' in wx.PlatformInfo:
+                useMetal = self.cb.IsChecked()
+             
+            dlg = VerifDialog(self, -1, u"输入口令", size=(350, 200),
+                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                              useMetal=useMetal,
+                              )
+            dlg.CenterOnScreen()
+            val = dlg.ShowModal()
+            if val == wx.ID_OK:
+                print("You pressed OK\n")
+            else:
+                print("You pressed Cancel\n")
   
-        dlg.Destroy()
+            dlg.Destroy()
+#     def initDlg(self):
+#         #todo 
+#         #创建一个数据组 获取dbsheet里的数据，填入左边对话框 
+#         print("OK!")
         
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
@@ -233,7 +245,7 @@ if __name__ == '__main__':
     #import run
     #run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
     app = wx.App(False)
-    frame = wx.Frame(None, -1, '弱口令检测工具',size=(500,600))
+    frame = wx.Frame(None, -1, u'弱口令检测工具',size=(500,600))
     win = TestPanel(frame, None)
     frame.Show()
     app.MainLoop()

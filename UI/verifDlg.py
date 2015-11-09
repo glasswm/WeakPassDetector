@@ -9,17 +9,10 @@ class VerifDialog(wx.Dialog):
             useMetal=False,
             ):
  
-        # Instead of calling wx.Dialog.__init__ we precreate the dialog
-        # so we can set an extra style that must be set before
-        # creation, and then we create the GUI object using the Create
-        # method.
         pre = wx.PreDialog()
         pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
         pre.Create(parent, ID, title, pos, size, style)
- 
-        # This next step is the most important, it turns this Python
-        # object into the real wrapper of the dialog (instead of pre)
-        # as far as the wxPython extension is concerned.
+
         self.PostCreate(pre)
  
         # This extra style can be set after the UI object has been created.
@@ -32,14 +25,14 @@ class VerifDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
     
         box = wx.BoxSizer(wx.HORIZONTAL)
-        self.m_Label_Name = wx.StaticText(self,wx.ID_ANY, "用户名")
+        self.m_Label_Name = wx.StaticText(self,wx.ID_ANY, u"用户名")
         self.m_Text_Name = wx.TextCtrl(self)
         box.Add(self.m_Label_Name, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(self.m_Text_Name, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
   
         box = wx.BoxSizer(wx.HORIZONTAL)
-        m_Label_PSW = wx.StaticText(self, wx.ID_ANY, "密码")
+        m_Label_PSW = wx.StaticText(self, wx.ID_ANY, u"密码")
         self.m_Text_PSW = wx.TextCtrl(self)
 
         box.Add(m_Label_PSW, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -50,8 +43,8 @@ class VerifDialog(wx.Dialog):
         sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
   
         box = wx.BoxSizer(wx.HORIZONTAL)
-        bt_Ok = wx.Button(self,wx.ID_ANY,label="确定")
-        bt_Cancel = wx.Button(self,wx.ID_ANY,label="取消")
+        bt_Ok = wx.Button(self,wx.ID_ANY,label=u"确定")
+        bt_Cancel = wx.Button(self,wx.ID_ANY,label=u"取消")
         box.Add(bt_Ok,1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(bt_Cancel,1, wx.ALIGN_CENTRE|wx.ALL, 5)
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)

@@ -32,12 +32,12 @@ class NewSysDialog(wx.Dialog):
         # contents
         sizer = wx.BoxSizer(wx.VERTICAL)
   
-        label = wx.StaticText(self, -1, "请输入新增系统基本信息")
+        label = wx.StaticText(self, -1, u"请输入新增系统基本信息")
         label.SetHelpText("This is the help text for the label")
         sizer.Add(label, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
   
         box = wx.BoxSizer(wx.HORIZONTAL)
-        self.m_Label_SysName = wx.StaticText(self,wx.ID_ANY, "系统名称")
+        self.m_Label_SysName = wx.StaticText(self,wx.ID_ANY, u"系统名称")
         self.m_Text_SysName = wx.TextCtrl(self)
         box.Add(self.m_Label_SysName, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(self.m_Text_SysName, 3, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -45,10 +45,10 @@ class NewSysDialog(wx.Dialog):
   
         box = wx.BoxSizer(wx.HORIZONTAL)
   
-        m_Label_IP = wx.StaticText(self, wx.ID_ANY, "IP地址")
+        m_Label_IP = wx.StaticText(self, wx.ID_ANY, u"IP地址")
         self.m_Text_IP = masked.IpAddrCtrl(self, -1, style = wx.TE_PROCESS_TAB)
        
-        m_Label_Port = wx.StaticText(self,wx.ID_ANY,"端口号")
+        m_Label_Port = wx.StaticText(self,wx.ID_ANY,u"端口号")
         self.m_Text_Port = wx.TextCtrl(self)
         box.Add(m_Label_IP, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(self.m_Text_IP, 2, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -58,11 +58,11 @@ class NewSysDialog(wx.Dialog):
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
-        m_Label_DBType = wx.StaticText(self,wx.ID_ANY,"数据库类型")
-        sampleList = ['Oracle', 'mySQL', '其他']
+        m_Label_DBType = wx.StaticText(self,wx.ID_ANY,u"数据库类型")
+        sampleList = ['Oracle', 'mySQL', u'其他']
         self.m_Choice_DBType = wx.Choice(self, choices=sampleList) 
-        m_Label_Cyptype = wx.StaticText(self,wx.ID_ANY,"加密算法")
-        sampleList1 = ['MD5', 'SHA1', '其他']
+        m_Label_Cyptype = wx.StaticText(self,wx.ID_ANY,u"加密算法")
+        sampleList1 = ['MD5', 'SHA1', u'其他']
         self.m_Choice_Cyptype = wx.Choice(self,choices=sampleList1)
 
         box.Add(m_Label_DBType, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -72,9 +72,9 @@ class NewSysDialog(wx.Dialog):
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
-        m_Label_DBname = wx.StaticText(self, wx.ID_ANY, "数据库名")
+        m_Label_DBname = wx.StaticText(self, wx.ID_ANY, u"数据库名")
         self.m_Text_DBname = wx.TextCtrl(self)
-        m_Label_Sheetname = wx.StaticText(self, wx.ID_ANY, "表名")
+        m_Label_Sheetname = wx.StaticText(self, wx.ID_ANY, u"表名")
         self.m_Text_Sheetname = wx.TextCtrl(self)
 
         box.Add(m_Label_DBname, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -84,9 +84,9 @@ class NewSysDialog(wx.Dialog):
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
         
         box = wx.BoxSizer(wx.HORIZONTAL)
-        m_Label_Username = wx.StaticText(self, wx.ID_ANY, "账号字段名")
+        m_Label_Username = wx.StaticText(self, wx.ID_ANY, u"账号字段名")
         self.m_Text_Username = wx.TextCtrl(self)
-        m_Label_Pswname = wx.StaticText(self, wx.ID_ANY, "密码字段名")
+        m_Label_Pswname = wx.StaticText(self, wx.ID_ANY, u"密码字段名")
         self.m_Text_Pswname = wx.TextCtrl(self)
 
         box.Add(m_Label_Username, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
@@ -100,8 +100,8 @@ class NewSysDialog(wx.Dialog):
         sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, 5)
   
         box = wx.BoxSizer(wx.HORIZONTAL)
-        bt_Ok = wx.Button(self,wx.ID_ANY,label="确定")
-        bt_Cancel = wx.Button(self,wx.ID_ANY,label="取消")
+        bt_Ok = wx.Button(self,wx.ID_ANY,label=u"确定")
+        bt_Cancel = wx.Button(self,wx.ID_ANY,label=u"取消")
         box.Add(bt_Ok,1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(bt_Cancel,1, wx.ALIGN_CENTRE|wx.ALL, 5)
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
