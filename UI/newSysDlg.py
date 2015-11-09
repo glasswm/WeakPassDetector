@@ -59,10 +59,10 @@ class NewSysDialog(wx.Dialog):
         
         box = wx.BoxSizer(wx.HORIZONTAL)
         m_Label_DBType = wx.StaticText(self,wx.ID_ANY,u"数据库类型")
-        sampleList = ['Oracle', 'mySQL', u'其他']
+        sampleList = ['mysql', 'oracle','sqlserver','sqlite']
         self.m_Choice_DBType = wx.Choice(self, choices=sampleList) 
         m_Label_Cyptype = wx.StaticText(self,wx.ID_ANY,u"加密算法")
-        sampleList1 = ['MD5', 'SHA1', u'其他']
+        sampleList1 = ['md5', 'sha1', 'sha256', 'plaintext']
         self.m_Choice_Cyptype = wx.Choice(self,choices=sampleList1)
 
         box.Add(m_Label_DBType, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
