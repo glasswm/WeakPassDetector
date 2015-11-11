@@ -93,6 +93,7 @@ class TestPanel(wx.Panel):
         
         m_Panel221 = wx.Panel(m_Panel22)
         m_Panel222 = wx.Panel(m_Panel22)
+        m_Panel223 = wx.Panel(m_Panel22)
         
         m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,u"口令总条数")
         self.m_Text_SumNum = wx.TextCtrl(m_Panel221)
@@ -100,6 +101,9 @@ class TestPanel(wx.Panel):
         m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,u"弱口令条数")
         self.m_Text_WeakNum = wx.TextCtrl(m_Panel222)
         self.m_Text_WeakNum.SetEditable(False)
+        m_Label_UnknownNum = wx.StaticText(m_Panel223,wx.ID_ANY,u"不明口令条数")
+        self.m_Text_UnknownNum = wx.TextCtrl(m_Panel223)
+        self.m_Text_UnknownNum.SetEditable(False)
         
         bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
@@ -116,7 +120,8 @@ class TestPanel(wx.Panel):
         bSizer_Panel222.Add(self.m_Text_WeakNum,proportion=1,flag=wx.RIGHT,border=30)
         m_Panel222.SetSizer(bSizer_Panel222)
         
-        m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
+        self.m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
+        self.count = 0
         bSizer_Panel23 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel23.Add(m_Gauge,proportion=1,flag=wx.LEFT|wx.RIGHT,border=10)
         m_Panel23.SetSizer(bSizer_Panel23)
@@ -223,10 +228,9 @@ class TestPanel(wx.Panel):
                 print("You pressed Cancel\n")
   
             dlg.Destroy()
-#     def initDlg(self):
-#         #todo 
-#         #创建一个数据组 获取dbsheet里的数据，填入左边对话框 
-#         print("OK!")
+
+    def OnIdle(self, event):
+        self.gauge.SetValue(self.count)
         
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)

@@ -68,25 +68,35 @@ class VerifDialog(wx.Dialog):
         
     def OK_button(self, evt):
         print("ok!")
-        up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
-        username_list = []
-        crypt_list = []
-        for i in up_pair:
-            username_list.append(i[0])
-            crypt_list.append(i[1])
-        print username_list
-        print crypt_list
-        if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
-            crypt_type = 'md5'
-        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
-            crypt_type = 'sha1'
-        (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
-        self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
-        self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
+        if self.m_Text_Name == "" or self.m_Text_PSW == "":
+            dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        else:
+            up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
+            username_list = []
+            crypt_list = []
+            for i in up_pair:
+                username_list.append(i[0])
+                crypt_list.append(i[1])
+            print username_list
+            print crypt_list
+            if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
+                crypt_type = 'md5'
+            elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
+                crypt_type = 'sha1'
+
+            unknown_count = 1
+            while(unknown_count>0)
+                (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
+                self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
+                self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
+                self.parent.m_Text_UnknownNum.SetValue(unknown_count)
+                self.parent.count = 100-unknown_count*100/len(up_pair)
 
     def Cancel_Button(self, evt):
         print("cancel!")
-#         self.Destroy()
+        self.Destroy()
 #             
 
 
