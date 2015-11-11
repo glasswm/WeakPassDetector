@@ -44,6 +44,7 @@ class EditSysDialog(wx.Dialog):
         box = wx.BoxSizer(wx.HORIZONTAL)
         self.m_Label_SysName = wx.StaticText(self,wx.ID_ANY, u"系统名称")
         self.m_Text_SysName = wx.TextCtrl(self)
+        self.m_Text_SysName.SetEditable(False)
         box.Add(self.m_Label_SysName, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(self.m_Text_SysName, 3, wx.ALIGN_CENTRE|wx.ALL, 5)
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)

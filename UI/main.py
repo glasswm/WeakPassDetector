@@ -52,15 +52,17 @@ class TestPanel(wx.Panel):
         bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
         self.sampleList = []
-
-        db_util = DBUtil()
-        self.res = db_util.get_all_system()
-        print(len(res))
-        for i in res:
-            self.sampleList.append(i.sys_name)
-            self.idList.append(i.id)
+        #
+        # db_util = DBUtil()
+        # self.res = db_util.get_all_system()
+        # print(len(res))
+        # for i in res:
+        #     self.sampleList.append(i.sys_name)
+        #     self.idList.append(i.id)
 
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),self.sampleList,wx.LB_SINGLE)
+        RefreshSysList()
+
         bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
         bSizer_Panel11.Add(self.listBox)
         bSizerBox_Panel1.Add(bSizer_Panel11,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
@@ -188,7 +190,7 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=idList[self.listBox.GetSelection()], size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal
                              )
@@ -207,7 +209,7 @@ class TestPanel(wx.Panel):
     def WeakCheckStartButton(self,evt):
         print self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
-            dlg = wx.MessageDialog(None, u"请在右侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 #self.Close(True)
                 dlg.Destroy()
@@ -216,7 +218,7 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
              
-            dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = VerifDialog(self, -1, u"输入口令", idx=idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
                               )
@@ -232,10 +234,16 @@ class TestPanel(wx.Panel):
     def OnIdle(self, event):
         self.gauge.SetValue(self.count)
 
-    def OnListBoxEvt(self, event):
-        self.sampleList.append((len(res).sys_name)
-        self.idList.append((len(res).id)
-        
+    def RefreshSysList(self, event)
+        sampleList = []
+        db_util = DBUtil()
+        res = db_util.get_all_system()
+        print(len(res))
+        for i in res:
+            self.sampleList.append(i.sys_name)
+            idList.append(i.id)
+        self.ListBox.SetValue(sampleList)
+
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
     return win
