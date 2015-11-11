@@ -6,6 +6,8 @@ from client.models import DBUtil, SystemInfo
 
 
 class NewSysDialog(wx.Dialog):
+    parent = None
+
     def __init__(
             self, parent, ID, title, size=wx.DefaultSize, pos=wx.DefaultPosition, 
             style=wx.DEFAULT_DIALOG_STYLE,
@@ -16,6 +18,7 @@ class NewSysDialog(wx.Dialog):
         # so we can set an extra style that must be set before
         # creation, and then we create the GUI object using the Create
         # method.
+        self.parent = parent
         pre = wx.PreDialog()
         pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
         pre.Create(parent, ID, title, pos, size, style)

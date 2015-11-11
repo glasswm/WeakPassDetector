@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from time import sleep
 import  wx
 import wx.lib.masked as masked
 from client.client_test import check_weakpass
@@ -87,17 +88,28 @@ class VerifDialog(wx.Dialog):
             elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
                 crypt_type = 'sha1'
 
-            unknown_count = 1
-            while(unknown_count>0)
+            self.Destroy()
+            self.parent.m_ListCtrl.DeleteAllItems()
+            while(True):
                 (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
                 self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
                 self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
-                self.parent.m_Text_UnknownNum.SetValue(unknown_count)
-                self.parent.count = 100-unknown_count*100/len(up_pair)
-                for i range len(weak_list):
+                self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
+                # self.parent.m_Text_WeakNum.update()
+                # self.parent.m_Text_SumNum.update()
+                # self.parent.m_Text_UnknownNum.update()
+                #self.parent.count = 100-unknown_count*100/len(up_pair)
+                for i in weak_list:
+                    #print weakCount+i
                     self.parent.m_ListCtrl.InsertStringItem(weakCount,str(weakCount+1))
                     self.parent.m_ListCtrl.SetStringItem(weakCount,1,username_list[i])
-                weakCount += len(wak_list)
+                    weakCount += 1
+                self.parent.m_Gauge.SetValue(100-unknown_count*100/len(up_pair))
+                if unknown_count == 0:
+                    break
+                sleep(5)
+
+
         # m_ListCtrl.SetStringItem(0,1,u"信息系统")
 
     def Cancel_Button(self, evt):

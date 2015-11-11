@@ -61,7 +61,7 @@ class TestPanel(wx.Panel):
         #     self.idList.append(i.id)
 
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),self.sampleList,wx.LB_SINGLE)
-        RefreshSysList()
+        self.RefreshSysList()
 
         bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
         bSizer_Panel11.Add(self.listBox)
@@ -110,23 +110,30 @@ class TestPanel(wx.Panel):
         bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
         bSizer_Panel22.Add(m_Panel222,proportion=1,flag=wx.EXPAND)
+        bSizer_Panel22.Add(m_Panel223,proportion=1,flag=wx.EXPAND)
         m_Panel22.SetSizer(bSizer_Panel22)
         
         bSizer_Panel221 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel221.Add(m_Label_SumNum,proportion=1,flag=wx.LEFT,border=30)
-        bSizer_Panel221.Add(self.m_Text_SumNum,proportion=1,flag=wx.RIGHT,border=30)
+        bSizer_Panel221.Add(m_Label_SumNum,proportion=0.3)
+        bSizer_Panel221.Add(self.m_Text_SumNum,proportion=0.3)
         m_Panel221.SetSizer(bSizer_Panel221)
         
         bSizer_Panel222 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel222.Add(m_Label_WeakNum,proportion=1,flag=wx.LEFT,border=30)
-        bSizer_Panel222.Add(self.m_Text_WeakNum,proportion=1,flag=wx.RIGHT,border=30)
+        bSizer_Panel222.Add(m_Label_WeakNum,proportion=0.5,flag=wx.LEFT)
+        bSizer_Panel222.Add(self.m_Text_WeakNum,proportion=0.5,flag=wx.RIGHT)
         m_Panel222.SetSizer(bSizer_Panel222)
+
+        bSizer_Panel223 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel223.Add(m_Label_UnknownNum,proportion=0.5,flag=wx.LEFT)
+        bSizer_Panel223.Add(self.m_Text_UnknownNum,proportion=0.5,flag=wx.RIGHT)
+        m_Panel223.SetSizer(bSizer_Panel223)
         
         self.m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
         self.count = 0
         bSizer_Panel23 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel23.Add(m_Gauge,proportion=1,flag=wx.LEFT|wx.RIGHT,border=10)
+        bSizer_Panel23.Add(self.m_Gauge,proportion=1,flag=wx.LEFT|wx.RIGHT,border=10)
         m_Panel23.SetSizer(bSizer_Panel23)
+        #self.m_Gauge.Bind(wx.wxEVT_IDLE,self.OnIdle)
         #panel 3
         #m_Text_List = wx.TextCtrl(m_Panel3)
         # m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
@@ -231,18 +238,19 @@ class TestPanel(wx.Panel):
   
             dlg.Destroy()
 
-    def OnIdle(self, event):
+    def OnIdle(self):
         self.gauge.SetValue(self.count)
 
-    def RefreshSysList(self, event)
-        sampleList = []
+    def RefreshSysList(self):
+        #sampleList = []
         db_util = DBUtil()
         res = db_util.get_all_system()
         print(len(res))
         for i in res:
             self.sampleList.append(i.sys_name)
             idList.append(i.id)
-        self.ListBox.SetValue(sampleList)
+        #self.listBox.SetValue(sampleList)
+        self.listBox.SetItems(self.sampleList)
 
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
