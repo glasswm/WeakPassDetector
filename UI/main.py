@@ -51,16 +51,16 @@ class TestPanel(wx.Panel):
         m_Label_11 = wx.StaticBox(m_Panel11, label=u"系统信息")
         bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
-        sampleList = []
+        self.sampleList = []
 
         db_util = DBUtil()
-        res = db_util.get_all_system()
+        self.res = db_util.get_all_system()
         print(len(res))
         for i in res:
-            sampleList.append(i.sys_name)
-            idList.append(i.id)
+            self.sampleList.append(i.sys_name)
+            self.idList.append(i.id)
 
-        self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),sampleList,wx.LB_SINGLE)
+        self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),self.sampleList,wx.LB_SINGLE)
         bSizer_Panel11 = wx.BoxSizer(wx.VERTICAL)
         bSizer_Panel11.Add(self.listBox)
         bSizerBox_Panel1.Add(bSizer_Panel11,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
@@ -128,22 +128,22 @@ class TestPanel(wx.Panel):
         #panel 3
         #m_Text_List = wx.TextCtrl(m_Panel3)
         # m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
-        m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
-        m_ListCtrl.InsertColumn(0,u'序号')
-        m_ListCtrl.InsertColumn(1,u'弱口令用户名')
-        m_ListCtrl.InsertColumn(2,u'备注')
+        self.m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        self.m_ListCtrl.InsertColumn(0,u'序号')
+        self.m_ListCtrl.InsertColumn(1,u'弱口令用户名')
+        self.m_ListCtrl.InsertColumn(2,u'备注')
         # bSizer_Panel3 = wx.BoxSizer(wx.HORIZONTAL)
         # bSizer_Panel3.Add(m_Text_List,proportion = 1,flag=wx.Left|wx.RIGHT|wx.EXPAND)
         m_Label_3 = wx.StaticBox(m_Panel3, label=u"检测结果")  
         bSizer_Panel3 = wx.StaticBoxSizer(m_Label_3, wx.HORIZONTAL)  
-        bSizer_Panel3.Add(m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
+        bSizer_Panel3.Add(self.m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel3.SetSizer(bSizer_Panel3)
         
-        m_ListCtrl.InsertStringItem(0,"1")
-        m_ListCtrl.SetStringItem(0,1,u"信息系统")
-        
-        m_ListCtrl.InsertStringItem(1,"2")
-        m_ListCtrl.SetStringItem(1,1,u"通信系统")
+        # m_ListCtrl.InsertStringItem(0,"1")
+        # m_ListCtrl.SetStringItem(0,1,u"信息系统")
+        #
+        # m_ListCtrl.InsertStringItem(1,"2")
+        # m_ListCtrl.SetStringItem(1,1,u"通信系统")
 
         self.SetSizer(bSizer1) 
         
@@ -188,7 +188,7 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal
                              )
@@ -216,7 +216,7 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
              
-            dlg = VerifDialog(self, -1, u"输入口令", idx=idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
                               )
@@ -231,6 +231,10 @@ class TestPanel(wx.Panel):
 
     def OnIdle(self, event):
         self.gauge.SetValue(self.count)
+
+    def OnListBoxEvt(self, event):
+        self.sampleList.append((len(res).sys_name)
+        self.idList.append((len(res).id)
         
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)

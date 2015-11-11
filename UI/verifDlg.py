@@ -81,6 +81,7 @@ class VerifDialog(wx.Dialog):
                 crypt_list.append(i[1])
             print username_list
             print crypt_list
+            weakCount = 0
             if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
                 crypt_type = 'md5'
             elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
@@ -93,6 +94,11 @@ class VerifDialog(wx.Dialog):
                 self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
                 self.parent.m_Text_UnknownNum.SetValue(unknown_count)
                 self.parent.count = 100-unknown_count*100/len(up_pair)
+                for i range len(weak_list):
+                    self.parent.m_ListCtrl.InsertStringItem(weakCount,str(weakCount+1))
+                    self.parent.m_ListCtrl.SetStringItem(weakCount,1,username_list[i])
+                weakCount += len(wak_list)
+        # m_ListCtrl.SetStringItem(0,1,u"信息系统")
 
     def Cancel_Button(self, evt):
         print("cancel!")

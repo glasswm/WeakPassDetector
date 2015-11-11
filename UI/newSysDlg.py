@@ -140,6 +140,7 @@ class NewSysDialog(wx.Dialog):
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
                 self.Destroy()
+            self.parent.sampleList.append(m_Text_SysName.GetValue())
 
     def Cancel_Button(self, evt):
         print("cancel!")
