@@ -16,15 +16,16 @@ from interface import initDlg
 provider = wx.SimpleHelpProvider()
 wx.HelpProvider.Set(provider)
 #---------------------------------------------------------------------------
-idList = []
 class TestPanel(wx.Panel):
 
     selected_sys = None
     m_Text_SumNum = None
     m_Text_WeakNum = None
+    idList = None
 
     def __init__(self, parent, log):
         self.log = log
+        self.idList = []
         wx.Panel.__init__(self, parent, -1)
  
  
@@ -58,7 +59,7 @@ class TestPanel(wx.Panel):
         # print(len(res))
         # for i in res:
         #     self.sampleList.append(i.sys_name)
-        #     self.idList.append(i.id)
+        #     self.self.idList.append(i.id)
 
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),self.sampleList,wx.LB_SINGLE)
         self.RefreshSysList()
@@ -67,18 +68,44 @@ class TestPanel(wx.Panel):
         bSizer_Panel11.Add(self.listBox)
         bSizerBox_Panel1.Add(bSizer_Panel11,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel11.SetSizer(bSizerBox_Panel1)
-
+########
+        #panel 12-12
         bSizer_Panel12 = wx.BoxSizer(wx.VERTICAL)
-        m_Panel121 = wx.Panel(m_Panel12)
-        m_Panel122 = wx.Panel(m_Panel12)
+        # m_Panel121 = wx.Panel(m_Panel12)
+        # m_Panel122 = wx.Panel(m_Panel12)
+        # bSizer_Panel12.Add(m_Panel121,proportion=3,flag=wx.EXPAND)
+        # bSizer_Panel12.Add(m_Panel122,proportion=2,flag=wx.EXPAND)
+
+        # m_Panel1211 = wx.Panel(m_Panel121)
+        # m_Panel1212 = wx.Panel(m_Panel121)
+        # m_Panel1213 = wx.Panel(m_Panel121)
+        # bSizer_Panel121 = wx.BoxSizer(wx.VERTICAL)
+        # bSizer_Panel121.Add(m_Panel1211,proportion=1,flag=wx.EXPAND)
+        # bSizer_Panel121.Add(m_Panel1212,proportion=1,flag=wx.EXPAND)
+        # bSizer_Panel121.Add(m_Panel1213,proportion=1,flag=wx.EXPAND)
+
         bt_New = wx.Button(m_Panel12,wx.ID_ANY,label=u"新增系统信息")
         bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label=u"编辑系统信息")
         bt_Delete = wx.Button(m_Panel12,wx.ID_ANY,label=u"删除系统信息")
+
         bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"弱口令检测")
         bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"定期修改检测")
 
+        #m_Label_121 = wx.StaticBox(m_Panel121, label=u"系统维护")
+        #m_Label_122 = wx.StaticBox(m_Panel121, label=u"操作类型")
+        #bSizerBox_Panel121 = wx.StaticBoxSizer(m_Label_121,wx.VERTICAL)
+        #bSizerBox_Panel121.Add(bSizerBox_Panel121,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
+        #m_Panel121.SetSizer(bSizerBox_Panel121)
+        # bSizerBox_Panel121.Add(bt_New,proportion=1,flag=wx.EXPAND)
+        # bSizerBox_Panel121.Add(bt_Edit,proportion=1,flag=wx.EXPAND)
+        # bSizerBox_Panel121.Add(bt_Delete,proportion=1,flag=wx.EXPAND)
+
+        #m_Panel121.SetSizer(bSizerBox_Panel121)
+
+
+
         bSizer_Panel12 = wx.GridBagSizer(0,0)
-        
+
         bSizer_Panel12.Add(bt_New, pos=(1, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
         bSizer_Panel12.Add(bt_Edit, pos=(3, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
         bSizer_Panel12.Add(bt_Delete, pos=(5, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
@@ -97,40 +124,53 @@ class TestPanel(wx.Panel):
         bSizer_Panel2.Add(m_Panel23,proportion=1,flag=wx.EXPAND)
         m_Panel2.SetSizer(bSizer_Panel2)
         
-        m_Panel221 = wx.Panel(m_Panel22)
-        m_Panel222 = wx.Panel(m_Panel22)
-        m_Panel223 = wx.Panel(m_Panel22)
+        # m_Panel221 = wx.Panel(m_Panel22)
+        # m_Panel222 = wx.Panel(m_Panel22)
+        # m_Panel223 = wx.Panel(m_Panel22)
         
-        m_Label_SumNum = wx.StaticText(m_Panel221,wx.ID_ANY,u"口令总条数")
-        self.m_Text_SumNum = wx.TextCtrl(m_Panel221)
+        m_Label_SumNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"口令总条数")
+        self.m_Text_SumNum = wx.TextCtrl(m_Panel22,size=(50,22))
         self.m_Text_SumNum.SetEditable(False)
-        m_Label_WeakNum = wx.StaticText(m_Panel222,wx.ID_ANY,u"弱口令条数")
-        self.m_Text_WeakNum = wx.TextCtrl(m_Panel222)
+        m_Label_WeakNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"弱口令条数")
+        self.m_Text_WeakNum = wx.TextCtrl(m_Panel22,size=(50,22))
+        print self.m_Text_WeakNum.GetSize()
         self.m_Text_WeakNum.SetEditable(False)
-        m_Label_UnknownNum = wx.StaticText(m_Panel223,wx.ID_ANY,u"不明口令条数")
-        self.m_Text_UnknownNum = wx.TextCtrl(m_Panel223)
+        m_Label_UnknownNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"不明口令条数")
+        self.m_Text_UnknownNum = wx.TextCtrl(m_Panel22,size=(50,22))
         self.m_Text_UnknownNum.SetEditable(False)
-        
-        bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
-        bSizer_Panel22.Add(m_Panel222,proportion=1,flag=wx.EXPAND)
-        bSizer_Panel22.Add(m_Panel223,proportion=1,flag=wx.EXPAND)
-        m_Panel22.SetSizer(bSizer_Panel22)
-        
-        bSizer_Panel221 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel221.Add(m_Label_SumNum,proportion=0.3)
-        bSizer_Panel221.Add(self.m_Text_SumNum,proportion=0.3)
-        m_Panel221.SetSizer(bSizer_Panel221)
-        
-        bSizer_Panel222 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel222.Add(m_Label_WeakNum,proportion=0.5,flag=wx.LEFT)
-        bSizer_Panel222.Add(self.m_Text_WeakNum,proportion=0.5,flag=wx.RIGHT)
-        m_Panel222.SetSizer(bSizer_Panel222)
 
-        bSizer_Panel223 = wx.BoxSizer(wx.HORIZONTAL)
-        bSizer_Panel223.Add(m_Label_UnknownNum,proportion=0.5,flag=wx.LEFT)
-        bSizer_Panel223.Add(self.m_Text_UnknownNum,proportion=0.5,flag=wx.RIGHT)
-        m_Panel223.SetSizer(bSizer_Panel223)
+        bSizer_Panel22 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer_Panel22 = wx.GridBagSizer(2,10)
+
+        bSizer_Panel22.Add(m_Label_SumNum, pos=(0, 2), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel22.Add(self.m_Text_SumNum, pos=(0, 3), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel22.Add(m_Label_WeakNum, pos=(0, 4), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel22.Add(self.m_Text_WeakNum, pos=(0, 5), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel22.Add(m_Label_UnknownNum, pos=(0, 6), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel22.Add(self.m_Text_UnknownNum, pos=(0, 7), span=(1, 1), flag=wx.ALIGN_CENTER)
+
+        #bSizer_Panel12.AddGrowableCol(3)
+        m_Panel22.SetSizer(bSizer_Panel22)
+
+        # bSizer_Panel22.Add(m_Panel221,proportion=1,flag=wx.EXPAND)
+        # bSizer_Panel22.Add(m_Panel222,proportion=1,flag=wx.EXPAND)
+        # bSizer_Panel22.Add(m_Panel223,proportion=1,flag=wx.EXPAND)
+        # m_Panel22.SetSizer(bSizer_Panel22)
+        
+        # bSizer_Panel221 = wx.BoxSizer(wx.HORIZONTAL)
+        # bSizer_Panel221.Add(m_Label_SumNum,proportion=0.3)
+        # bSizer_Panel221.Add(self.m_Text_SumNum,proportion=0.3)
+        # m_Panel221.SetSizer(bSizer_Panel221)
+        #
+        # bSizer_Panel222 = wx.BoxSizer(wx.HORIZONTAL)
+        # bSizer_Panel222.Add(m_Label_WeakNum,proportion=0.5,flag=wx.LEFT)
+        # bSizer_Panel222.Add(self.m_Text_WeakNum,proportion=0.5,flag=wx.RIGHT)
+        # m_Panel222.SetSizer(bSizer_Panel222)
+        #
+        # bSizer_Panel223 = wx.BoxSizer(wx.HORIZONTAL)
+        # bSizer_Panel223.Add(m_Label_UnknownNum,proportion=0.5,flag=wx.LEFT)
+        # bSizer_Panel223.Add(self.m_Text_UnknownNum,proportion=0.5,flag=wx.RIGHT)
+        # m_Panel223.SetSizer(bSizer_Panel223)
         
         self.m_Gauge = wx.Gauge(m_Panel23,style = wx.GA_PROGRESSBAR)
         self.count = 0
@@ -142,16 +182,21 @@ class TestPanel(wx.Panel):
         #m_Text_List = wx.TextCtrl(m_Panel3)
         # m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
         self.m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
-        self.m_ListCtrl.InsertColumn(0,u'序号')
-        self.m_ListCtrl.InsertColumn(1,u'弱口令用户名')
-        self.m_ListCtrl.InsertColumn(2,u'备注')
+        self.m_ListCtrl.InsertColumn(0,u'序号',wx.LIST_FORMAT_CENTER)
+        self.m_ListCtrl.SetColumnWidth(0, 70)
+        self.m_ListCtrl.InsertColumn(1,u'弱口令用户名',wx.LIST_FORMAT_CENTER)
+        self.m_ListCtrl.SetColumnWidth(1, 300)
+        self.m_ListCtrl.InsertColumn(2,u'备注',wx.LIST_FORMAT_CENTER)
         # bSizer_Panel3 = wx.BoxSizer(wx.HORIZONTAL)
         # bSizer_Panel3.Add(m_Text_List,proportion = 1,flag=wx.Left|wx.RIGHT|wx.EXPAND)
         m_Label_3 = wx.StaticBox(m_Panel3, label=u"检测结果")  
         bSizer_Panel3 = wx.StaticBoxSizer(m_Label_3, wx.HORIZONTAL)  
         bSizer_Panel3.Add(self.m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel3.SetSizer(bSizer_Panel3)
-        
+
+
+
+
         # m_ListCtrl.InsertStringItem(0,"1")
         # m_ListCtrl.SetStringItem(0,1,u"信息系统")
         #
@@ -200,7 +245,7 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal
                              )
@@ -230,10 +275,11 @@ class TestPanel(wx.Panel):
             if dlg.ShowModal() == wx.ID_YES:
                 print "delete that system"
                 print self.listBox.GetSelection()
-                print idList[self.listBox.GetSelection()]
-                #print self.listBox.
+                #print self.idList[self.listBox.GetSelection()]
                 db_util = DBUtil()
-                db_util.del_system_by_id(idList[self.listBox.GetSelection()])
+                print self.idList
+                db_util.del_system_by_id(self.idList[self.listBox.GetSelection()])
+                self.RefreshSysList()
                 #self.Close(True)
             dlg.Destroy()
 
@@ -249,7 +295,7 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
              
-            dlg = VerifDialog(self, -1, u"输入口令", idx=idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
                               )
@@ -267,13 +313,20 @@ class TestPanel(wx.Panel):
 
     def RefreshSysList(self):
         #sampleList = []
+        self.listBox.Clear()
+        self.sampleList = []
         db_util = DBUtil()
+        res = []
+        self.idList = []
         res = db_util.get_all_system()
+        print ("length of res")
         print(len(res))
         for i in res:
             self.sampleList.append(i.sys_name)
-            idList.append(i.id)
+            self.idList.append(i.id)
         #self.listBox.SetValue(sampleList)
+        #self.listBox.Clear()
+        print self.idList
         self.listBox.SetItems(self.sampleList)
 
 def runTest(frame, nb, log):
