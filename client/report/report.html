@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-table.css">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="bootstrap-table.js"></script>
+    <script src="bootstrap-table-zh-CN.js"></script>
+    <title></title>
+
+    <style>
+      td {text-align: center; }
+      th {background-color: #D0EBEB;}
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1 align=center>弱口令检查报告 &nbsp; {{ sys_name }}</h1>
+<h2 align=center>检查人: {{ operator }} &nbsp;&nbsp;&nbsp;&nbsp; 检查时间: {{ time }}</h2>
+<h3 align=center>该系统共有帐号 {{ total_count }} 个，发现弱口令 {{ weak_count }} 个</h3>
+
+<table id="table"
+       data-toggle="table"
+       data-height="900"
+       data-search="true"
+       data-pagination="true"
+       data-page-size="20"
+       data-page-list="[20,50,100]"
+       data-pagination-first-text="First"
+       data-pagination-pre-text="Previous"
+       data-pagination-next-text="Next"
+       data-pagination-last-text="Last"
+       data-sort-name="id"
+       data-sort-order="asc">
+    <thead>
+    <tr>
+        <th data-field="id" data-halign="center" data-align="center" data-sortable="true">序号</th>
+        <th data-field="name" data-halign="center" data-align="center" data-sortable="true">帐号名</th>
+        <th data-field="wtype" data-halign="center" data-align="center" data-sortable="true">弱口令类别</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ weaklist }}
+    </tbody>
+</table>
+
+</div>
+
+</body>
+</html>
