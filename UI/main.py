@@ -16,15 +16,16 @@ from interface import initDlg
 provider = wx.SimpleHelpProvider()
 wx.HelpProvider.Set(provider)
 #---------------------------------------------------------------------------
-idList = []
 class TestPanel(wx.Panel):
 
     selected_sys = None
     m_Text_SumNum = None
     m_Text_WeakNum = None
+    idList = None
 
     def __init__(self, parent, log):
         self.log = log
+        self.idList = []
         wx.Panel.__init__(self, parent, -1)
  
  
@@ -58,7 +59,7 @@ class TestPanel(wx.Panel):
         # print(len(res))
         # for i in res:
         #     self.sampleList.append(i.sys_name)
-        #     self.idList.append(i.id)
+        #     self.self.idList.append(i.id)
 
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),self.sampleList,wx.LB_SINGLE)
         self.RefreshSysList()
@@ -244,7 +245,7 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal
                              )
@@ -274,10 +275,10 @@ class TestPanel(wx.Panel):
             if dlg.ShowModal() == wx.ID_YES:
                 print "delete that system"
                 print self.listBox.GetSelection()
-                print idList[self.listBox.GetSelection()]
-                #print self.listBox.
+                #print self.idList[self.listBox.GetSelection()]
                 db_util = DBUtil()
-                db_util.del_system_by_id(idList[self.listBox.GetSelection()])
+                print self.idList
+                db_util.del_system_by_id(self.idList[self.listBox.GetSelection()])
                 self.RefreshSysList()
                 #self.Close(True)
             dlg.Destroy()
@@ -294,7 +295,7 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
              
-            dlg = VerifDialog(self, -1, u"输入口令", idx=idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
                               )
@@ -315,13 +316,17 @@ class TestPanel(wx.Panel):
         self.listBox.Clear()
         self.sampleList = []
         db_util = DBUtil()
+        res = []
+        self.idList = []
         res = db_util.get_all_system()
+        print ("length of res")
         print(len(res))
         for i in res:
             self.sampleList.append(i.sys_name)
-            idList.append(i.id)
+            self.idList.append(i.id)
         #self.listBox.SetValue(sampleList)
         #self.listBox.Clear()
+        print self.idList
         self.listBox.SetItems(self.sampleList)
 
 def runTest(frame, nb, log):
