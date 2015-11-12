@@ -69,17 +69,21 @@ class TestPanel(wx.Panel):
         m_Panel11.SetSizer(bSizerBox_Panel1)
 
         bSizer_Panel12 = wx.BoxSizer(wx.VERTICAL)
+        m_Panel121 = wx.Panel(m_Panel12)
+        m_Panel122 = wx.Panel(m_Panel12)
         bt_New = wx.Button(m_Panel12,wx.ID_ANY,label=u"新增系统信息")
         bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label=u"编辑系统信息")
+        bt_Delete = wx.Button(m_Panel12,wx.ID_ANY,label=u"删除系统信息")
         bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"弱口令检测")
         bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"定期修改检测")
 
         bSizer_Panel12 = wx.GridBagSizer(0,0)
         
-        bSizer_Panel12.Add(bt_New, pos=(1, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-        bSizer_Panel12.Add(bt_Edit, pos=(4, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-        bSizer_Panel12.Add(bt_Wstart, pos=(8, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
-        bSizer_Panel12.Add(bt_Rstart, pos=(11, 1), span=(2, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_New, pos=(1, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Edit, pos=(3, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Delete, pos=(5, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Wstart, pos=(7, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Rstart, pos=(9, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
         bSizer_Panel12.AddGrowableCol(3)
         m_Panel12.SetSizer(bSizer_Panel12)
  
@@ -158,9 +162,8 @@ class TestPanel(wx.Panel):
         
         self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
-        self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)  
-
-
+        self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)
+        self.Bind(wx.EVT_BUTTON, self.DeleteSysButton, bt_Delete)
     # def RefreshButton(self,evt):
 
     def NewSysButton(self, evt):
@@ -188,7 +191,7 @@ class TestPanel(wx.Panel):
     def EditSysButton(self, evt):
         print self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
-            dlg = wx.MessageDialog(None, u"请在右侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 #self.Close(True)
                 dlg.Destroy()
@@ -212,7 +215,28 @@ class TestPanel(wx.Panel):
             dlg.Destroy()
         #fill this panel
 #            GetSysInf()
-            
+    def DeleteSysButton(self, evt):
+        print self.listBox.GetStringSelection()
+        if self.listBox.GetStringSelection() == '':
+            dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                #self.Close(True)
+                dlg.Destroy()
+        else:
+            useMetal = False
+            if 'wxMac' in wx.PlatformInfo:
+                useMetal = self.cb.IsChecked()
+            dlg = wx.MessageDialog(None, u"确定删除此系统？", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                print "delete that system"
+                print self.listBox.GetSelection()
+                print idList[self.listBox.GetSelection()]
+                #print self.listBox.
+                db_util = DBUtil()
+                db_util.del_system_by_id(idList[self.listBox.GetSelection()])
+                #self.Close(True)
+            dlg.Destroy()
+
     def WeakCheckStartButton(self,evt):
         print self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
