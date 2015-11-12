@@ -87,7 +87,7 @@ class DBUtil(object):
         self.session.commit()
 
     def del_system_by_id(self, id):
-        sys_info = self.session.query(SystemInfo).filter(SystemInfo.id==id)
+        sys_info = self.session.query(SystemInfo).filter(SystemInfo.id==id).first()
         self.session.delete(sys_info)
         self.session.commit()
 
