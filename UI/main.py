@@ -27,23 +27,18 @@ class TestPanel(wx.Panel):
         self.log = log
         self.idList = []
         wx.Panel.__init__(self, parent, -1)
- 
- 
 
         m_Panel1 = wx.Panel(self,wx.ID_ANY)
         m_Panel2 = wx.Panel(self,wx.ID_ANY)
         m_Panel3 = wx.Panel(self,wx.ID_ANY)
 
- 
         bSizer1 = wx.BoxSizer(wx.VERTICAL)
         bSizer1.Add(m_Panel1,proportion=4,flag=wx.EXPAND)
-        bSizer1.Add(m_Panel2,proportion=1,flag=wx.EXPAND)
+        bSizer1.Add(m_Panel2,proportion=2,flag=wx.EXPAND)
         bSizer1.Add(m_Panel3,proportion=4,flag=wx.EXPAND)
-
 
         m_Panel11 = wx.Panel(m_Panel1)
         m_Panel12 = wx.Panel(m_Panel1)
-
         bSizer_Panel1 = wx.BoxSizer(wx.HORIZONTAL)
         bSizer_Panel1.Add(m_Panel11,proportion=2,flag=wx.EXPAND)
         bSizer_Panel1.Add(m_Panel12,proportion=1,flag=wx.EXPAND)
@@ -53,14 +48,6 @@ class TestPanel(wx.Panel):
         bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
         self.sampleList = []
-        #
-        # db_util = DBUtil()
-        # self.res = db_util.get_all_system()
-        # print(len(res))
-        # for i in res:
-        #     self.sampleList.append(i.sys_name)
-        #     self.self.idList.append(i.id)
-
         self.listBox = wx.ListBox(m_Panel11,26,wx.DefaultPosition,(300,215),self.sampleList,wx.LB_SINGLE)
         self.RefreshSysList()
 
@@ -117,9 +104,11 @@ class TestPanel(wx.Panel):
  
          #panel 2
         bSizer_Panel2 = wx.BoxSizer(wx.VERTICAL)
+        m_Panel21 = wx.Panel(m_Panel2)
         m_Panel22 = wx.Panel(m_Panel2)
         m_Panel23 = wx.Panel(m_Panel2)
-        
+
+        bSizer_Panel2.Add(m_Panel21,proportion=1,flag=wx.EXPAND)
         bSizer_Panel2.Add(m_Panel22,proportion=1,flag=wx.EXPAND)
         bSizer_Panel2.Add(m_Panel23,proportion=1,flag=wx.EXPAND)
         m_Panel2.SetSizer(bSizer_Panel2)
@@ -127,7 +116,13 @@ class TestPanel(wx.Panel):
         # m_Panel221 = wx.Panel(m_Panel22)
         # m_Panel222 = wx.Panel(m_Panel22)
         # m_Panel223 = wx.Panel(m_Panel22)
-        
+        bt_Stop = wx.Button(m_Panel21,wx.ID_ANY,label=u"停止检测")
+        bt_Export = wx.Button(m_Panel21,wx.ID_ANY,label=u"导出报表")
+        bSizer_Panel21 = wx.GridBagSizer(2,10)
+        bSizer_Panel21.Add(bt_Stop, pos=(0,6), span=(1,3), flag = wx.ALIGN_CENTER)
+        bSizer_Panel21.Add(bt_Export, pos=(0,11), span=(1,3), flag = wx.ALIGN_CENTER)
+        m_Panel21.SetSizer(bSizer_Panel21)
+
         m_Label_SumNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"口令总条数")
         self.m_Text_SumNum = wx.TextCtrl(m_Panel22,size=(50,22))
         self.m_Text_SumNum.SetEditable(False)
@@ -194,22 +189,12 @@ class TestPanel(wx.Panel):
         bSizer_Panel3.Add(self.m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel3.SetSizer(bSizer_Panel3)
 
-
-
-
-        # m_ListCtrl.InsertStringItem(0,"1")
-        # m_ListCtrl.SetStringItem(0,1,u"信息系统")
-        #
-        # m_ListCtrl.InsertStringItem(1,"2")
-        # m_ListCtrl.SetStringItem(1,1,u"通信系统")
-
         self.SetSizer(bSizer1) 
         
         self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
         self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)
         self.Bind(wx.EVT_BUTTON, self.DeleteSysButton, bt_Delete)
-    # def RefreshButton(self,evt):
 
     def NewSysButton(self, evt):
         useMetal = False
@@ -258,8 +243,7 @@ class TestPanel(wx.Panel):
                 print("You pressed Cancel\n")
   
             dlg.Destroy()
-        #fill this panel
-#            GetSysInf()
+
     def DeleteSysButton(self, evt):
         print self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
@@ -275,12 +259,10 @@ class TestPanel(wx.Panel):
             if dlg.ShowModal() == wx.ID_YES:
                 print "delete that system"
                 print self.listBox.GetSelection()
-                #print self.idList[self.listBox.GetSelection()]
                 db_util = DBUtil()
                 print self.idList
                 db_util.del_system_by_id(self.idList[self.listBox.GetSelection()])
                 self.RefreshSysList()
-                #self.Close(True)
             dlg.Destroy()
 
     def WeakCheckStartButton(self,evt):
@@ -288,7 +270,6 @@ class TestPanel(wx.Panel):
         if self.listBox.GetStringSelection() == '':
             dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
-                #self.Close(True)
                 dlg.Destroy()
         else:
             useMetal = False
@@ -305,14 +286,12 @@ class TestPanel(wx.Panel):
                 print("You pressed OK\n")
             else:
                 print("You pressed Cancel\n")
-  
             dlg.Destroy()
 
     def OnIdle(self):
         self.gauge.SetValue(self.count)
 
     def RefreshSysList(self):
-        #sampleList = []
         self.listBox.Clear()
         self.sampleList = []
         db_util = DBUtil()
@@ -324,8 +303,6 @@ class TestPanel(wx.Panel):
         for i in res:
             self.sampleList.append(i.sys_name)
             self.idList.append(i.id)
-        #self.listBox.SetValue(sampleList)
-        #self.listBox.Clear()
         print self.idList
         self.listBox.SetItems(self.sampleList)
 
