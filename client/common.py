@@ -3,9 +3,6 @@
 import os
 import time
 
-from django.conf import settings
-import django
-
 __author__ = 'wm'
 
 from enum import Enum
@@ -73,12 +70,7 @@ def generate_statement(sys_name, operator, weak_list, total_count, unkown_count)
 #ENCRYPT_ALGORITHM_ENUM = ('md5', 'sha1')
 
 if __name__ == '__main__':
-    settings.configure()
-    TEMPLATE_DIRS = (
-        os.path.join(os.path.dirname(__file__), 'report').replace('\\','/'),
-    )
-    print TEMPLATE_DIRS
-    django.setup()
+
     weak_list = [{'name' : 'aaaa1', 'wtype' : '1'},
                  {'name' : 'aaaa2', 'wtype' : '2'},
                  {'name' : 'aaaa3', 'wtype' : '1'},
