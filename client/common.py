@@ -37,7 +37,7 @@ class EncryptAlgorithmType(Enum):
     plaintext = 'plaintext'
 
 
-def generate_statement(sys_name, operator, time, weak_list, total_count, unkown_count):
+def generate_statement(sys_name, operator, weak_list, total_count, unkown_count):
 
     # res = render(None, 'report.html', {'sys_name':sys_name,
     #                                 'operator': operator,
@@ -47,7 +47,6 @@ def generate_statement(sys_name, operator, time, weak_list, total_count, unkown_
     #                                 'weak_list': weak_list})
 
     weaklist_str = ''
-
     for count, i in enumerate(weak_list):
         weaklist_str += '''
         <tr>
@@ -59,15 +58,16 @@ def generate_statement(sys_name, operator, time, weak_list, total_count, unkown_
 
     res = open(os.path.dirname(__file__) + '/report/report.html', 'r').read().decode("utf-8")
 
-    print res
+    #print res
+    t = time.time()
     res = res.replace("{{ sys_name }}", sys_name);
     res = res.replace("{{ operator }}", operator);
-    res = res.replace("{{ time }}", time);
+    res = res.replace("{{ time }}", time.strftime('%Y-%m-%d',time.localtime(t)));
     res = res.replace("{{ total_count }}", str(total_count));
     res = res.replace("{{ weak_count }}", str(len(weak_list)));
     res = res.replace("{{ weaklist }}", weaklist_str);
 
-    out = open(os.path.dirname(__file__) + '/report/report'+ time +'.html', 'w')
+    out = open(os.path.dirname(__file__) + '/report/report'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html', 'w')
     out.write(res.encode('utf-8'))
     out.close()
 
@@ -87,4 +87,4 @@ if __name__ == '__main__':
                  {'name' : 'aaaa3', 'wtype' : '1'},
                  {'name' : 'aaaa4', 'wtype' : '3'},
                  {'name' : 'aaaa5', 'wtype' : '1'},]
-    generate_statement(u'基建管理信息系统', u'汪明', time.strftime('%Y-%m-%d',time.localtime(time.time())), weak_list, 14321, 111)
+    generate_statement(u'基建管理信息系统', u'汪明', weak_list, 14321, 111)
