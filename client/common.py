@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-from django.conf import settings
-from django.shortcuts import render
-
-import django
-
 import time
-from django.template.defaultfilters import join
+
+from django.conf import settings
+import django
 
 __author__ = 'wm'
 
