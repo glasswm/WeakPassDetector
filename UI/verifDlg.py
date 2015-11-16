@@ -5,18 +5,20 @@ import wx.lib.masked as masked
 from client.client_test import check_weakpass
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
-
+from threadManager import WorkerThread
 
 class VerifDialog(wx.Dialog):
 
     cur_sys_info = None
     parent = None
-
     def __init__(
             self, parent, ID, title, idx, size=wx.DefaultSize, pos=wx.DefaultPosition,
             style=wx.DEFAULT_DIALOG_STYLE,
             useMetal=False,
             ):
+        self.threads = []
+        self.count = 0
+        self.idx = idx
         self.parent = parent
         pre = wx.PreDialog()
         pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
@@ -74,40 +76,44 @@ class VerifDialog(wx.Dialog):
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
         else:
-            up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
-            username_list = []
-            crypt_list = []
-            for i in up_pair:
-                username_list.append(i[0])
-                crypt_list.append(i[1])
-            print username_list
-            print crypt_list
-            weakCount = 0
-            if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
-                crypt_type = 'md5'
-            elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
-                crypt_type = 'sha1'
-
-            self.Destroy()
-            self.parent.m_ListCtrl.DeleteAllItems()
-            while(True):
-                (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
-                self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
-                self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
-                self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
-                # self.parent.m_Text_WeakNum.update()
-                # self.parent.m_Text_SumNum.update()
-                # self.parent.m_Text_UnknownNum.update()
-                #self.parent.count = 100-unknown_count*100/len(up_pair)
-                for i in weak_list:
-                    #print weakCount+i
-                    self.parent.m_ListCtrl.InsertStringItem(weakCount,str(weakCount+1))
-                    self.parent.m_ListCtrl.SetStringItem(weakCount,1,username_list[i])
-                    weakCount += 1
-                self.parent.m_Gauge.SetValue(100-unknown_count*100/len(up_pair))
-                if unknown_count == 0:
-                    break
-                sleep(5)
+            self.count += 1
+            thread = WorkerThread(self.count, self.idx, self.parent, self)#����һ���߳�
+            self.threads.append(thread)
+            thread.start()
+            # up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
+            # username_list = []
+            # crypt_list = []
+            # for i in up_pair:
+            #     username_list.append(i[0])
+            #     crypt_list.append(i[1])
+            # print username_list
+            # print crypt_list
+            # weakCount = 0
+            # if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
+            #     crypt_type = 'md5'
+            # elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
+            #     crypt_type = 'sha1'
+            #
+            # self.Destroy()
+            # self.parent.m_ListCtrl.DeleteAllItems()
+            # while(True):
+            #     (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
+            #     self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
+            #     self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
+            #     self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
+            #     # self.parent.m_Text_WeakNum.update()
+            #     # self.parent.m_Text_SumNum.update()
+            #     # self.parent.m_Text_UnknownNum.update()
+            #     #self.parent.count = 100-unknown_count*100/len(up_pair)
+            #     for i in weak_list:
+            #         #print weakCount+i
+            #         self.parent.m_ListCtrl.InsertStringItem(weakCount,str(weakCount+1))
+            #         self.parent.m_ListCtrl.SetStringItem(weakCount,1,username_list[i])
+            #         weakCount += 1
+            #     self.parent.m_Gauge.SetValue(100-unknown_count*100/len(up_pair))
+            #     if unknown_count == 0:
+            #         break
+            #     sleep(5)
 
 
         # m_ListCtrl.SetStringItem(0,1,u"信息系统")

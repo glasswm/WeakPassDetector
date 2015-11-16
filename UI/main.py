@@ -195,6 +195,8 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
         self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)
         self.Bind(wx.EVT_BUTTON, self.DeleteSysButton, bt_Delete)
+        self.Bind(wx.EVT_BUTTON, self.ExportReport, bt_Export)
+        self.Bind(wx.EVT_BUTTON, self.StopTest, bt_Stop)
 
     def NewSysButton(self, evt):
         useMetal = False
@@ -305,6 +307,12 @@ class TestPanel(wx.Panel):
             self.idList.append(i.id)
         print self.idList
         self.listBox.SetItems(self.sampleList)
+
+    def ExportReport(self):
+        print ("export report")
+
+    def StopTest(self):
+        print ("stop testing, stop thread")
 
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
