@@ -9,7 +9,7 @@ from editSysDlg import EditSysDialog
 from verifDlg import VerifDialog
 import logging
 from interface import initDlg
-
+from timer import timer
 
 
 #---------------------------------------------------------------------------
@@ -24,6 +24,7 @@ class TestPanel(wx.Panel):
     m_Text_SumNum = None
     m_Text_WeakNum = None
     idList = None
+    thread = None
 
     def __init__(self, parent, log):
         self.log = log
@@ -280,7 +281,8 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-             
+
+            thread = timer(self, -1, idx=self.idList[self.listBox.GetSelection()],)
             dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
@@ -339,6 +341,7 @@ class TestPanel(wx.Panel):
 
     def StopTest(self):
         print ("stop testing, stop thread")
+        self.thread.stop()
 
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
