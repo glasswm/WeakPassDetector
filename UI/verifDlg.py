@@ -34,14 +34,14 @@ class VerifDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
     
         box = wx.BoxSizer(wx.HORIZONTAL)
-        self.m_Label_Name = wx.StaticText(self,wx.ID_ANY, u"用户名")
+        self.m_Label_Name = wx.StaticText(self,wx.ID_ANY, u"用户名",style = wx.ALIGN_CENTER)
         self.m_Text_Name = wx.TextCtrl(self)
         box.Add(self.m_Label_Name, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(self.m_Text_Name, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
   
         box = wx.BoxSizer(wx.HORIZONTAL)
-        m_Label_PSW = wx.StaticText(self, wx.ID_ANY, u"密码")
+        m_Label_PSW = wx.StaticText(self, wx.ID_ANY, u"密码",style = wx.ALIGN_CENTER)
         self.m_Text_PSW = wx.TextCtrl(self)
 
         box.Add(m_Label_PSW, 1, wx.ALIGN_CENTRE|wx.ALL, 5)

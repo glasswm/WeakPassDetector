@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import  wx
 import wx.lib.masked as masked
+
+from ReguTestDlg import ReguTestDialog
 from client.models import DBUtil
 from newSysDlg import NewSysDialog
 from editSysDlg import EditSysDialog
@@ -197,6 +199,7 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.DeleteSysButton, bt_Delete)
         self.Bind(wx.EVT_BUTTON, self.ExportReport, bt_Export)
         self.Bind(wx.EVT_BUTTON, self.StopTest, bt_Stop)
+        self.Bind(wx.EVT_BUTTON, self.RegularModifyTestButton, bt_Rstart)
 
     def NewSysButton(self, evt):
         useMetal = False
@@ -279,6 +282,29 @@ class TestPanel(wx.Panel):
                 useMetal = self.cb.IsChecked()
              
             dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
+                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                              useMetal=useMetal,
+                              )
+            dlg.CenterOnScreen()
+            val = dlg.ShowModal()
+            if val == wx.ID_OK:
+                print("You pressed OK\n")
+            else:
+                print("You pressed Cancel\n")
+            dlg.Destroy()
+
+    def RegularModifyTestButton(self, evt):
+        print self.listBox.GetStringSelection()
+        if self.listBox.GetStringSelection() == '':
+            dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        else:
+            useMetal = False
+            if 'wxMac' in wx.PlatformInfo:
+                useMetal = self.cb.IsChecked()
+
+            dlg = ReguTestDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
                               )
