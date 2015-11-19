@@ -8,17 +8,24 @@ from client.models import DBUtil
 class timer(threading.Thread): #The timer class is derived from the class threading.Thread
     cur_sys_info = None
     parent = None
+    db_user_name = None
+    db_pass_wd =None
 
-    def __init__(self, parent, idx,):
+    def __init__(self, parent, idx):
         self.parent = parent
-        threading.Thread.__init__(self)
-        self.thread_stop = False
+        super(timer, self).__init__()
+        self._stop = threading.Event()
 
         db_util = DBUtil()
-        self.cur_sys_info = db_util.get_system_by_id(self.idx)
+        self.cur_sys_info = db_util.get_system_by_id(idx)
 
     def run(self): #Overwrite run() method, put what you want the thread do here
-        up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
+        print 'db user: ', self.db_user_name, ', db_passwd: ', self.db_pass_wd
+        kkkk = 0
+        while (kkkk<100000000):
+            kkkk += 1
+        print kkkk
+        up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
         username_list = []
         crypt_list = []
         for i in up_pair:
@@ -32,9 +39,8 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
             crypt_type = 'sha1'
 
-        self.Destroy()
         self.parent.m_ListCtrl.DeleteAllItems()
-        while(True):
+        while(self.stopped() != True):
             (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
             self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
             self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
@@ -49,4 +55,11 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             time.sleep(5)
 
     def stop(self):
-        self.thread_stop = True
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
+    def set_db_user(self, name, passwd):
+        self.db_user_name = name
+        self.db_pass_wd = passwd

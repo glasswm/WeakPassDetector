@@ -2,7 +2,7 @@ __author__ = 'glasswm'
 
 LOCAL_DB_File = '../tmp.db'
 
-wp_server = 'http://192.168.58.132:4000/wpd'
+wp_server = 'http://192.168.238.132:4000/wpd'
 
 
 proxies = {

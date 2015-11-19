@@ -282,7 +282,7 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
 
-            thread = timer(self, -1, idx=self.idList[self.listBox.GetSelection()],)
+            self.thread = timer(self, idx=self.idList[self.listBox.GetSelection()])
             dlg = VerifDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
@@ -336,12 +336,13 @@ class TestPanel(wx.Panel):
         print self.idList
         self.listBox.SetItems(self.sampleList)
 
-    def ExportReport(self):
+    def ExportReport(self, evt):
         print ("export report")
 
-    def StopTest(self):
+    def StopTest(self, evt):
         print ("stop testing, stop thread")
         self.thread.stop()
+        #self.thread.join()
 
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)

@@ -69,12 +69,14 @@ class VerifDialog(wx.Dialog):
         
     def OK_button(self, evt):
         print("ok!")
-        if self.m_Text_Name == "" or self.m_Text_PSW == "":
+        if self.m_Text_Name.GetValue() == "" or self.m_Text_PSW.GetValue() == "":
             dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
         else:
+            self.parent.thread.set_db_user(self.m_Text_Name.GetValue(), self.m_Text_PSW.GetValue())
             self.parent.thread.start()
+            self.Destroy()
             # up_pair = self.cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
             # username_list = []
             # crypt_list = []
