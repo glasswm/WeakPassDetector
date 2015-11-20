@@ -3,6 +3,7 @@ import  wx
 import wx.lib.masked as masked
 
 from ReguTestDlg import ReguTestDialog
+from client.common import generate_statement
 from client.models import DBUtil
 from newSysDlg import NewSysDialog
 from editSysDlg import EditSysDialog
@@ -23,6 +24,7 @@ class TestPanel(wx.Panel):
     selected_sys = None
     m_Text_SumNum = None
     m_Text_WeakNum = None
+    weak_List = None
     idList = None
     thread = None
 
@@ -338,6 +340,12 @@ class TestPanel(wx.Panel):
 
     def ExportReport(self, evt):
         print ("export report")
+        wl = []
+        for i in self.weak_List:
+            temp = {'name' : 'aaaa1', 'wtype' : '1'}
+            temp['name'] = str(i)
+            wl.append(temp)
+        generate_statement(self.listBox.GetStringSelection(), u'汪明', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
 
     def StopTest(self, evt):
         print ("stop testing, stop thread")

@@ -21,10 +21,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
 
     def run(self): #Overwrite run() method, put what you want the thread do here
         print 'db user: ', self.db_user_name, ', db_passwd: ', self.db_pass_wd
-        kkkk = 0
-        while (kkkk<100000000):
-            kkkk += 1
-        print kkkk
+        self.parent.weak_List = []
         up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
         username_list = []
         crypt_list = []
@@ -42,6 +39,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         self.parent.m_ListCtrl.DeleteAllItems()
         while(self.stopped() != True):
             (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
+            self.parent.weak_List = weak_list
             self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
             self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
             self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
