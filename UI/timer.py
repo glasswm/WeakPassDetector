@@ -28,6 +28,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         for i in up_pair:
             username_list.append(i[0])
             crypt_list.append(i[1])
+        self.parent.username_List = username_list
         print username_list
         print crypt_list
         weakCount = 0

@@ -25,6 +25,7 @@ class TestPanel(wx.Panel):
     m_Text_SumNum = None
     m_Text_WeakNum = None
     weak_List = None
+    username_List = None
     idList = None
     thread = None
 
@@ -343,7 +344,7 @@ class TestPanel(wx.Panel):
         wl = []
         for i in self.weak_List:
             temp = {'name' : 'aaaa1', 'wtype' : '1'}
-            temp['name'] = str(i)
+            temp['name'] = self.username_List[i]
             wl.append(temp)
         generate_statement(self.listBox.GetStringSelection(), u'汪明', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
 
