@@ -9,7 +9,6 @@ from newSysDlg import NewSysDialog
 from editSysDlg import EditSysDialog
 from verifDlg import VerifDialog
 import logging
-from interface import initDlg
 from timer import timer
 
 
@@ -122,10 +121,10 @@ class TestPanel(wx.Panel):
         # m_Panel221 = wx.Panel(m_Panel22)
         # m_Panel222 = wx.Panel(m_Panel22)
         # m_Panel223 = wx.Panel(m_Panel22)
-        bt_Stop = wx.Button(m_Panel21,wx.ID_ANY,label=u"停止检测")
+        self.bt_Stop = wx.Button(m_Panel21,wx.ID_ANY,label=u"停止检测")
         bt_Export = wx.Button(m_Panel21,wx.ID_ANY,label=u"导出报表")
         bSizer_Panel21 = wx.GridBagSizer(2,10)
-        bSizer_Panel21.Add(bt_Stop, pos=(0,6), span=(1,3), flag = wx.ALIGN_CENTER)
+        bSizer_Panel21.Add(self.bt_Stop, pos=(0,6), span=(1,3), flag = wx.ALIGN_CENTER)
         bSizer_Panel21.Add(bt_Export, pos=(0,11), span=(1,3), flag = wx.ALIGN_CENTER)
         m_Panel21.SetSizer(bSizer_Panel21)
 
@@ -202,7 +201,7 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)
         self.Bind(wx.EVT_BUTTON, self.DeleteSysButton, bt_Delete)
         self.Bind(wx.EVT_BUTTON, self.ExportReport, bt_Export)
-        self.Bind(wx.EVT_BUTTON, self.StopTest, bt_Stop)
+        self.Bind(wx.EVT_BUTTON, self.StopTest, self.bt_Stop)
         self.Bind(wx.EVT_BUTTON, self.RegularModifyTestButton, bt_Rstart)
 
     def NewSysButton(self, evt):
@@ -300,6 +299,9 @@ class TestPanel(wx.Panel):
 
     def RegularModifyTestButton(self, evt):
         print self.listBox.GetStringSelection()
+        # self.bt_Stop.SetLabel("good")
+        # self.m_ListCtrl.DeleteColumn(1)
+        # self.m_ListCtrl.InsertColumn(1,u'xxxx',wx.LIST_FORMAT_CENTER)
         if self.listBox.GetStringSelection() == '':
             dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
