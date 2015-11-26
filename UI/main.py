@@ -3,6 +3,7 @@ import  wx
 import wx.lib.masked as masked
 
 from ReguTestDlg import ReguTestDialog
+from regularTestThread import regularThread
 from client.common import generate_statement
 from client.models import DBUtil
 from newSysDlg import NewSysDialog
@@ -27,6 +28,7 @@ class TestPanel(wx.Panel):
     username_List = None
     idList = None
     thread = None
+    regularThread = None
     weak_Test = True
 
     def __init__(self, parent, log):
@@ -326,7 +328,7 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-
+            self.regularThread = regularThread(self, idx=self.idList[self.listBox.GetSelection()])
             dlg = ReguTestDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
