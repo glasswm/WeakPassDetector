@@ -128,7 +128,7 @@ class DBUtil(object):
             else:
                 rec = Cryptograph(user_name=i[0], crypt_pass=i[1], last_time=i[2], system=sys_info)
                 self.session.add(rec)
-            self.session.commit()
+        self.session.commit()
 
     def __del__(self):
         self.session.close()
