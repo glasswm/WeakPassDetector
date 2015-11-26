@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from time import sleep
+
 import  wx
 import wx.lib.masked as masked
 
@@ -12,6 +14,7 @@ from editSysDlg import EditSysDialog
 from verifDlg import VerifDialog
 import logging
 from timer import timer
+import datetime
 
 
 #---------------------------------------------------------------------------

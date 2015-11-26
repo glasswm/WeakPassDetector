@@ -5,6 +5,7 @@ from interface import crypt, updateDtime
 from client.client_test import check_weakpass
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
+import datetime
 
 class regularThread(threading.Thread): #The timer class is derived from the class threading.Thread
     parent = None
@@ -38,7 +39,12 @@ class regularThread(threading.Thread): #The timer class is derived from the clas
         crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
         new_list = []
         symbol = False
-        dTime = updateDtime('2015-11-05')
+        #dTime = updateDtime('2015-11-05')
+        now = datetime.datetime.now()
+        dTime = (now - cur_sys_info.last_update_time).days
+        cur_sys_info.last_update_time = now
+        self.db_util.update_system(cur_sys_info)
+
         for i in up_pair_crypt:
             for j in crypt_list:
                 if i[0] != j[0]:
