@@ -280,6 +280,7 @@ class TestPanel(wx.Panel):
             dlg.Destroy()
 
     def TestStartButton(self,evt):
+        self.m_Gauge.SetValue(0)
         if self.weak_Test == True:
             self.WeakCheckStartButton()
         else:

@@ -56,6 +56,7 @@ class regularThread(threading.Thread): #The timer class is derived from the clas
             new_list.append(temp)
 
         self.db_util.set_crypt(self.idx, new_list)
+        self.parent.m_Gauge.SetValue(100)
 
     def stop(self):
         self._stop.set()
