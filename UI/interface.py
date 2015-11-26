@@ -25,7 +25,6 @@ def updateDtime(t):
     d2 = datetime.datetime(string.atoi(p[0]),string.atoi(p[1]),string.atoi(p[2]))
     return (d1-d2).days
 
-#return current time
 def curTime():
     (a,b,c,d,e,f,g,h,i) = time.localtime(time.time())
     strTime = str(a) + '-' + str(b) + '-' + str(c)

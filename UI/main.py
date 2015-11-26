@@ -27,6 +27,7 @@ class TestPanel(wx.Panel):
     username_List = None
     idList = None
     thread = None
+    weak_Test = True
 
     def __init__(self, parent, log):
         self.log = log
@@ -80,8 +81,9 @@ class TestPanel(wx.Panel):
         bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label=u"编辑系统信息")
         bt_Delete = wx.Button(m_Panel12,wx.ID_ANY,label=u"删除系统信息")
 
-        bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"弱口令检测")
-        bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"定期修改检测")
+        self.bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"  弱口令检测 ")
+        bt_Export = wx.Button(m_Panel12,wx.ID_ANY,label=u"   导出报表   ")
+        #self.bt_Rstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"切换：弱口令检测")
 
         #m_Label_121 = wx.StaticBox(m_Panel121, label=u"系统维护")
         #m_Label_122 = wx.StaticBox(m_Panel121, label=u"操作类型")
@@ -101,8 +103,8 @@ class TestPanel(wx.Panel):
         bSizer_Panel12.Add(bt_New, pos=(1, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
         bSizer_Panel12.Add(bt_Edit, pos=(3, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
         bSizer_Panel12.Add(bt_Delete, pos=(5, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
-        bSizer_Panel12.Add(bt_Wstart, pos=(7, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
-        bSizer_Panel12.Add(bt_Rstart, pos=(9, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(self.bt_Wstart, pos=(7, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
+        bSizer_Panel12.Add(bt_Export, pos=(9, 1), span=(1, 5), flag=wx.ALIGN_CENTER)
         bSizer_Panel12.AddGrowableCol(3)
         m_Panel12.SetSizer(bSizer_Panel12)
  
@@ -122,10 +124,11 @@ class TestPanel(wx.Panel):
         # m_Panel222 = wx.Panel(m_Panel22)
         # m_Panel223 = wx.Panel(m_Panel22)
         self.bt_Stop = wx.Button(m_Panel21,wx.ID_ANY,label=u"停止检测")
-        bt_Export = wx.Button(m_Panel21,wx.ID_ANY,label=u"导出报表")
+        #bt_Export = wx.Button(m_Panel21,wx.ID_ANY,label=u"导出报表")
+        self.bt_Rstart = wx.Button(m_Panel21,wx.ID_ANY,label=u"切换模式")
         bSizer_Panel21 = wx.GridBagSizer(2,10)
-        bSizer_Panel21.Add(self.bt_Stop, pos=(0,6), span=(1,3), flag = wx.ALIGN_CENTER)
-        bSizer_Panel21.Add(bt_Export, pos=(0,11), span=(1,3), flag = wx.ALIGN_CENTER)
+        bSizer_Panel21.Add(self.bt_Rstart, pos=(0,6), span=(1,3), flag = wx.ALIGN_CENTER)
+        bSizer_Panel21.Add(self.bt_Stop, pos=(0,11), span=(1,3), flag = wx.ALIGN_CENTER)
         m_Panel21.SetSizer(bSizer_Panel21)
 
         m_Label_SumNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"口令总条数")
@@ -198,11 +201,11 @@ class TestPanel(wx.Panel):
         
         self.Bind(wx.EVT_BUTTON, self.NewSysButton, bt_New)
         self.Bind(wx.EVT_BUTTON, self.EditSysButton, bt_Edit)
-        self.Bind(wx.EVT_BUTTON, self.WeakCheckStartButton, bt_Wstart)
+        self.Bind(wx.EVT_BUTTON, self.TestStartButton, self.bt_Wstart)
         self.Bind(wx.EVT_BUTTON, self.DeleteSysButton, bt_Delete)
         self.Bind(wx.EVT_BUTTON, self.ExportReport, bt_Export)
         self.Bind(wx.EVT_BUTTON, self.StopTest, self.bt_Stop)
-        self.Bind(wx.EVT_BUTTON, self.RegularModifyTestButton, bt_Rstart)
+        self.Bind(wx.EVT_BUTTON, self.ModeSwitchButton, self.bt_Rstart)
 
     def NewSysButton(self, evt):
         useMetal = False
@@ -273,7 +276,22 @@ class TestPanel(wx.Panel):
                 self.RefreshSysList()
             dlg.Destroy()
 
-    def WeakCheckStartButton(self,evt):
+    def TestStartButton(self,evt):
+        if self.weak_Test == True:
+            self.WeakCheckStartButton()
+        else:
+            self.RegularModifyTestButton()
+
+    def ModeSwitchButton(self,evt):
+        print self.listBox.GetStringSelection()
+        self.weak_Test = 1 - self.weak_Test
+        print self.weak_Test
+        if self.weak_Test == True:
+            self.bt_Wstart.SetLabel("弱口令检测".decode('utf-8'))
+        else:
+            self.bt_Wstart.SetLabel("定期修改检测".decode('utf-8'))
+
+    def WeakCheckStartButton(self):
         print self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
             dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
@@ -297,9 +315,7 @@ class TestPanel(wx.Panel):
                 print("You pressed Cancel\n")
             dlg.Destroy()
 
-    def RegularModifyTestButton(self, evt):
-        print self.listBox.GetStringSelection()
-        # self.bt_Stop.SetLabel("good")
+    def RegularModifyTestButton(self):
         # self.m_ListCtrl.DeleteColumn(1)
         # self.m_ListCtrl.InsertColumn(1,u'xxxx',wx.LIST_FORMAT_CENTER)
         if self.listBox.GetStringSelection() == '':
@@ -342,6 +358,12 @@ class TestPanel(wx.Panel):
         self.listBox.SetItems(self.sampleList)
 
     def ExportReport(self, evt):
+        if self.weak_Test == True:
+            self.WeakTestReport()
+        else:
+            self.RegularTestReport()
+
+    def WeakTestReport(self):
         print ("export report")
         wl = []
         for i in self.weak_List:
@@ -349,6 +371,9 @@ class TestPanel(wx.Panel):
             temp['name'] = self.username_List[i]
             wl.append(temp)
         generate_statement(self.listBox.GetStringSelection(), u'汪明', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
+
+    def RegularTestReport(self):
+        print("regular test report")
 
     def StopTest(self, evt):
         print ("stop testing, stop thread")
