@@ -4,6 +4,8 @@ import  wx
 import time
 import datetime
 import wx.lib.masked as masked
+
+from interface import crypt
 from client.client_test import check_weakpass
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
@@ -12,12 +14,18 @@ class ReguTestDialog(wx.Dialog):
 
     cur_sys_info = None
     parent = None
+    db_user_name = None
+    db_pass_wd = None
+    db_util = None
+    idx = None
 
     def __init__(
             self, parent, ID, title, idx, size=wx.DefaultSize, pos=wx.DefaultPosition,
             style=wx.DEFAULT_DIALOG_STYLE,
             useMetal=False,
             ):
+        self.db_util = DBUtil()
+        self.idx = idx
         self.parent = parent
         pre = wx.PreDialog()
         pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
@@ -61,9 +69,6 @@ class ReguTestDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.OK_button, bt_Ok)
         self.Bind(wx.EVT_BUTTON, self.Cancel_Button, bt_Cancel)
 
-        db_util = DBUtil()
-        self.cur_sys_info = db_util.get_system_by_id(idx)
-
     def OK_button(self, evt):
         print("ok!")
         if self.m_Text_Name == "" or self.m_Text_PSW == "":
@@ -72,8 +77,46 @@ class ReguTestDialog(wx.Dialog):
                 dlg.Destroy()
         else:
             print("regular modify testing!")
-            self.parent.regularThread.start()
+            self.regularTest()
             self.Destroy()
+
+    def regularTest(self):
+        cur_sys_info = self.db_util.get_system_by_id(self.idx)
+        up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
+        up_pair_crypt = []
+        for i in up_pair:
+            temp = (i[0],crypt(i[1]))
+            up_pair_crypt.append(temp)
+
+        #if table not exists, set up_pair_crypt to db
+
+        crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
+        new_list = []
+        symbol = False
+        #dTime = updateDtime('2015-11-05')
+        now = datetime.datetime.now()
+        dTime = (now - cur_sys_info.last_update_time).days
+        cur_sys_info.last_update_time = now
+        self.db_util.update_system(cur_sys_info)
+
+        for i in up_pair_crypt:
+            for j in crypt_list:
+                if i[0] != j[0]:
+                    symbol = True
+                    continue
+                else:
+                    symbol = False
+                    if i[1] != j[1]:
+                        temp = (i[0],i[1],0)
+                    else:
+                        temp = (i[0],i[1],j[2] + dTime)
+            if symbol == True:
+                temp = (i[0],i[1],0)
+                symbol = False
+            new_list.append(temp)
+
+        self.db_util.set_crypt(self.idx, new_list)
+        self.parent.m_Gauge.SetValue(100)
 
     def Cancel_Button(self, evt):
         print("cancel!")

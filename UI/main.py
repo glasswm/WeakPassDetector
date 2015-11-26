@@ -344,7 +344,6 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            self.regularThread = regularThread(self, idx=self.idList[self.listBox.GetSelection()])
             dlg = ReguTestDialog(self, -1, u"输入口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                               style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                               useMetal=useMetal,
