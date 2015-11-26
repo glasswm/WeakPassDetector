@@ -92,7 +92,10 @@ class ReguTestDialog(wx.Dialog):
         symbol = False
         #dTime = updateDtime('2015-11-05')
         now = datetime.datetime.now()
-        dTime = (now - cur_sys_info.last_update_time).days
+        if cur_sys_info.last_update_time == None:
+            dTime = 0
+        else:
+            dTime = (now - cur_sys_info.last_update_time).days
         cur_sys_info.last_update_time = now
         self.db_util.update_system(cur_sys_info)
 
