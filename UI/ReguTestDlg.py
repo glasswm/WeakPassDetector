@@ -79,7 +79,7 @@ class ReguTestDialog(wx.Dialog):
 
     def regularTest(self):
         cur_sys_info = self.db_util.get_system_by_id(self.idx)
-        up_pair = cur_sys_info.get_account_data(username=self.m_Text_Name, password=self.m_Text_PSW)
+        up_pair = cur_sys_info.get_account_data(username=self.m_Text_Name.GetValue(), password=self.m_Text_PSW.GetValue())
         up_pair_crypt = []
         for i in up_pair:
             temp = (i[0],crypt(i[1]))
