@@ -1,6 +1,7 @@
 import threading
 import time
 
+from interface import crypt, updateDtime
 from client.client_test import check_weakpass
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
@@ -8,21 +9,53 @@ from client.models import DBUtil
 class regularThread(threading.Thread): #The timer class is derived from the class threading.Thread
     parent = None
     db_user_name = None
-    db_pass_wd =None
-    crypt_list = []
+    db_pass_wd = None
+    db_util = None
+    idx = None
+    #crypt_list = []
 
     def __init__(self, parent, idx):
         self.parent = parent
         super(regularThread, self).__init__()
         self._stop = threading.Event()
 
-        db_util = DBUtil()
-        self.crypt_list = db_util.get_crypt_by_systemID(idx)
+        self.db_util = DBUtil()
+        self.idx = idx
+        # self.cur_sys_info = db_util.get_system_by_id(idx)
+        # self.crypt_list = db_util.get_crypt_by_systemID(idx)
 
     def run(self): #Overwrite run() method, put what you want the thread do here
         print("todo:regular test")
-        # for i in self.crypt_list:
+        cur_sys_info = self.db_util.get_system_by_id(self.idx)
+        up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
+        up_pair_crypt = []
+        for i in up_pair:
+            temp = (i[0],crypt(i[1]))
+            up_pair_crypt.append(temp)
 
+        #if table not exists, set up_pair_crypt to db
+
+        crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
+        new_list = []
+        symbol = False
+        dTime = updateDtime('2015-11-05')
+        for i in up_pair_crypt:
+            for j in crypt_list:
+                if i[0] != j[0]:
+                    symbol = True
+                    continue
+                else:
+                    symbol = False
+                    if i[1] != j[1]:
+                        temp = (i[0],i[1],0)
+                    else:
+                        temp = (i[0],i[1],j[2] + dTime)
+            if symbol == True:
+                temp = (i[0],i[1],0)
+                symbol = False
+            new_list.append(temp)
+
+        self.db_util.set_crypt(self.idx, new_list)
 
     def stop(self):
         self._stop.set()
