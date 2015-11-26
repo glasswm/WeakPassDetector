@@ -12,10 +12,7 @@ from client.models import DBUtil
 
 class ReguTestDialog(wx.Dialog):
 
-    cur_sys_info = None
     parent = None
-    db_user_name = None
-    db_pass_wd = None
     db_util = None
     idx = None
 
@@ -82,7 +79,7 @@ class ReguTestDialog(wx.Dialog):
 
     def regularTest(self):
         cur_sys_info = self.db_util.get_system_by_id(self.idx)
-        up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
+        up_pair = cur_sys_info.get_account_data(username=self.m_Text_Name, password=self.m_Text_PSW)
         up_pair_crypt = []
         for i in up_pair:
             temp = (i[0],crypt(i[1]))
