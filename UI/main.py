@@ -295,6 +295,7 @@ class TestPanel(wx.Panel):
         print self.weak_Test
         if self.weak_Test == True:
             self.bt_Wstart.SetLabel("弱口令检测".decode('utf-8'))
+            self.m_ListCtrl.DeleteAllColumns()
             self.m_ListCtrl.InsertColumn(0,u'序号',wx.LIST_FORMAT_CENTER)
             self.m_ListCtrl.SetColumnWidth(0, 70)
             self.m_ListCtrl.InsertColumn(1,u'弱口令用户名',wx.LIST_FORMAT_CENTER)
@@ -302,6 +303,7 @@ class TestPanel(wx.Panel):
             self.m_ListCtrl.InsertColumn(2,u'备注',wx.LIST_FORMAT_CENTER)
         else:
             self.bt_Wstart.SetLabel("定期修改检测".decode('utf-8'))
+            self.m_ListCtrl.DeleteAllColumns()
             self.m_ListCtrl.InsertColumn(0,u'序号',wx.LIST_FORMAT_CENTER)
             self.m_ListCtrl.SetColumnWidth(0, 70)
             self.m_ListCtrl.InsertColumn(1,u'用户名',wx.LIST_FORMAT_CENTER)

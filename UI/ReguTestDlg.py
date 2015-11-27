@@ -5,6 +5,7 @@ import time
 import datetime
 import wx.lib.masked as masked
 
+from client.__setting__ import detect_period
 from interface import crypt
 from client.client_test import check_weakpass
 from client.common import EncryptAlgorithmType
@@ -102,11 +103,17 @@ class ReguTestDialog(wx.Dialog):
         cur_sys_info.last_update_time = now
         self.db_util.update_system(cur_sys_info)
 
+        count = 0
         for i in up_pair_crypt:
             temp1 = None
             if d.has_key(i[0]) == True:
                 if i[1] == d[i[0]][0]:
                     temp1 = (i[0],i[1],d[i[0]][1] + dTime)
+                    if temp1[2] >= detect_period:
+                        self.parent.m_ListCtrl.InsertStringItem(count,str(count+1))
+                        self.parent.m_ListCtrl.SetStringItem(count,1,temp1[0])
+                        self.parent.m_ListCtrl.SetStringItem(count,2,temp1[2])
+                        count += 1
                 else:
                     temp1 = (i[0],i[1],0)
             else:
