@@ -3,20 +3,25 @@ from time import sleep
 import  wx
 import wx.lib.masked as masked
 from client.client_test import check_weakpass
-from client.common import EncryptAlgorithmType
+from client.common import EncryptAlgorithmType, generate_unmod_statement
 from client.models import DBUtil
 
 class exportRegularDialog(wx.Dialog):
 
-    cur_sys_info = None
+    #cur_sys_info = None
     parent = None
+    idx = None
+    db_util = None
 
     def __init__(
             self, parent, ID, title, idx, size=wx.DefaultSize, pos=wx.DefaultPosition,
             style=wx.DEFAULT_DIALOG_STYLE,
             useMetal=False,
             ):
+
         self.parent = parent
+        self.idx = idx
+        self.db_util = DBUtil()
         pre = wx.PreDialog()
         pre.SetExtraStyle(wx.DIALOG_EX_CONTEXTHELP)
         pre.Create(parent, ID, title, pos, size, style)
@@ -57,11 +62,23 @@ class exportRegularDialog(wx.Dialog):
 
     def OK_button(self, evt):
         print("ok!")
+        rl = []
+        count = 0
         if self.m_Text_Day.GetValue() == "":
             dlg = wx.MessageDialog(None, u"请输入限制天数!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
         else:
+            crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
+            for i in crypt_list:
+                if i[2] >= self.m_Text_Day.GetValue:
+                    count += 1
+                    temp = {'name' : 'aaaa1', 'day' : '31'}
+                    temp['name'] = i[0]
+                    temp['day'] = i[2]
+                    rl.append(temp)
+            generate_unmod_statement(self.parent.listBox.GetStringSelection(), u'汪明', rl, count, self.m_Text_Day.GetValue)
+
             print("export report")
 
     def Cancel_Button(self, evt):
