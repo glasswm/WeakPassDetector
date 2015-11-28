@@ -89,7 +89,7 @@ class ReguTestDialog(wx.Dialog):
 
         crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
         new_list = []
-        symbol = False
+
         #dTime = updateDtime('2015-11-05')
         now = datetime.datetime.now()
         if cur_sys_info.last_update_time == None:
@@ -100,20 +100,22 @@ class ReguTestDialog(wx.Dialog):
         self.db_util.update_system(cur_sys_info)
 
         for i in up_pair_crypt:
+            print i
+            temp1 = None
+            symbol = False
             for j in crypt_list:
-                if i[0] != j[0]:
+                print i, j
+                if i[0] == j[0]:
                     symbol = True
-                    continue
-                else:
-                    symbol = False
                     if i[1] != j[1]:
-                        temp = (i[0],i[1],0)
+                        temp1 = (i[0],i[1],0)
                     else:
-                        temp = (i[0],i[1],j[2] + dTime)
-            if symbol == True:
-                temp = (i[0],i[1],0)
-                symbol = False
-            new_list.append(temp)
+                        temp1 = (i[0],i[1],j[2] + dTime)
+                    break
+            if symbol == False:
+                temp1 = (i[0],i[1],0)
+            print temp1
+            new_list.append(temp1)
 
         self.db_util.set_crypt(self.idx, new_list)
         self.parent.m_Gauge.SetValue(100)

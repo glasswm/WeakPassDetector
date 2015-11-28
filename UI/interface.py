@@ -12,10 +12,8 @@ def md5(str):
 
 # 逆序、md5
 def crypt(str):
-    str = 'password'
     sstr = str[::-1]
-    md5(sstr)
-    print(md5(sstr))
+    return md5(sstr)
 
 #return lasting time
 def updateDtime(t):
