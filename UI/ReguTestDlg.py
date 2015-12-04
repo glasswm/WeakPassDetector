@@ -88,10 +88,9 @@ class ReguTestDialog(wx.Dialog):
         #if table not exists, set up_pair_crypt to db
 
         crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
-        item = []
+        d = {}
         for i in crypt_list:
-            item = [i[0],(i[1],i[2])]
-            d = dict(item)
+            d[i[0]] = (i[1],i[2])
 
         new_list = []
 
@@ -106,8 +105,8 @@ class ReguTestDialog(wx.Dialog):
         for i in up_pair_crypt:
             temp1 = None
             if d.has_key(i[0]) == True:
-                if i[1] == d[i[0]]:
-                    temp1 = (i[0],i[1],d[i[2]] + dTime)
+                if i[1] == d[i[0]][0]:
+                    temp1 = (i[0],i[1],d[i[0]][1] + dTime)
                 else:
                     temp1 = (i[0],i[1],0)
             else:
