@@ -10,4 +10,4 @@ proxies = {
   "https": "http://127.0.0.1:8080",
 }
 
-detect_period = 30
+detect_period = 5

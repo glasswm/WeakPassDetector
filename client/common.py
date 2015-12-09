@@ -97,7 +97,7 @@ def generate_unmod_statement(sys_name, operator, unmod_list, total_count, period
     res = res.replace("{{ unmod_count }}", str(len(unmod_list)));
     res = res.replace("{{ unmod_list }}", unmod_list_str);
 
-    out = open(os.path.dirname(__file__) + '/report/report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html', 'w')
+    out = open(os.path.dirname(__file__) + '/report/report_unmod'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html', 'w')
     out.write(res.encode('utf-8'))
     out.close()
 

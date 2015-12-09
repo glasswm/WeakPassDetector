@@ -112,7 +112,7 @@ class ReguTestDialog(wx.Dialog):
                     if temp1[2] >= detect_period:
                         self.parent.m_ListCtrl.InsertStringItem(count,str(count+1))
                         self.parent.m_ListCtrl.SetStringItem(count,1,temp1[0])
-                        self.parent.m_ListCtrl.SetStringItem(count,2,temp1[2])
+                        self.parent.m_ListCtrl.SetStringItem(count,2,str(temp1[2]))
                         count += 1
                 else:
                     temp1 = (i[0],i[1],0)

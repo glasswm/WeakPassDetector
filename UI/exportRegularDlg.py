@@ -71,15 +71,17 @@ class exportRegularDialog(wx.Dialog):
         else:
             crypt_list = self.db_util.get_crypt_by_systemID(self.idx)
             for i in crypt_list:
-                if i[2] >= self.m_Text_Day.GetValue:
+                if i[2] >= int(self.m_Text_Day.GetValue()):
                     count += 1
                     temp = {'name' : 'aaaa1', 'day' : '31'}
                     temp['name'] = i[0]
-                    temp['day'] = i[2]
+                    temp['day'] = str(i[2])
                     rl.append(temp)
-            generate_unmod_statement(self.parent.listBox.GetStringSelection(), u'汪明', rl, count, self.m_Text_Day.GetValue)
+            print "input period: " + self.m_Text_Day.GetValue()
+            generate_unmod_statement(self.parent.listBox.GetStringSelection(), u'汪明', rl, len(crypt_list), self.m_Text_Day.GetValue())
 
             print("export report")
+            self.Destroy()
 
     def Cancel_Button(self, evt):
         print("cancel!")
