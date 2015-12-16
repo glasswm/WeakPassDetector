@@ -68,7 +68,7 @@ class ReguTestDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.Cancel_Button, bt_Cancel)
 
     def OK_button(self, evt):
-        print("ok!")
+        #print("ok!")
         if self.m_Text_Name == "" or self.m_Text_PSW == "":
             dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:

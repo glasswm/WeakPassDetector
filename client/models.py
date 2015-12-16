@@ -31,6 +31,7 @@ class SystemInfo(Base):
 
     def get_account_data(self, username, password):
         # Database Urls = "dialect+driver://username:password@host:port/database"
+        print 'Getting accout data from system database'
         if (self.db_type == DatabaseType.mysql):
             dialect = 'mysql'
             driver = 'mysqlconnector'
@@ -50,14 +51,14 @@ class SystemInfo(Base):
                       Column(self.db_column_password, String),
                       )
 
-        s = select([users])
+        s = select([users]).limit(10000)
         result = conn.execute(s)
         res = []
         for row in result:
             #print row[self.db_column_username], row[self.db_column_password]
             res.append((row[self.db_column_username], row[self.db_column_password]))
         result.close()
-        print res
+        print 'Get ' + str(len(res)) + ' records from database.'
         return res
 
 class Cryptograph(Base):

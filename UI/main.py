@@ -142,7 +142,7 @@ class TestPanel(wx.Panel):
         self.m_Text_SumNum.SetEditable(False)
         m_Label_WeakNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"弱口令条数")
         self.m_Text_WeakNum = wx.TextCtrl(m_Panel22,size=(50,22))
-        print self.m_Text_WeakNum.GetSize()
+        #print self.m_Text_WeakNum.GetSize()
         self.m_Text_WeakNum.SetEditable(False)
         m_Label_UnknownNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"不明口令条数")
         self.m_Text_UnknownNum = wx.TextCtrl(m_Panel22,size=(50,22))
@@ -236,14 +236,14 @@ class TestPanel(wx.Panel):
         dlg.Destroy()
         
     def EditSysButton(self, evt):
-        print self.listBox.GetStringSelection()
+        print "Edit System Info: " + self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
             dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 #self.Close(True)
                 dlg.Destroy()
         else:
-            print(u"做得好！")
+            #print(u"做得好！")
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
@@ -253,11 +253,11 @@ class TestPanel(wx.Panel):
                              )
             dlg.CenterOnScreen()
             val = dlg.ShowModal()
-     
-            if val == wx.ID_OK:
-                print("You pressed OK\n")
-            else:
-                print("You pressed Cancel\n")
+
+            # if val == wx.ID_OK:
+            #     print("You pressed OK\n")
+            # else:
+            #     print("You pressed Cancel\n")
   
             dlg.Destroy()
 
@@ -312,7 +312,7 @@ class TestPanel(wx.Panel):
             self.m_ListCtrl.SetColumnWidth(2, 200)
 
     def WeakCheckStartButton(self):
-        print self.listBox.GetStringSelection()
+        print "Check Weak Password: " + self.listBox.GetStringSelection()
         if self.listBox.GetStringSelection() == '':
             dlg = wx.MessageDialog(None, u"请在左侧选择系统!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
@@ -329,10 +329,10 @@ class TestPanel(wx.Panel):
                               )
             dlg.CenterOnScreen()
             val = dlg.ShowModal()
-            if val == wx.ID_OK:
-                print("You pressed OK\n")
-            else:
-                print("You pressed Cancel\n")
+            # if val == wx.ID_OK:
+            #     print("You pressed OK\n")
+            # else:
+            #     print("You pressed Cancel\n")
             dlg.Destroy()
 
     def RegularModifyTestButton(self):
@@ -368,12 +368,11 @@ class TestPanel(wx.Panel):
         res = []
         self.idList = []
         res = db_util.get_all_system()
-        print ("length of res")
-        print(len(res))
+        print ("Find " + str(len(res)) + " Systems in the local db")
         for i in res:
             self.sampleList.append(i.sys_name)
             self.idList.append(i.id)
-        print self.idList
+        #print self.idList
         self.listBox.SetItems(self.sampleList)
 
     def ExportReport(self, evt):

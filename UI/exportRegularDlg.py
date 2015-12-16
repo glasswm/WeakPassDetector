@@ -61,7 +61,7 @@ class exportRegularDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.Cancel_Button, bt_Cancel)
 
     def OK_button(self, evt):
-        print("ok!")
+        #print("ok!")
         rl = []
         count = 0
         if self.m_Text_Day.GetValue() == "":

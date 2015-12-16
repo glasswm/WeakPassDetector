@@ -43,7 +43,7 @@ def check_weakpass(encrypt_algorithm, cipher_list):
     split_size = 1000
 
     for i in range(0, len(cipher_list), split_size):
-        print cipher_list[i:i+split_size]
+        #print cipher_list[i:i+split_size]
         payload = {
             'method': 'check_weak_pass',
             'params': {'encrypt_algorithm' : encrypt_algorithm,

@@ -68,7 +68,7 @@ class VerifDialog(wx.Dialog):
         self.cur_sys_info = db_util.get_system_by_id(idx)
         
     def OK_button(self, evt):
-        print("ok!")
+        #print("ok!")
         if self.m_Text_Name.GetValue() == "" or self.m_Text_PSW.GetValue() == "":
             dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:

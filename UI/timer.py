@@ -20,7 +20,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         self.cur_sys_info = db_util.get_system_by_id(idx)
 
     def run(self): #Overwrite run() method, put what you want the thread do here
-        print 'db user: ', self.db_user_name, ', db_passwd: ', self.db_pass_wd
+        #print 'db user: ', self.db_user_name, ', db_passwd: ', self.db_pass_wd
         self.parent.weak_List = []
         up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
         username_list = []
@@ -29,8 +29,8 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             username_list.append(i[0])
             crypt_list.append(i[1])
         self.parent.username_List = username_list
-        print username_list
-        print crypt_list
+        #print username_list
+        #print crypt_list
         weakCount = 0
         if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
             crypt_type = 'md5'
