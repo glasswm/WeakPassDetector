@@ -31,19 +31,21 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         self.parent.username_List = username_list
         #print username_list
         #print crypt_list
-        weakCount = 0
+
         if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
             crypt_type = 'md5'
         elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
             crypt_type = 'sha1'
 
-        self.parent.m_ListCtrl.DeleteAllItems()
         while(self.stopped() != True):
+            self.parent.m_ListCtrl.DeleteAllItems()
+            weakCount = 0
             (weak_list, strong_list, unknown_count) = check_weakpass(crypt_type, crypt_list)
             self.parent.weak_List = weak_list
             self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
             self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
             self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
+
             for i in weak_list:
                 self.parent.m_ListCtrl.InsertStringItem(weakCount,str(weakCount+1))
                 self.parent.m_ListCtrl.SetStringItem(weakCount,1,username_list[i])
