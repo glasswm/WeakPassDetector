@@ -30,7 +30,10 @@ def check_weak_pass(**kwargs):
         logging.warning('cipher list is empty')
         return 'cipher list is empty'
     else:
-        return askDB(cipher_list, encrypt_algorithm)
+        cipher_list_low = []
+        for i in cipher_list:
+            cipher_list_low.append(i.lower())
+        return askDB(cipher_list_low, encrypt_algorithm)
 
 
 @Request.application
