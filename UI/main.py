@@ -5,6 +5,8 @@ import  wx
 import wx.lib.masked as masked
 
 from ReguTestDlg import ReguTestDialog
+from client.__setting__ import serial_key
+from client.client_test import check_serial
 from exportRegularDlg import exportRegularDialog
 from regularTestThread import regularThread
 from client.common import generate_statement
@@ -35,19 +37,22 @@ class TestPanel(wx.Panel):
     regularThread = None
     weak_Test = True
 
-    def __init__(self, parent, log):
+    def __init__(self, parent, log, vdays):
         self.log = log
         self.idList = []
+        self.vdays = vdays
         wx.Panel.__init__(self, parent, -1)
 
         m_Panel1 = wx.Panel(self,wx.ID_ANY)
         m_Panel2 = wx.Panel(self,wx.ID_ANY)
         m_Panel3 = wx.Panel(self,wx.ID_ANY)
+        m_Panel4 = wx.Panel(self,wx.ID_ANY)
 
         bSizer1 = wx.BoxSizer(wx.VERTICAL)
         bSizer1.Add(m_Panel1,proportion=4,flag=wx.EXPAND)
         bSizer1.Add(m_Panel2,proportion=2,flag=wx.EXPAND)
         bSizer1.Add(m_Panel3,proportion=4,flag=wx.EXPAND)
+        bSizer1.Add(m_Panel4,proportion=1,flag=wx.EXPAND)
 
         m_Panel11 = wx.Panel(m_Panel1)
         m_Panel12 = wx.Panel(m_Panel1)
@@ -202,6 +207,13 @@ class TestPanel(wx.Panel):
         bSizer_Panel3 = wx.StaticBoxSizer(m_Label_3, wx.HORIZONTAL)  
         bSizer_Panel3.Add(self.m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel3.SetSizer(bSizer_Panel3)
+
+        m_Label_copyright = wx.StaticText(m_Panel4, wx.ID_ANY, u"软件版权归国网信通公司所有")
+        m_Label_vdays = wx.StaticText(m_Panel4, wx.ID_ANY, u"授权" + str(self.vdays) + u"天")
+        bSizer_Panel4 = wx.GridBagSizer(1,10)
+        bSizer_Panel4.Add(m_Label_copyright, pos=(0, 2), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel4.Add(m_Label_vdays, pos=(0, 7), span=(1, 1), flag=wx.ALIGN_CENTER)
+        m_Panel4.SetSizer(bSizer_Panel4)
 
         self.SetSizer(bSizer1) 
         
@@ -446,8 +458,20 @@ if __name__ == '__main__':
     import sys,os
     #import run
     #run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
+
+    vdays = check_serial(serial_key)
     app = wx.App(False)
-    frame = wx.Frame(None, -1, u'弱口令检测工具',size=(500,600))
-    win = TestPanel(frame, None)
-    frame.Show()
-    app.MainLoop()
+
+    if vdays == -1:
+        dlg = wx.MessageDialog(None, u"请在main.cfg文件中填写正确注册码", u"提示", wx.OK | wx.ICON_QUESTION)
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
+    elif vdays > 0:
+        frame = wx.Frame(None, -1, u'弱口令检测工具',size=(600,800))
+        win = TestPanel(frame, None, vdays=vdays)
+        frame.Show()
+        app.MainLoop()
+    else:
+        dlg = wx.MessageDialog(None, u"该注册码已过期", u"提示", wx.OK | wx.ICON_QUESTION)
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
