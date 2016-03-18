@@ -1,4 +1,4 @@
-from famer import askDB
+from famer import ask_db
 
 __author__ = 'wm'
 
@@ -33,7 +33,7 @@ def check_weak_pass(**kwargs):
         cipher_list_low = []
         for i in cipher_list:
             cipher_list_low.append(i.lower())
-        return askDB(cipher_list_low, encrypt_algorithm)
+        return ask_db(cipher_list_low, encrypt_algorithm)
 
 
 @Request.application
