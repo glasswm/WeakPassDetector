@@ -1,0 +1,20 @@
+[2016-03-18 09:09:22] excute:insert into md5table values('e53a0a2978c28872a4505bdb51db06dc','y',current_date,'topN','1232')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into sha1table values('d6a9450dc08555d6ecfaf7162e5267f401e6dd9a','y',current_date,'topN','1232')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into md5table values('115f89503138416a242f40fb7d7f338e','y',current_date,'topN','223')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into sha1table values('af06318c33c8e41c70083ee23dbe19426f1f9c5b','y',current_date,'topN','223')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into md5table values('1c63129ae9db9c60c3e8aa94d3e00495','y',current_date,'topN','1qaz2wsx')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into sha1table values('c6922b6ba9e0939583f973bc1682493351ad4fe8','y',current_date,'topN','1qaz2wsx')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into md5table values('b9b164ad40d9ffa9c1c3b24e439424d6','y',current_date,'topN','q445sfd')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into sha1table values('e480efc7e6029e7ade1c8da1158114623f1fc22c','y',current_date,'topN','q445sfd')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into md5table values('76a2173be6393254e72ffa4d6df1030a','y',current_date,'topN','passwd')
+[2016-03-18 09:09:22] excute:commit
+[2016-03-18 09:09:22] excute:insert into sha1table values('30274c47903bd1bac7633bbf09743149ebab805f','y',current_date,'topN','passwd')
+[2016-03-18 09:09:22] excute:commit
