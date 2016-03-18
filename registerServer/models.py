@@ -4,8 +4,16 @@ __author__ = 'wm'
 
 from sqlalchemy import Column, Integer, Sequence, String, create_engine, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from client.common import singleton
 from sqlalchemy.orm import sessionmaker
+
+
+def singleton(cls, *args, **kw):
+    instances = {}
+    def _singleton():
+        if cls not in instances:
+            instances[cls] = cls(*args, **kw)
+        return instances[cls]
+    return _singleton
 
 Base = declarative_base()
 
