@@ -462,7 +462,11 @@ if __name__ == '__main__':
     vdays = check_serial(serial_key)
     app = wx.App(False)
 
-    if vdays == -1:
+    if vdays == -2:
+        dlg = wx.MessageDialog(None, u"无法连接到授权验证服务器", u"提示", wx.OK | wx.ICON_QUESTION)
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
+    elif vdays == -1:
         dlg = wx.MessageDialog(None, u"请在main.cfg文件中填写正确注册码", u"提示", wx.OK | wx.ICON_QUESTION)
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()

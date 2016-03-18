@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy.pool import SingletonThreadPool
 
 __author__ = 'wm'
 
@@ -43,7 +44,7 @@ class DBUtil(object):
     session = None
 
     def __init__(self):
-        sysinfo_db_engine = create_engine('sqlite:///' + 'regDB', echo=False)
+        sysinfo_db_engine = create_engine('sqlite:///' + '/home/wpd/regServer/regDB', echo=False, connect_args={'check_same_thread':False}, poolclass=SingletonThreadPool)
         Base.metadata.create_all(sysinfo_db_engine)
         Session = sessionmaker(bind=sysinfo_db_engine)
         self.session = Session()

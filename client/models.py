@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'wm'
 
 from sqlalchemy import Column, Integer, Sequence, String, create_engine, MetaData, Table, select, ForeignKey, \
@@ -26,7 +27,8 @@ class SystemInfo(Base):
     last_update_time = Column(DateTime, nullable=True)
 
     def __repr__(self):
-        return "<SystemInfo(id=%d, sys_name='%s', db_type='%s', db_name='%s')>" % (self.id, self.sys_name, self.db_type, self.db_name)
+        res =  u"<SystemInfo(id=%d, sys_name='%s', db_type='%s', db_name='%s', encrypt_alogorithm='%s')>" % (self.id, self.sys_name, self.db_type, self.db_name, self.db_password_encrypt_algorithm)
+        return res.encode('utf-8')
 
 
     def get_account_data(self, username, password):

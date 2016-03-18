@@ -47,7 +47,8 @@ class fileoperator:
             f.close()
 
     def write_log(self,log_data):
-        log_file_name = os.getcwd() + "/log/runtimelog_" + self.get_data_str() + ".log"        
+        print os.getcwd()
+        log_file_name = "/home/wpd/server/log/runtimelog_" + self.get_data_str() + ".log"
         log_data_with_time = self.get_time_str() + log_data
         self.append_record_to_file(log_file_name,log_data_with_time)
 
