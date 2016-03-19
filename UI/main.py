@@ -31,6 +31,7 @@ class TestPanel(wx.Panel):
     m_Text_SumNum = None
     m_Text_WeakNum = None
     weak_List = None
+    weak_type_list = None
     username_List = None
     idList = None
     thread = None
@@ -49,10 +50,10 @@ class TestPanel(wx.Panel):
         m_Panel4 = wx.Panel(self,wx.ID_ANY)
 
         bSizer1 = wx.BoxSizer(wx.VERTICAL)
-        bSizer1.Add(m_Panel1,proportion=4,flag=wx.EXPAND)
+        bSizer1.Add(m_Panel1,proportion=3.5,flag=wx.EXPAND)
         bSizer1.Add(m_Panel2,proportion=2,flag=wx.EXPAND)
         bSizer1.Add(m_Panel3,proportion=4,flag=wx.EXPAND)
-        bSizer1.Add(m_Panel4,proportion=1,flag=wx.EXPAND)
+        bSizer1.Add(m_Panel4,proportion=0.5,flag=wx.EXPAND)
 
         m_Panel11 = wx.Panel(m_Panel1)
         m_Panel12 = wx.Panel(m_Panel1)
@@ -197,10 +198,11 @@ class TestPanel(wx.Panel):
         # m_Text_List = wx.TextCtrl(m_Panel3,style = wx.TE_MULTILINE)
         self.m_ListCtrl = wx.ListCtrl(m_Panel3,style=wx.LC_REPORT|wx.SUNKEN_BORDER)
         self.m_ListCtrl.InsertColumn(0,u'序号',wx.LIST_FORMAT_CENTER)
-        self.m_ListCtrl.SetColumnWidth(0, 70)
         self.m_ListCtrl.InsertColumn(1,u'弱口令用户名',wx.LIST_FORMAT_CENTER)
-        self.m_ListCtrl.SetColumnWidth(1, 300)
         self.m_ListCtrl.InsertColumn(2,u'备注',wx.LIST_FORMAT_CENTER)
+        self.m_ListCtrl.SetColumnWidth(0, 80)
+        self.m_ListCtrl.SetColumnWidth(1, 220)
+        self.m_ListCtrl.SetColumnWidth(2, 220)
         # bSizer_Panel3 = wx.BoxSizer(wx.HORIZONTAL)
         # bSizer_Panel3.Add(m_Text_List,proportion = 1,flag=wx.Left|wx.RIGHT|wx.EXPAND)
         m_Label_3 = wx.StaticBox(m_Panel3, label=u"检测结果")  
@@ -208,11 +210,11 @@ class TestPanel(wx.Panel):
         bSizer_Panel3.Add(self.m_ListCtrl,proportion = 5,flag=wx.LEFT|wx.RIGHT |wx.EXPAND, border=10)
         m_Panel3.SetSizer(bSizer_Panel3)
 
-        m_Label_copyright = wx.StaticText(m_Panel4, wx.ID_ANY, u"软件版权归国网信通公司所有")
-        m_Label_vdays = wx.StaticText(m_Panel4, wx.ID_ANY, u"授权" + str(self.vdays) + u"天")
+        m_Label_copyright = wx.StaticText(m_Panel4, wx.ID_ANY, u"© 2015-2016 SGCC All rights reserved.")
+        m_Label_vdays = wx.StaticText(m_Panel4, wx.ID_ANY, u"使用期限剩余：" + str(self.vdays) + u"天")
         bSizer_Panel4 = wx.GridBagSizer(1,10)
-        bSizer_Panel4.Add(m_Label_copyright, pos=(0, 2), span=(1, 1), flag=wx.ALIGN_CENTER)
-        bSizer_Panel4.Add(m_Label_vdays, pos=(0, 7), span=(1, 1), flag=wx.ALIGN_CENTER)
+        bSizer_Panel4.Add(m_Label_copyright, pos=(0, 1), span=(1, 1), flag=wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
+        bSizer_Panel4.Add(m_Label_vdays, pos=(0, 6), span=(1, 1), flag=wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
         m_Panel4.SetSizer(bSizer_Panel4)
 
         self.SetSizer(bSizer1) 
@@ -415,11 +417,15 @@ class TestPanel(wx.Panel):
     def WeakTestReport(self):
         print ("export report")
         wl = []
-        for i in self.weak_List:
+        for index, i in enumerate(self.weak_List):
             temp = {'name' : 'aaaa1', 'wtype' : '1'}
             temp['name'] = self.username_List[i]
+            temp['wtype'] = self.weak_type_list[index]
             wl.append(temp)
-        generate_statement(self.listBox.GetStringSelection(), u'汪明', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
+        fpath = generate_statement(self.listBox.GetStringSelection(), u'admin', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
+        dlg = wx.MessageDialog(None, u"报表成功生成 " + fpath, u"提示", wx.OK | wx.ICON_QUESTION)
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
 
     def StopTest(self, evt):
         print ("stop testing, stop thread")
@@ -471,7 +477,7 @@ if __name__ == '__main__':
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()
     elif vdays > 0:
-        frame = wx.Frame(None, -1, u'弱口令检测工具',size=(600,800))
+        frame = wx.Frame(None, -1, u'弱口令检测工具' + 'v0.9 beta',size=(600,800))
         win = TestPanel(frame, None, vdays=vdays)
         frame.Show()
         app.MainLoop()

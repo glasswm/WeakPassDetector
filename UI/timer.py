@@ -47,6 +47,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             weakCount = 0
             (weak_list, strong_list, unknown_count, weak_type_list) = check_weakpass(crypt_type, crypt_list)
             self.parent.weak_List = weak_list
+            self.parent.weak_type_list = weak_type_list
             self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
             self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
             self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
