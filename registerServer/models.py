@@ -1,11 +1,21 @@
 from datetime import datetime
+import os
+from sqlalchemy.pool import SingletonThreadPool
 
 __author__ = 'wm'
 
 from sqlalchemy import Column, Integer, Sequence, String, create_engine, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from client.common import singleton
 from sqlalchemy.orm import sessionmaker
+
+
+def singleton(cls, *args, **kw):
+    instances = {}
+    def _singleton():
+        if cls not in instances:
+            instances[cls] = cls(*args, **kw)
+        return instances[cls]
+    return _singleton
 
 Base = declarative_base()
 
@@ -35,7 +45,7 @@ class DBUtil(object):
     session = None
 
     def __init__(self):
-        sysinfo_db_engine = create_engine('sqlite:///' + 'regDB', echo=False)
+        sysinfo_db_engine = create_engine('sqlite:///' + os.path.dirname(__file__) + '/regDB', echo=False, connect_args={'check_same_thread':False}, poolclass=SingletonThreadPool)
         Base.metadata.create_all(sysinfo_db_engine)
         Session = sessionmaker(bind=sysinfo_db_engine)
         self.session = Session()

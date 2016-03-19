@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from client.__setting__ import wp_server, proxies, reg_server, serial_key
 
 __author__ = 'wm'
@@ -37,10 +39,11 @@ def check_weakpass(encrypt_algorithm, cipher_list):
     headers = {'content-type': 'application/json'}
 
     weak_list = []
+    weak_type_list = []
     strong_list = []
     unknown_count = 0
 
-    split_size = 1000
+    split_size = 10000
 
     for i in range(0, len(cipher_list), split_size):
         #print cipher_list[i:i+split_size]
@@ -53,14 +56,14 @@ def check_weakpass(encrypt_algorithm, cipher_list):
         }
         response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
         response = response.json()
-        #print response
+        print response
         res = response["result"]
         weak_list = weak_list + [kkk+i for kkk in res[0]]
-        strong_list = strong_list + [kkk+i for kkk in res[1]]
-        unknown_count = unknown_count + res[2]
-        print response
+        weak_type_list = weak_type_list + res[1]
+        strong_list = strong_list + [kkk+i for kkk in res[2]]
+        unknown_count = unknown_count + res[3]
 
-    return weak_list, strong_list, unknown_count
+    return weak_list, strong_list, unknown_count, weak_type_list
 
 
 def check_serial(serial_key):
@@ -73,11 +76,14 @@ def check_serial(serial_key):
         'jsonrpc': "2.0",
         'id': 0,
     }
-    response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
-    response = response.json()
-    #print response
-    res = response['result']
-    print response
+    try:
+        response = requests.post(url, data=json.dumps(payload), headers=headers, timeout=5) #, proxies=proxies)
+        response = response.json()
+        print response
+        res = response['result']
+    except Exception as e:
+        print e.message
+        res = -2
     return res
 
 def add_log(message):
@@ -101,5 +107,5 @@ if __name__ == '__main__':
     #(7852424, 7777, 1, 45, 123456, 1234, 999999, 1234ab7c)
     #check_serial(serial_key)
     check_serial('1111')
-    add_log('heheheheh')
+    add_log(u'你好啊2222')
     #main()

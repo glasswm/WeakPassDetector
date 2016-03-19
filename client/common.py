@@ -50,20 +50,22 @@ def generate_statement(sys_name, operator, weak_list, total_count, unkown_count)
         </tr>
         '''
 
-    res = open(os.path.dirname(__file__) + '/report/report.html', 'r').read().decode("utf-8")
+    res = open(os.path.dirname(__file__) + '\\report\\report.html', 'r').read().decode("utf-8")
 
     #print res
     t = time.time()
     res = res.replace("{{ sys_name }}", sys_name);
     res = res.replace("{{ operator }}", operator);
-    res = res.replace("{{ time }}", time.strftime('%Y-%m-%d',time.localtime(t)));
+    res = res.replace("{{ time }}", time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(t)));
     res = res.replace("{{ total_count }}", str(total_count));
     res = res.replace("{{ weak_count }}", str(len(weak_list)));
     res = res.replace("{{ weaklist }}", weaklist_str);
 
-    out = open(os.path.dirname(__file__) + '/report/report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html', 'w')
+    o_fname = os.path.dirname(__file__) + '\\report\\report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html'
+    out = open(o_fname, 'w')
     out.write(res.encode('utf-8'))
     out.close()
+    return o_fname
 
 
 def generate_unmod_statement(sys_name, operator, unmod_list, total_count, period):
