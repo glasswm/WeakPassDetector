@@ -26,9 +26,9 @@ if __name__ == "__main__":
         elif sys.argv[1] == "custom":
             temp_data_list = fo.read_list_from_file(sys.argv[2])
             append_knowledge(temp_data_list, "custom")
-        elif sys.argv[1] == "length_less_then_8":
+        elif sys.argv[1] == "length_less_than_8":
             temp_data_list = fo.read_list_from_file(sys.argv[2])
-            append_knowledge(temp_data_list, "length_less_then_8")
+            append_knowledge(temp_data_list, "length_less_than_8")
         else:
             print_help()
     else:

@@ -176,7 +176,7 @@ class dboperator:
                     '\\', '|', ';', ':', '\'', '\"', ',', '<', '.', '>', '/', '?']
         length = len(weak_pl)
         if length < 8:
-            return "length_less_then_8"
+            return "length_less_than_8"
         elif length == 8:
             if self.string_all_in_set(weak_pl, num_list):
                 return "8_length_numeric"
