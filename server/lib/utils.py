@@ -123,7 +123,7 @@ class dboperator:
             return False
 
     def append_record_to_md5table(self, md5_str):
-        sql = "insert into md5table values('" + md5_str.lower() + "','u',current_date,'','')"
+        sql = "insert into md5table values('" + md5_str.lower() + "','u',current_date,-1,'')"
         self.cur.execute(sql)
         self.fo.write_log("excute:" + sql)
         print(sql)
@@ -131,7 +131,7 @@ class dboperator:
         self.fo.write_log("excute:commit")
 
     def append_record_to_sha1table(self, sha1_str):
-        sql = "insert into sha1table values('" + sha1_str.lower() + "','u',current_date,'','')"
+        sql = "insert into sha1table values('" + sha1_str.lower() + "','u',current_date,-1,'')"
         self.cur.execute(sql)
         self.fo.write_log("excute:" + sql)
         print(sql)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from client.__setting__ import wp_server, proxies, reg_server, serial_key
+from client.__setting__ import wp_server, proxies, reg_server, serial_key, TOP_N, STRONG, USER_CUSTOM, LENGTH_8_SPECIAL, \
+    LENGTH_8_CHAR, LENGTH_8_NUM, LESS_THAN_8
 
 __author__ = 'wm'
 
@@ -8,6 +9,23 @@ __author__ = 'wm'
 import requests
 import json
 
+def weakt2str(wt):
+    if wt == TOP_N:
+        return 'TOP_N'
+    elif wt == LESS_THAN_8:
+        return u'长度小于8位'
+    elif wt == LENGTH_8_NUM:
+        return u'8位纯数字'
+    elif wt == LENGTH_8_CHAR:
+        return u'8位纯字母'
+    elif wt == LENGTH_8_SPECIAL:
+        return u'8位纯特殊字符'
+    elif wt == USER_CUSTOM:
+        return u'自定义字典'
+    elif wt == STRONG:
+        return u'健壮'
+    else:
+        return u'未知'
 
 def main():
     url = wp_server
@@ -62,6 +80,9 @@ def check_weakpass(encrypt_algorithm, cipher_list):
         weak_type_list = weak_type_list + res[1]
         strong_list = strong_list + [kkk+i for kkk in res[2]]
         unknown_count = unknown_count + res[3]
+
+    for i in range(0, len(weak_type_list)):
+        weak_type_list[i] = weakt2str(weak_type_list[i])
 
     return weak_list, strong_list, unknown_count, weak_type_list
 

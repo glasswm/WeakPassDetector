@@ -22,3 +22,13 @@ proxies = {
 
 #detect_period = 10
 detect_period = config.get('Crack', 'detect_period')
+
+
+TOP_N = 0
+LESS_THAN_8 = 1
+LENGTH_8_NUM = 2
+LENGTH_8_CHAR = 3
+LENGTH_8_SPECIAL = 4
+USER_CUSTOM = 5
+
+STRONG = 9
