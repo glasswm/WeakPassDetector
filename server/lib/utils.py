@@ -48,7 +48,7 @@ class fileoperator:
             f.close()
 
     def write_log(self, log_data):
-        log_file_name = os.getcwd() + "/log/runtimelog_" + self.get_data_str() + ".log"
+        log_file_name = os.path.dirname(__file__) + "/../log/runtimelog_" + self.get_data_str() + ".log"
         log_data_with_time = self.get_time_str() + log_data
         self.append_record_to_file(log_file_name, log_data_with_time)
 
@@ -69,7 +69,7 @@ class dboperator:
             md5_str = hashlib.md5(temp_data).hexdigest()
             sha1_str = hashlib.sha1(temp_data).hexdigest()
             if self.is_in_md5table(md5_str):
-                update_md5_knowledge_sql = "update md5table set isweak='y',updatetime=current_date,weaktype=\'" + note + "\',text=\'" + temp_data + "\' where md5=\'" + md5_str + "\'"
+                update_md5_knowledge_sql = "update md5table set isweak='y',updatetime=current_date,weaktype=" + str(note) + ",text=\'" + temp_data + "\' where md5=\'" + md5_str + "\'"
                 print(update_md5_knowledge_sql)
                 self.cur.execute(update_md5_knowledge_sql)
                 self.fo.write_log("excute:" + update_md5_knowledge_sql)
@@ -77,21 +77,21 @@ class dboperator:
                 self.conn.commit()
                 self.fo.write_log("excute:commit")
             else:
-                append_md5_knowledge_sql = "insert into md5table values(\'" + md5_str + "\','y',current_date,\'" + note + "\',\'" + temp_data + "\')"
+                append_md5_knowledge_sql = "insert into md5table values(\'" + md5_str + "\','y',current_date," + str(note) + ",\'" + temp_data + "\')"
                 self.cur.execute(append_md5_knowledge_sql)
                 self.fo.write_log("excute:" + append_md5_knowledge_sql)
                 print(append_md5_knowledge_sql)
                 self.conn.commit()
                 self.fo.write_log("excute:commit")
             if self.is_in_sha1table(sha1_str):
-                update_sha1_knowledge_sql = "update sha1table set isweak='y',updatetime=current_date,weaktype=\'" + note + "\',text=\'" + temp_data + "\' where sha1=\'" + sha1_str + "\'"
+                update_sha1_knowledge_sql = "update sha1table set isweak='y',updatetime=current_date,weaktype=" + str(note) + ",text=\'" + temp_data + "\' where sha1=\'" + sha1_str + "\'"
                 self.cur.execute(update_sha1_knowledge_sql)
                 self.fo.write_log("excute:" + update_sha1_knowledge_sql)
                 print(update_sha1_knowledge_sql)
                 self.conn.commit()
                 self.fo.write_log("excute:commit")
             else:
-                append_sha1_knowledge_sql = "insert into sha1table values(\'" + sha1_str + "\','y',current_date,\'" + note + "\',\'" + temp_data + "\')"
+                append_sha1_knowledge_sql = "insert into sha1table values(\'" + sha1_str + "\','y',current_date," + str(note) + ",\'" + temp_data + "\')"
                 self.cur.execute(append_sha1_knowledge_sql)
                 self.fo.write_log("excute:" + append_sha1_knowledge_sql)
                 print(append_sha1_knowledge_sql)
@@ -196,7 +196,7 @@ class dboperator:
             return
         for i in range(0, len(weak_en_list)):
             weak_type = self.get_weak_type(weak_pl_list[i])
-            sql = "update md5table set isweak='y',updatetime=current_date,weaktype=\'" + weak_type + "\',text=\'" + \
+            sql = "update md5table set isweak='y',updatetime=current_date,weaktype=" + str(weak_type) + ",text=\'" + \
                   weak_pl_list[i] + "\' where md5='" + weak_en_list[i] + "'"
             print(sql)
             self.cur.execute(sql)
@@ -217,7 +217,7 @@ class dboperator:
             return
         for i in range(0, len(weak_en_list)):
             weak_type = self.get_weak_type(weak_pl_list[i])
-            sql = "update sha1table set isweak='y',updatetime=current_date,weaktype=\'" + weak_type + "\',text=\'" + \
+            sql = "update sha1table set isweak='y',updatetime=current_date,weaktype=" + str(weak_type) + ",text=\'" + \
                   weak_pl_list[i] + "\' where sha1='" + weak_en_list[i] + "'"
             print(sql)
             self.cur.execute(sql)

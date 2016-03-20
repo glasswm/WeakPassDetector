@@ -61,7 +61,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             if unknown_count == 0:
                 add_log(str(datetime.now()) + " - End Check " + str(begin_time) + " - " + repr(self.cur_sys_info) + " - Weak Accounts " + str(len(weak_list)))
                 break
-            time.sleep(20)
+            time.sleep(5)
 
     def stop(self):
         self._stop.set()
