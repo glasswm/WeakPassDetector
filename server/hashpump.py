@@ -1,6 +1,7 @@
 from lib.utils import dboperator
 from lib.utils import fileoperator
 import sys
+from server.__setting__ import LESS_THAN_8, USER_CUSTOM, TOP_N
 
 
 def print_help():
@@ -22,13 +23,13 @@ if __name__ == "__main__":
     elif len(sys.argv) == 3:
         if sys.argv[1] == "topn":
             temp_data_list = fo.read_list_from_file(sys.argv[2])
-            append_knowledge(temp_data_list, "topn")
+            append_knowledge(temp_data_list, TOP_N)
         elif sys.argv[1] == "custom":
             temp_data_list = fo.read_list_from_file(sys.argv[2])
-            append_knowledge(temp_data_list, "custom")
-        elif sys.argv[1] == "length_less_then_8":
+            append_knowledge(temp_data_list, USER_CUSTOM)
+        elif sys.argv[1] == "l8":
             temp_data_list = fo.read_list_from_file(sys.argv[2])
-            append_knowledge(temp_data_list, "length_less_then_8")
+            append_knowledge(temp_data_list, LESS_THAN_8)
         else:
             print_help()
     else:

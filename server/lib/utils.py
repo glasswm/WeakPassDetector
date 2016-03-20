@@ -2,6 +2,7 @@ import os
 import time
 import psycopg2
 import hashlib
+from server.__setting__ import LESS_THAN_8, STRONG, LENGTH_8_SPECIAL, LENGTH_8_CHAR, LENGTH_8_NUM
 
 
 class fileoperator:
@@ -176,18 +177,18 @@ class dboperator:
                     '\\', '|', ';', ':', '\'', '\"', ',', '<', '.', '>', '/', '?']
         length = len(weak_pl)
         if length < 8:
-            return "length_less_then_8"
+            return LESS_THAN_8
         elif length == 8:
             if self.string_all_in_set(weak_pl, num_list):
-                return "8_length_numeric"
+                return LENGTH_8_NUM
             elif self.string_all_in_set(weak_pl, letter_list):
-                return "8_length_character"
+                return LENGTH_8_CHAR
             elif self.string_all_in_set(weak_pl, xxx_list):
-                return "8_length_special_character"
+                return LENGTH_8_SPECIAL
             else:
-                return "8_length_unknown_type"
+                return STRONG
         else:
-            return "it_is_strong"
+            return STRONG
 
     def refresh_md5table(self, weak_en_list, weak_pl_list, strong_en_list):
         if len(weak_en_list) != len(weak_pl_list):

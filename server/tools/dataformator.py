@@ -1,3 +1,6 @@
+from server.__setting__ import LESS_THAN_8, LENGTH_8_NUM, LENGTH_8_CHAR, LENGTH_8_SPECIAL, STRONG
+
+
 def string_all_in_set(test_str, test_set):
     for s in test_str:
         if s in test_set:
@@ -18,18 +21,18 @@ def get_weak_type(weak_pl):
                 '\\', '|', ';', ':', '\'', '\"', ',', '<', '.', '>', '/', '?']
     length = len(weak_pl)
     if length < 8:
-        return "length_less_then_8"
+        return LESS_THAN_8
     elif length == 8:
         if string_all_in_set(weak_pl, num_list):
-            return "8_length_numeric"
+            return LENGTH_8_NUM
         elif string_all_in_set(weak_pl, letter_list):
-            return "8_length_character"
+            return LENGTH_8_CHAR
         elif string_all_in_set(weak_pl, xxx_list):
-            return "8_length_special_character"
+            return LENGTH_8_SPECIAL
         else:
-            return "8_length_mix_type"
+            return STRONG
     else:
-        return "it_is_strong"
+        return STRONG
 
 
 def append_record_to_file(file_name, input_data):
