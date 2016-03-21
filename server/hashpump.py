@@ -1,7 +1,15 @@
 from lib.utils import dboperator
 from lib.utils import fileoperator
 import sys
-from server.__setting__ import LESS_THAN_8, USER_CUSTOM, TOP_N
+
+TOP_N = 0
+LESS_THAN_8 = 1
+LENGTH_8_NUM = 2
+LENGTH_8_CHAR = 3
+LENGTH_8_SPECIAL = 4
+USER_CUSTOM = 5
+
+STRONG = 9
 
 
 def print_help():

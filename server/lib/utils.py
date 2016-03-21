@@ -2,7 +2,16 @@ import os
 import time
 import psycopg2
 import hashlib
-from server.__setting__ import LESS_THAN_8, STRONG, LENGTH_8_SPECIAL, LENGTH_8_CHAR, LENGTH_8_NUM
+
+
+TOP_N = 0
+LESS_THAN_8 = 1
+LENGTH_8_NUM = 2
+LENGTH_8_CHAR = 3
+LENGTH_8_SPECIAL = 4
+USER_CUSTOM = 5
+
+STRONG = 9
 
 
 class fileoperator:
@@ -69,7 +78,8 @@ class dboperator:
             md5_str = hashlib.md5(temp_data).hexdigest()
             sha1_str = hashlib.sha1(temp_data).hexdigest()
             if self.is_in_md5table(md5_str):
-                update_md5_knowledge_sql = "update md5table set isweak='y',updatetime=current_date,weaktype=" + str(note) + ",text=\'" + temp_data + "\' where md5=\'" + md5_str + "\'"
+                update_md5_knowledge_sql = "update md5table set isweak='y',updatetime=current_date,weaktype=" + str(
+                    note) + ",text=\'" + temp_data + "\' where md5=\'" + md5_str + "\'"
                 print(update_md5_knowledge_sql)
                 self.cur.execute(update_md5_knowledge_sql)
                 self.fo.write_log("excute:" + update_md5_knowledge_sql)
@@ -77,21 +87,24 @@ class dboperator:
                 self.conn.commit()
                 self.fo.write_log("excute:commit")
             else:
-                append_md5_knowledge_sql = "insert into md5table values(\'" + md5_str + "\','y',current_date," + str(note) + ",\'" + temp_data + "\')"
+                append_md5_knowledge_sql = "insert into md5table values(\'" + md5_str + "\','y',current_date," + str(
+                    note) + ",\'" + temp_data + "\')"
                 self.cur.execute(append_md5_knowledge_sql)
                 self.fo.write_log("excute:" + append_md5_knowledge_sql)
                 print(append_md5_knowledge_sql)
                 self.conn.commit()
                 self.fo.write_log("excute:commit")
             if self.is_in_sha1table(sha1_str):
-                update_sha1_knowledge_sql = "update sha1table set isweak='y',updatetime=current_date,weaktype=" + str(note) + ",text=\'" + temp_data + "\' where sha1=\'" + sha1_str + "\'"
+                update_sha1_knowledge_sql = "update sha1table set isweak='y',updatetime=current_date,weaktype=" + str(
+                    note) + ",text=\'" + temp_data + "\' where sha1=\'" + sha1_str + "\'"
                 self.cur.execute(update_sha1_knowledge_sql)
                 self.fo.write_log("excute:" + update_sha1_knowledge_sql)
                 print(update_sha1_knowledge_sql)
                 self.conn.commit()
                 self.fo.write_log("excute:commit")
             else:
-                append_sha1_knowledge_sql = "insert into sha1table values(\'" + sha1_str + "\','y',current_date," + str(note) + ",\'" + temp_data + "\')"
+                append_sha1_knowledge_sql = "insert into sha1table values(\'" + sha1_str + "\','y',current_date," + str(
+                    note) + ",\'" + temp_data + "\')"
                 self.cur.execute(append_sha1_knowledge_sql)
                 self.fo.write_log("excute:" + append_sha1_knowledge_sql)
                 print(append_sha1_knowledge_sql)
@@ -173,7 +186,8 @@ class dboperator:
         letter_list_hig = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
                            'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         letter_list = letter_list_low + letter_list_hig
-        xxx_list = [' ', '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{', '}',
+        xxx_list = [' ', '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', ']', '{',
+                    '}',
                     '\\', '|', ';', ':', '\'', '\"', ',', '<', '.', '>', '/', '?']
         length = len(weak_pl)
         if length < 8:
