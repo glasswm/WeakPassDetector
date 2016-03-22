@@ -74,7 +74,7 @@ def check_weakpass(encrypt_algorithm, cipher_list):
         }
         response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
         response = response.json()
-        print response
+        #print response
         res = response["result"]
         weak_list = weak_list + [kkk+i for kkk in res[0]]
         weak_type_list = weak_type_list + res[1]
@@ -100,7 +100,7 @@ def check_serial(serial_key):
     try:
         response = requests.post(url, data=json.dumps(payload), headers=headers, timeout=5) #, proxies=proxies)
         response = response.json()
-        print response
+        #print response
         res = response['result']
     except Exception as e:
         print e.message
@@ -119,7 +119,7 @@ def add_log(message):
     }
     response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
     response = response.json()
-    print response
+    #print response
 
 
 

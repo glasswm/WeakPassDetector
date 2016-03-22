@@ -45,7 +45,7 @@ class ReguTestDialog(wx.Dialog):
 
         box = wx.BoxSizer(wx.HORIZONTAL)
         m_Label_PSW = wx.StaticText(self, wx.ID_ANY, u"密码",style = wx.ALIGN_CENTER)
-        self.m_Text_PSW = wx.TextCtrl(self)
+        self.m_Text_PSW = wx.TextCtrl(self, style=wx.TE_PASSWORD)
 
         box.Add(m_Label_PSW, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
         box.Add(self.m_Text_PSW, 1, wx.ALIGN_CENTRE|wx.ALL, 5)
