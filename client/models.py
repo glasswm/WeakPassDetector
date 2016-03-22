@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import wx
+
 __author__ = 'wm'
 
 from sqlalchemy import Column, Integer, Sequence, String, create_engine, MetaData, Table, select, ForeignKey, \
@@ -33,34 +35,41 @@ class SystemInfo(Base):
 
     def get_account_data(self, username, password):
         # Database Urls = "dialect+driver://username:password@host:port/database"
-        print 'Getting accout data from system database'
-        if (self.db_type == DatabaseType.mysql):
-            dialect = 'mysql'
-            driver = 'mysqlconnector'
-        elif (self.db_type == DatabaseType.oracle):
-            dialect = 'oracle'
-            driver = 'cx_oracle'
-        else:
-            logging.error(('unknown database type %s' % self.db_type))
-            exit()
-        sql_schema = '%s+%s://%s:%s@%s:%s/%s' % (dialect, driver, username, password, self.db_ip.replace(' ',''), self.db_port, self.db_name)
-        engine = create_engine(sql_schema, echo=False)
-        conn = engine.connect()
-        metadata = MetaData()
+        try:
+            print 'Getting accout data from system database'
+            if (self.db_type == DatabaseType.mysql):
+                dialect = 'mysql'
+                driver = 'mysqlconnector'
+            elif (self.db_type == DatabaseType.oracle):
+                dialect = 'oracle'
+                driver = 'cx_oracle'
+            else:
+                logging.error(('unknown database type %s' % self.db_type))
+                exit()
+            sql_schema = '%s+%s://%s:%s@%s:%s/%s' % (dialect, driver, username, password, self.db_ip.replace(' ',''), self.db_port, self.db_name)
+            engine = create_engine(sql_schema, echo=False)
+            conn = engine.connect()
+            metadata = MetaData()
 
-        users = Table(self.db_table_name, metadata,
-                      Column(self.db_column_username, String),
-                      Column(self.db_column_password, String),
-                      )
+            users = Table(self.db_table_name, metadata,
+                          Column(self.db_column_username, String),
+                          Column(self.db_column_password, String),
+                          )
 
-        s = select([users]).limit(10000)
-        result = conn.execute(s)
-        res = []
-        for row in result:
-            #print row[self.db_column_username], row[self.db_column_password]
-            res.append((row[self.db_column_username], row[self.db_column_password]))
-        result.close()
-        print 'Get ' + str(len(res)) + ' records from database.'
+            s = select([users]).limit(10000)
+            result = conn.execute(s)
+            res = []
+            for row in result:
+                #print row[self.db_column_username], row[self.db_column_password]
+                res.append((row[self.db_column_username], row[self.db_column_password]))
+            result.close()
+            print 'Get ' + str(len(res)) + ' records from database.'
+        except Exception as e:
+            print e.message
+            dlg = wx.MessageDialog(None, e.message, u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+            res = []
         return res
 
 class Cryptograph(Base):
