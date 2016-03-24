@@ -53,6 +53,8 @@ class fileoperator:
         try:
             for data in data_list:
                 f.write(data + "\r\n")
+        except Exception as e:
+            print e
         finally:
             f.close()
 
