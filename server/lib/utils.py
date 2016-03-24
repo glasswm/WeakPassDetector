@@ -218,7 +218,7 @@ class dboperator:
             self.conn.commit()
             self.fo.write_log("excute:commit")
         for strong in strong_en_list:
-            sql = "update md5table set isweak='n',updatetime=current_date where md5='" + strong + "'"
+            sql = "update md5table set isweak='n',updatetime=current_date,weaktype=" + str(STRONG) + " where md5='" + strong + "'"
             print(sql)
             self.cur.execute(sql)
             self.fo.write_log("excute:" + sql)
@@ -239,7 +239,7 @@ class dboperator:
             self.conn.commit()
             self.fo.write_log("excute:commit")
         for strong in strong_en_list:
-            sql = "update sha1table set isweak='n',updatetime=current_date where sha1='" + strong + "'"
+            sql = "update sha1table set isweak='n',updatetime=current_date,weaktype=" + str(STRONG) + " where sha1='" + strong + "'"
             print(sql)
             self.cur.execute(sql)
             self.fo.write_log("excute:" + sql)
@@ -258,7 +258,7 @@ class dboperator:
             if len(resultSet) > 0:
                 isweak = resultSet[0][0]
                 weak_type = resultSet[0][1]
-                print(weak_type)
+                #print(weak_type)
                 if isweak == 'y':
                     weak_list.append(i)
                     weak_type_list.append(weak_type)
@@ -283,7 +283,7 @@ class dboperator:
             if len(resultSet) > 0:
                 isweak = resultSet[0][0]
                 weak_type = resultSet[0][1]
-                print(weak_type)
+                #print(weak_type)
                 if isweak == 'y':
                     weak_list.append(i)
                     weak_type_list.append(weak_type)
