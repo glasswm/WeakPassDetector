@@ -93,7 +93,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             self.parent.weak_List = weak_list
             self.parent.weak_type_list = weak_type_list
             self.parent.m_Text_WeakNum.SetValue(str(len(weak_list)))
-            self.parent.m_Text_SumNum.SetValue(str(len(up_pair)))
+            self.parent.m_Text_SumNum.SetValue(str(len(crypt_list)))
             self.parent.m_Text_UnknownNum.SetValue(str(unknown_count))
 
             for i in weak_list:
@@ -101,7 +101,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
                 self.parent.m_ListCtrl.SetStringItem(weakCount,1,username_list[i])
                 self.parent.m_ListCtrl.SetStringItem(weakCount,2,weak_type_list[weakCount])
                 weakCount += 1
-            self.parent.m_Gauge.SetValue(100-unknown_count*100/len(up_pair))
+            self.parent.m_Gauge.SetValue(100-unknown_count*100/len(crypt_list))
             if unknown_count == 0:
                 add_log(str(datetime.now()) + " - End Check " + str(begin_time) + " - " + repr(self.cur_sys_info) + " - Weak Accounts " + str(len(weak_list)))
                 break

@@ -50,7 +50,7 @@ def generate_statement(sys_name, operator, weak_list, total_count, unkown_count)
         </tr>
         '''
 
-    res = open(os.path.dirname(__file__) + '\\report\\report.html', 'r').read().decode("utf-8")
+    res = open('c:\\wpd\\report\\report.html', 'r').read().decode("utf-8")
 
     #print res
     t = time.time()
@@ -61,7 +61,7 @@ def generate_statement(sys_name, operator, weak_list, total_count, unkown_count)
     res = res.replace("{{ weak_count }}", str(len(weak_list)));
     res = res.replace("{{ weaklist }}", weaklist_str);
 
-    o_fname = os.path.dirname(__file__) + '\\report\\report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html'
+    o_fname = 'c:\\wpd\\report\\report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html'
     out = open(o_fname, 'w')
     out.write(res.encode('utf-8'))
     out.close()
@@ -87,7 +87,7 @@ def generate_unmod_statement(sys_name, operator, unmod_list, total_count, period
         </tr>
         '''
 
-    res = open(os.path.dirname(__file__) + '/report/report_unmod.html', 'r').read().decode("utf-8")
+    res = open('c:\\wpd\\report\\report_unmod.html', 'r').read().decode("utf-8")
 
     #print res
     t = time.time()
@@ -99,7 +99,7 @@ def generate_unmod_statement(sys_name, operator, unmod_list, total_count, period
     res = res.replace("{{ unmod_count }}", str(len(unmod_list)));
     res = res.replace("{{ unmod_list }}", unmod_list_str);
 
-    out = open(os.path.dirname(__file__) + '/report/report_unmod'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html', 'w')
+    out = open('c:\\wpd\\report\\report_unmod'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html', 'w')
     out.write(res.encode('utf-8'))
     out.close()
 
