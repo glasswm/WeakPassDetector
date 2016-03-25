@@ -25,10 +25,7 @@ def test_hash_type(data_list):
 
 def ask_db(data_list, data_type):
     print 'askDB'
-    for i in range(0, len(data_list)):
-        data_list[i] = data_list[i].lower()
     dbo = dboperator()
-    print 'askDB2'
     if data_type == "md5":
         return dbo.ask_md5table(data_list)
     elif data_type == "sha1":
