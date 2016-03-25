@@ -8,6 +8,37 @@ from client.client_test import check_weakpass, add_log
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
 
+
+num_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+letter_list_low = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                   't', 'u', 'v', 'w', 'x', 'y', 'z']
+letter_list_hig = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+                   'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+char_set = num_list + letter_list_low + letter_list_hig
+
+def string_all_in_set(test_str, test_set):
+    for s in test_str:
+        if s in test_set:
+            pass
+        else:
+            return False
+    return True
+
+def is_md5_crypt(crypt):
+    if crypt == None:
+        return False
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 32:
+        return False
+    return True
+
+def is_sha1_crypt(crypt):
+    if crypt == None:
+        return False
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 40:
+        return False
+    return True
+
+
 class timer(threading.Thread): #The timer class is derived from the class threading.Thread
     cur_sys_info = None
     parent = None
@@ -30,9 +61,22 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         add_log(str(begin_time) + " - Start Check - " + repr(self.cur_sys_info) + " - Total Accounts " + str(len(up_pair)))
         username_list = []
         crypt_list = []
-        for i in up_pair:
-            username_list.append(i[0])
-            crypt_list.append(i[1])
+        invalid_crypt_count = 0
+        if self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.md5:
+            for i in up_pair:
+                if is_md5_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append(i[1])
+                else:
+                    invalid_crypt_count += 1
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
+            for i in up_pair:
+                if is_sha1_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append(i[1])
+                else:
+                    invalid_crypt_count += 1
+        print '%d invalid crypts found' % invalid_crypt_count
         self.parent.username_List = username_list
         #print username_list
         #print crypt_list
@@ -61,7 +105,7 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             if unknown_count == 0:
                 add_log(str(datetime.now()) + " - End Check " + str(begin_time) + " - " + repr(self.cur_sys_info) + " - Weak Accounts " + str(len(weak_list)))
                 break
-            time.sleep(5)
+            time.sleep(40)
 
     def stop(self):
         self._stop.set()
