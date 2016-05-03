@@ -465,7 +465,8 @@ if __name__ == '__main__':
     #import run
     #run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
 
-    vdays = check_serial(serial_key)
+    #vdays = check_serial(serial_key)
+    vdays = 10
     app = wx.App(False)
 
     if vdays == -2:
