@@ -119,8 +119,8 @@ class NewSysDialog(wx.Dialog):
         
     def OK_button(self, evt):
         if self.m_Text_SysName.GetValue() == "" or self.m_Text_IP.GetValue() == "   .   .   .   " or self.m_Text_Port.GetValue() == "" or self.m_Choice_DBType.GetSelection() == -1 or self.m_Choice_Cyptype.GetSelection() == -1 or self.m_Text_DBname.GetValue() == "" or self.m_Text_Sheetname.GetValue() == "" or self.m_Text_Username.GetValue() == "" or self.m_Text_Pswname.GetValue() == "":
-            dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
-            if dlg.ShowModal() == wx.ID_YES:
+            dlg = wx.MessageDialog(None, u"请输入完整信息!", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_OK:
                 #self.Close(True)
                 dlg.Destroy()
         else:
@@ -139,9 +139,10 @@ class NewSysDialog(wx.Dialog):
                          db_port=self.m_Text_Port.GetValue(), db_name=self.m_Text_DBname.GetValue(), db_table_name=self.m_Text_Sheetname.GetValue(), db_column_username=self.m_Text_Username.GetValue(),
                          db_column_password=self.m_Text_Pswname.GetValue(), db_password_encrypt_algorithm=cyp_type)
             db_util.add_system(demo_system)
-            dlg = wx.MessageDialog(None, u"添加成功!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
-            if dlg.ShowModal() == wx.ID_YES:
+            dlg = wx.MessageDialog(None, u"添加成功!", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_OK:
                 dlg.Destroy()
+                print '111'
                 self.Destroy()
             self.parent.RefreshSysList()
 

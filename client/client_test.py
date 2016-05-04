@@ -108,18 +108,20 @@ def check_serial(serial_key):
     return res
 
 def add_log(message):
-    url = reg_server
-    headers = {'content-type': 'application/json'}
-
-    payload = {
-        'method': 'addLog',
-        'params': {'message': message},
-        'jsonrpc': "2.0",
-        'id': 0,
-    }
-    response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
-    response = response.json()
-    #print response
+    pass
+# def add_log(message):
+#     url = reg_server
+#     headers = {'content-type': 'application/json'}
+#
+#     payload = {
+#         'method': 'addLog',
+#         'params': {'message': message},
+#         'jsonrpc': "2.0",
+#         'id': 0,
+#     }
+#     response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
+#     response = response.json()
+#     #print response
 
 
 

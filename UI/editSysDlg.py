@@ -172,8 +172,8 @@ class EditSysDialog(wx.Dialog):
             #              db_port=self.m_Text_Port.GetValue(), db_name=self.m_Text_DBname.GetValue(), db_table_name=self.m_Text_Sheetname.GetValue(), db_column_username=self.m_Text_Username.GetValue(),
             #              db_column_password=self.m_Text_Pswname.GetValue(), db_password_encrypt_algorithm=cyp_type)cyp_type
             db_util.update_system(self.cur_sys_info)
-            dlg = wx.MessageDialog(None, u"编辑成功!", u"提示", wx.YES_NO | wx.ICON_QUESTION)
-            if dlg.ShowModal() == wx.ID_YES:
+            dlg = wx.MessageDialog(None, u"编辑成功!", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_OK:
                 dlg.Destroy()
                 self.Destroy()
               

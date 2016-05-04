@@ -9,7 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_enum34 import EnumType
 from common import DatabaseType, EncryptAlgorithmType, singleton
 from sqlalchemy.orm import sessionmaker, relationship, backref
-from __setting__ import LOCAL_DB_File
+from __setting__ import LOCAL_DB_File, account_limit
 import logging
 
 Base = declarative_base()
@@ -56,7 +56,7 @@ class SystemInfo(Base):
                           Column(self.db_column_password, String),
                           )
 
-            s = select([users]).limit(10000)
+            s = select([users]).limit(account_limit)
             result = conn.execute(s)
             res = []
             for row in result:

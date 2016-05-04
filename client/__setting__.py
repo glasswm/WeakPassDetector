@@ -21,6 +21,8 @@ proxies = {
 # detect_period = 10
 detect_period = config.get('Crack', 'detect_period')
 
+account_limit = config.get('Crack', 'account_limit')
+
 TOP_N = 0
 LESS_THAN_8 = 1
 LENGTH_8_NUM = 2
