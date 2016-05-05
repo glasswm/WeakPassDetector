@@ -58,7 +58,10 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         self.parent.weak_List = []
         up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
         begin_time = datetime.now()
-        add_log(str(begin_time) + " - Start Check - " + repr(self.cur_sys_info) + " - Total Accounts " + str(len(up_pair)))
+        try:
+            add_log(str(begin_time) + " - Start Check - " + repr(self.cur_sys_info) + " - Total Accounts " + str(len(up_pair)))
+        except:
+            pass
         username_list = []
         crypt_list = []
         invalid_crypt_count = 0
@@ -103,7 +106,10 @@ class timer(threading.Thread): #The timer class is derived from the class thread
                 weakCount += 1
             self.parent.m_Gauge.SetValue(100-unknown_count*100/len(crypt_list))
             if unknown_count == 0:
-                add_log(str(datetime.now()) + " - End Check " + str(begin_time) + " - " + repr(self.cur_sys_info) + " - Weak Accounts " + str(len(weak_list)))
+                try:
+                    add_log(str(datetime.now()) + " - End Check " + str(begin_time) + " - " + repr(self.cur_sys_info) + " - Weak Accounts " + str(len(weak_list)))
+                except:
+                    pass
                 break
             time.sleep(40)
 

@@ -8,6 +8,7 @@ __author__ = 'wm'
 
 import requests
 import json
+import wx
 
 def weakt2str(wt):
     if wt == TOP_N:
@@ -72,14 +73,20 @@ def check_weakpass(encrypt_algorithm, cipher_list):
             'jsonrpc': "2.0",
             'id': 0,
         }
-        response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
-        response = response.json()
-        #print response
-        res = response["result"]
-        weak_list = weak_list + [kkk+i for kkk in res[0]]
-        weak_type_list = weak_type_list + res[1]
-        strong_list = strong_list + [kkk+i for kkk in res[2]]
-        unknown_count = unknown_count + res[3]
+        try:
+            response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
+            response = response.json()
+            #print response
+            res = response["result"]
+            weak_list = weak_list + [kkk+i for kkk in res[0]]
+            weak_type_list = weak_type_list + res[1]
+            strong_list = strong_list + [kkk+i for kkk in res[2]]
+            unknown_count = unknown_count + res[3]
+        except Exception as e:
+            print e.message
+            dlg = wx.MessageDialog(None, u"无法连接到弱口令鉴定服务器", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
 
     for i in range(0, len(weak_type_list)):
         weak_type_list[i] = weakt2str(weak_type_list[i])
@@ -107,21 +114,21 @@ def check_serial(serial_key):
         res = -2
     return res
 
-def add_log(message):
-    pass
 # def add_log(message):
-#     url = reg_server
-#     headers = {'content-type': 'application/json'}
-#
-#     payload = {
-#         'method': 'addLog',
-#         'params': {'message': message},
-#         'jsonrpc': "2.0",
-#         'id': 0,
-#     }
-#     response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
-#     response = response.json()
-#     #print response
+#     pass
+def add_log(message):
+    url = reg_server
+    headers = {'content-type': 'application/json'}
+
+    payload = {
+        'method': 'addLog',
+        'params': {'message': message},
+        'jsonrpc': "2.0",
+        'id': 0,
+    }
+    response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
+    response = response.json()
+    #print response
 
 
 

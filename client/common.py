@@ -2,7 +2,7 @@
 
 import os
 import time
-
+import wx
 __author__ = 'wm'
 
 from enum import Enum
@@ -41,6 +41,7 @@ def generate_statement(sys_name, operator, weak_list, total_count, unkown_count)
     #                                 'weak_list': weak_list})
 
     weaklist_str = ''
+    o_fname = -1
     for count, i in enumerate(weak_list):
         weaklist_str += '''
         <tr>
@@ -50,23 +51,26 @@ def generate_statement(sys_name, operator, weak_list, total_count, unkown_count)
         </tr>
         '''
 
-    res = open('c:\\wpd\\report\\report.html', 'r').read().decode("utf-8")
+    try:
+        res = open('c:\\wpd\\report\\report.html', 'r').read().decode("utf-8")
+        #print res
+        t = time.time()
+        res = res.replace("{{ sys_name }}", sys_name);
+        res = res.replace("{{ operator }}", operator);
+        res = res.replace("{{ time }}", time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(t)));
+        res = res.replace("{{ total_count }}", str(total_count));
+        res = res.replace("{{ weak_count }}", str(len(weak_list)));
+        res = res.replace("{{ weaklist }}", weaklist_str);
 
-    #print res
-    t = time.time()
-    res = res.replace("{{ sys_name }}", sys_name);
-    res = res.replace("{{ operator }}", operator);
-    res = res.replace("{{ time }}", time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(t)));
-    res = res.replace("{{ total_count }}", str(total_count));
-    res = res.replace("{{ weak_count }}", str(len(weak_list)));
-    res = res.replace("{{ weaklist }}", weaklist_str);
-
-    o_fname = 'c:\\wpd\\report\\report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html'
-    out = open(o_fname, 'w')
-    out.write(res.encode('utf-8'))
-    out.close()
+        o_fname = 'c:\\wpd\\report\\report_wp'+ time.strftime('%Y%m%d%H%M%S',time.localtime(t)) +'.html'
+        out = open(o_fname, 'w')
+        out.write(res.encode('utf-8'))
+        out.close()
+    except IOError:
+        dlg = wx.MessageDialog(None, u"未找到report.html，请确保程序已放到C:\\wpd\\", u"提示", wx.OK | wx.ICON_QUESTION)
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
     return o_fname
-
 
 def generate_unmod_statement(sys_name, operator, unmod_list, total_count, period):
 

@@ -403,15 +403,21 @@ class TestPanel(wx.Panel):
     def WeakTestReport(self):
         print ("export report")
         wl = []
-        for index, i in enumerate(self.weak_List):
-            temp = {'name' : 'aaaa1', 'wtype' : '1'}
-            temp['name'] = self.username_List[i]
-            temp['wtype'] = self.weak_type_list[index]
-            wl.append(temp)
-        fpath = generate_statement(self.listBox.GetStringSelection(), u'admin', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
-        dlg = wx.MessageDialog(None, u"报表成功生成 " + fpath, u"提示", wx.OK | wx.ICON_QUESTION)
-        if dlg.ShowModal() == wx.ID_YES:
-            dlg.Destroy()
+        if self.weak_List == None:
+            dlg = wx.MessageDialog(None, u"请先检测弱口令，再生成报表", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+        else:
+            for index, i in enumerate(self.weak_List):
+                temp = {'name' : 'aaaa1', 'wtype' : '1'}
+                temp['name'] = self.username_List[i]
+                temp['wtype'] = self.weak_type_list[index]
+                wl.append(temp)
+            fpath = generate_statement(self.listBox.GetStringSelection(), u'admin', wl, self.m_Text_SumNum.GetValue(), self.m_Text_WeakNum.GetValue())
+            if fpath != -1:
+                dlg = wx.MessageDialog(None, u"报表成功生成 " + fpath, u"提示", wx.OK | wx.ICON_QUESTION)
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
 
     def StopTest(self, evt):
         print ("stop testing, stop thread")

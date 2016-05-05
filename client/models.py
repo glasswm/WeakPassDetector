@@ -10,6 +10,7 @@ from sqlalchemy_enum34 import EnumType
 from common import DatabaseType, EncryptAlgorithmType, singleton
 from sqlalchemy.orm import sessionmaker, relationship, backref
 from __setting__ import LOCAL_DB_File, account_limit
+from mysql.connector.locales.eng import client_error
 import logging
 
 Base = declarative_base()

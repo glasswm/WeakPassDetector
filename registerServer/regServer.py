@@ -11,6 +11,8 @@ from werkzeug.serving import run_simple
 from jsonrpc import JSONRPCResponseManager, dispatcher
 
 
+logging.basicConfig(filename='use.log', level=logging.INFO)
+
 @dispatcher.add_method
 def verify(**kwargs):
     if ('serial_key' not in kwargs):
@@ -37,6 +39,7 @@ def application(request):
     dispatcher["echo"] = lambda s: s
     dispatcher["add"] = lambda a, b: a + b
 
+    logging.info(str(datetime.now()) + ' - ' + request.remote_addr + ' - ' + request.data)
     response = JSONRPCResponseManager.handle(
         request.data, dispatcher)
     return Response(response.json, mimetype='application/json')
