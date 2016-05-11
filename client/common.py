@@ -110,6 +110,33 @@ def generate_unmod_statement(sys_name, operator, unmod_list, total_count, period
 #DATABASE_ENUM = ('mysql', 'oracle')
 #ENCRYPT_ALGORITHM_ENUM = ('md5', 'sha1')
 
+
+from Crypto.Cipher import AES
+from binascii import b2a_hex, a2b_hex
+
+class prpcrypt():
+    def __init__(self, key, iv):
+        self.key = key
+        self.iv = iv
+        self.mode = AES.MODE_CBC
+        #self.cryptor = AES.new(self.key, self.mode, self.iv)
+
+    def encrypt(self, text):
+        length = 16
+        count = len(text)
+        add = length - (count % length)
+        text = text + ('\0' * add)
+        cryptor = AES.new(self.key, self.mode, self.iv)
+        self.ciphertext = cryptor.encrypt(text)
+        del cryptor
+        return b2a_hex(self.ciphertext)
+
+    def decrypt(self, text):
+        cryptor = AES.new(self.key, self.mode, self.iv)
+        plain_text = cryptor.decrypt(a2b_hex(text))
+        del cryptor
+        return plain_text.rstrip('\0')
+
 if __name__ == '__main__':
 
     # weak_list = [{'name' : 'aaaa1', 'wtype' : '1'},

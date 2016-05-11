@@ -9,6 +9,9 @@ __author__ = 'wm'
 import requests
 import json
 import wx
+from common import prpcrypt
+
+aes_obj = prpcrypt('wahaha5dezuiaiwo', '7418629350000312')
 
 def weakt2str(wt):
     if wt == TOP_N:
@@ -40,7 +43,7 @@ def main():
         "id": 0,
     }
     response = requests.post(
-        url, data=json.dumps(payload), headers=headers)
+        url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers)
 
     print response
 
@@ -74,7 +77,11 @@ def check_weakpass(encrypt_algorithm, cipher_list):
             'id': 0,
         }
         try:
-            response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
+            print json.dumps(payload)
+            kk = aes_obj.encrypt(json.dumps(payload))
+            #print kk
+            #print aes_obj.decrypt(kk)
+            response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
             response = response.json()
             #print response
             res = response["result"]
@@ -105,7 +112,7 @@ def check_serial(serial_key):
         'id': 0,
     }
     try:
-        response = requests.post(url, data=json.dumps(payload), headers=headers, timeout=5) #, proxies=proxies)
+        response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers, timeout=5) #, proxies=proxies)
         response = response.json()
         #print response
         res = response['result']
@@ -126,7 +133,7 @@ def add_log(message):
         'jsonrpc': "2.0",
         'id': 0,
     }
-    response = requests.post(url, data=json.dumps(payload), headers=headers) #, proxies=proxies)
+    response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
     response = response.json()
     #print response
 
