@@ -7,7 +7,7 @@ from datetime import datetime
 from client.client_test import check_weakpass, add_log
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
-
+import wx
 
 num_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 letter_list_low = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -57,6 +57,9 @@ class timer(threading.Thread): #The timer class is derived from the class thread
         #print 'db user: ', self.db_user_name, ', db_passwd: ', self.db_pass_wd
         self.parent.weak_List = []
         up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
+        print 'First 3 records:'
+        for i in up_pair[0:3]:
+            print 'username: ' + i[0] + ', password_encrypt: ' + i[1]
         begin_time = datetime.now()
         try:
             add_log(str(begin_time) + " - Start Check - " + repr(self.cur_sys_info) + " - Total Accounts " + str(len(up_pair)))
@@ -80,6 +83,12 @@ class timer(threading.Thread): #The timer class is derived from the class thread
                 else:
                     invalid_crypt_count += 1
         print '%d invalid crypts found' % invalid_crypt_count
+
+        if float(invalid_crypt_count) / float(len(up_pair)) > 1.0/3.0:
+            dlg = wx.MessageDialog(None, u"加密算法类别设置不正确，请与被测系统管理员进行核实", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+            return
         self.parent.username_List = username_list
         #print username_list
         #print crypt_list

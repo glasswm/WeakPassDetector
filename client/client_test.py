@@ -77,10 +77,6 @@ def check_weakpass(encrypt_algorithm, cipher_list):
             'id': 0,
         }
         try:
-            print json.dumps(payload)
-            kk = aes_obj.encrypt(json.dumps(payload))
-            #print kk
-            #print aes_obj.decrypt(kk)
             response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
             response = response.json()
             #print response

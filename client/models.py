@@ -67,9 +67,6 @@ class SystemInfo(Base):
                 res.append((row[self.db_column_username], row[self.db_column_password]))
             result.close()
             print 'Get ' + str(len(res)) + ' records from database.'
-            print 'First 3 records:'
-            for i in res[0:3]:
-                print 'username: ' + i[0] + ', password_encrypt: ' + i[1]
         except Exception as e:
             print e.message
             dlg = wx.MessageDialog(None, e.message, u"提示", wx.OK | wx.ICON_QUESTION)
