@@ -62,7 +62,7 @@ class TestPanel(wx.Panel):
         bSizer_Panel1.Add(m_Panel12,proportion=1,flag=wx.EXPAND)
         m_Panel1.SetSizer(bSizer_Panel1)
 
-        m_Label_11 = wx.StaticBox(m_Panel11, label=u"系统信息")
+        m_Label_11 = wx.StaticBox(m_Panel11, label=u"信息系统列表")
         bSizerBox_Panel1 = wx.StaticBoxSizer(m_Label_11,wx.VERTICAL)
 
         self.sampleList = []
@@ -89,9 +89,9 @@ class TestPanel(wx.Panel):
         # bSizer_Panel121.Add(m_Panel1212,proportion=1,flag=wx.EXPAND)
         # bSizer_Panel121.Add(m_Panel1213,proportion=1,flag=wx.EXPAND)
 
-        bt_New = wx.Button(m_Panel12,wx.ID_ANY,label=u"新增系统信息")
-        bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label=u"编辑系统信息")
-        bt_Delete = wx.Button(m_Panel12,wx.ID_ANY,label=u"删除系统信息")
+        bt_New = wx.Button(m_Panel12,wx.ID_ANY,label=u"新增信息系统")
+        bt_Edit = wx.Button(m_Panel12,wx.ID_ANY,label=u"编辑信息系统")
+        bt_Delete = wx.Button(m_Panel12,wx.ID_ANY,label=u"删除信息系统")
 
         #self.bt_Wstart = wx.Button(m_Panel12,wx.ID_ANY,label=u"  弱口令检测 ")
         #bt_Export = wx.Button(m_Panel12,wx.ID_ANY,label=u"   导出报表   ")
@@ -147,14 +147,14 @@ class TestPanel(wx.Panel):
         bSizer_Panel21.Add(bt_Export, pos=(1, 9), span=(1, 3), flag = wx.ALIGN_CENTER)
         m_Panel21.SetSizer(bSizer_Panel21)
 
-        m_Label_SumNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"口令总条数")
+        m_Label_SumNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"口令总数")
         self.m_Text_SumNum = wx.TextCtrl(m_Panel22,size=(50,22))
         self.m_Text_SumNum.SetEditable(False)
-        m_Label_WeakNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"弱口令条数")
+        m_Label_WeakNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"    弱口令数")
         self.m_Text_WeakNum = wx.TextCtrl(m_Panel22,size=(50,22))
         #print self.m_Text_WeakNum.GetSize()
         self.m_Text_WeakNum.SetEditable(False)
-        m_Label_UnknownNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"不明口令条数")
+        m_Label_UnknownNum = wx.StaticText(m_Panel22,wx.ID_ANY,u"    待破解口令数")
         self.m_Text_UnknownNum = wx.TextCtrl(m_Panel22,size=(50,22))
         self.m_Text_UnknownNum.SetEditable(False)
 
@@ -218,7 +218,7 @@ class TestPanel(wx.Panel):
         if 'wxMac' in wx.PlatformInfo:
             useMetal = self.cb.IsChecked()
              
-        dlg = NewSysDialog(self, -1, u"新增系统信息", size=(350, 200),
+        dlg = NewSysDialog(self, -1, u"新增信息系统", size=(350, 200),
                          #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
                          style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                          useMetal=useMetal,
@@ -247,7 +247,7 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑系统信息", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
+            dlg = EditSysDialog(self, -1, u"编辑信息系统", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal
                              )

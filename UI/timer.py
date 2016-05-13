@@ -114,7 +114,10 @@ class timer(threading.Thread): #The timer class is derived from the class thread
                 self.parent.m_ListCtrl.SetStringItem(weakCount,2,weak_type_list[weakCount])
                 weakCount += 1
             self.parent.m_Gauge.SetValue(100-unknown_count*100/len(crypt_list))
-            if unknown_count == 0:
+            if len(weak_list) + len(strong_list) == len(crypt_list):
+                dlg = wx.MessageDialog(None, u"检测完成，请导出报表查看详情", u"提示", wx.OK | wx.ICON_QUESTION)
+                if dlg.ShowModal() == wx.ID_YES:
+                    dlg.Destroy()
                 try:
                     add_log(str(datetime.now()) + " - End Check " + str(begin_time) + " - " + repr(self.cur_sys_info) + " - Weak Accounts " + str(len(weak_list)))
                 except:
