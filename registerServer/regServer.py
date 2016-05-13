@@ -1,3 +1,4 @@
+import os
 from models import DBUtil
 from datetime import datetime
 from models import UseLog
@@ -37,7 +38,7 @@ class prpcrypt():
 
 aes_obj = prpcrypt('wahaha5dezuiaiwo', '7418629350000312')
 
-logging.basicConfig(filename='use.log', level=logging.INFO)
+logging.basicConfig(filename=os.path.dirname(__file__) + '/use.log', level=logging.INFO)
 
 @dispatcher.add_method
 def verify(**kwargs):

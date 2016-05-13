@@ -11,7 +11,8 @@ LOCAL_DB_File = config.get('Crack', 'local_db')
 wp_server = config.get('Crack', 'wp_server')
 reg_server = config.get('Register', 'reg_server')
 
-serial_key = config.get('Register', 'serial_key')
+#serial_key = config.get('Register', 'serial_key')
+serial_key = 'adc9c08d7c'
 
 proxies = {
     "http": "http://127.0.0.1:8080",
