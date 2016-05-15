@@ -9,33 +9,10 @@ from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
 
 from jsonrpc import JSONRPCResponseManager, dispatcher
-from Crypto.Cipher import AES
-from binascii import b2a_hex, a2b_hex
 
-class prpcrypt():
-    def __init__(self, key, iv):
-        self.key = key
-        self.iv = iv
-        self.mode = AES.MODE_CBC
-        #self.cryptor = AES.new(self.key, self.mode, self.iv)
-
-    def encrypt(self, text):
-        length = 16
-        count = len(text)
-        add = length - (count % length)
-        text = text + ('\0' * add)
-        cryptor = AES.new(self.key, self.mode, self.iv)
-        self.ciphertext = cryptor.encrypt(text)
-        del cryptor
-        return b2a_hex(self.ciphertext)
-
-    def decrypt(self, text):
-        cryptor = AES.new(self.key, self.mode, self.iv)
-        plain_text = cryptor.decrypt(a2b_hex(text))
-        del cryptor
-        return plain_text.rstrip('\0')
-
-aes_obj = prpcrypt('wahaha5dezuiaiwo', '7418629350000312')
+from cryptography.fernet import Fernet
+key = 'M3ZkzmsiNCJHoV57K3dG0r4-gtkhfdpYMAlRoIZg4Kg='
+encrypt_obj = Fernet(key)
 
 @dispatcher.add_method
 def foobar(**kwargs):
@@ -71,7 +48,7 @@ def application(request):
     dispatcher["add"] = lambda a, b: a + b
 
     response = JSONRPCResponseManager.handle(
-        aes_obj.decrypt(request.data), dispatcher)
+        encrypt_obj.decrypt(request.data), dispatcher)
     return Response(response.json, mimetype='application/json')
 
 
