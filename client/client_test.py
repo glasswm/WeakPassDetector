@@ -9,9 +9,36 @@ __author__ = 'wm'
 import requests
 import json
 import wx
-from common import prpcrypt
 
-aes_obj = prpcrypt('wahaha5dezuiaiwo', '7418629350000312')
+
+def patch_crypto_be_discovery():
+
+    """
+    Monkey patches cryptography's backend detection.
+    Objective: support pyinstaller freezing.
+    """
+
+    from cryptography.hazmat import backends
+
+    try:
+        from cryptography.hazmat.backends.commoncrypto.backend import backend as be_cc
+    except ImportError:
+        be_cc = None
+
+    try:
+        from cryptography.hazmat.backends.openssl.backend import backend as be_ossl
+    except ImportError:
+        be_ossl = None
+
+    backends._available_backends_list = [
+        be for be in (be_cc, be_ossl) if be is not None
+    ]
+
+patch_crypto_be_discovery()
+
+from cryptography.fernet import Fernet
+key = 'M3ZkzmsiNCJHoV57K3dG0r4-gtkhfdpYMAlRoIZg4Kg='
+encrypt_obj = Fernet(key)
 
 def weakt2str(wt):
     if wt == TOP_N:
@@ -43,7 +70,7 @@ def main():
         "id": 0,
     }
     response = requests.post(
-        url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers)
+        url, data=encrypt_obj.encrypt(json.dumps(payload)), headers=headers)
 
     print response
 
@@ -77,7 +104,7 @@ def check_weakpass(encrypt_algorithm, cipher_list):
             'id': 0,
         }
         try:
-            response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
+            response = requests.post(url, data=encrypt_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
             response = response.json()
             #print response
             res = response["result"]
@@ -108,7 +135,7 @@ def check_serial(serial_key):
         'id': 0,
     }
     try:
-        response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers, timeout=5) #, proxies=proxies)
+        response = requests.post(url, data=encrypt_obj.encrypt(json.dumps(payload)), headers=headers, timeout=5) #, proxies=proxies)
         response = response.json()
         #print response
         res = response['result']
@@ -129,7 +156,7 @@ def add_log(message):
         'jsonrpc': "2.0",
         'id': 0,
     }
-    response = requests.post(url, data=aes_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
+    response = requests.post(url, data=encrypt_obj.encrypt(json.dumps(payload)), headers=headers) #, proxies=proxies)
     response = response.json()
     #print response
 
