@@ -38,6 +38,14 @@ def is_sha1_crypt(crypt):
         return False
     return True
 
+def is_isc_crypt(crypt):
+    if crypt == None:
+        return False
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 56:
+        return False
+    return True
+
+
 
 class timer(threading.Thread): #The timer class is derived from the class threading.Thread
     cur_sys_info = None
@@ -82,6 +90,13 @@ class timer(threading.Thread): #The timer class is derived from the class thread
                     crypt_list.append(i[1])
                 else:
                     invalid_crypt_count += 1
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.isc:
+            for i in up_pair:
+                if is_isc_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append(i[1])
+                else:
+                    invalid_crypt_count += 1
         print '%d invalid crypts found' % invalid_crypt_count
 
         if float(invalid_crypt_count) / float(len(up_pair)) > 1.0/3.0:
@@ -97,6 +112,8 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             crypt_type = 'md5'
         elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
             crypt_type = 'sha1'
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.isc:
+            crypt_type = 'isc'
 
         while(self.stopped() != True):
             self.parent.m_ListCtrl.DeleteAllItems()

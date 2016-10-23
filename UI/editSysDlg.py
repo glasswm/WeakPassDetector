@@ -135,6 +135,8 @@ class EditSysDialog(wx.Dialog):
             self.m_Choice_Cyptype.SetSelection(0)
         elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sha1:
             self.m_Choice_Cyptype.SetSelection(1)
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.isc:
+            self.m_Choice_Cyptype.SetSelection(2)
 
         
     def OK_button(self, evt):
@@ -149,6 +151,8 @@ class EditSysDialog(wx.Dialog):
                 cyp_type = EncryptAlgorithmType.md5
             elif self.m_Choice_Cyptype.GetSelection() == 1:
                 cyp_type = EncryptAlgorithmType.sha1
+            elif self.m_Choice_Cyptype.GetSelection() == 2:
+                cyp_type = EncryptAlgorithmType.isc
 
             if self.m_Choice_DBType.GetSelection() == 0:
                 db_type = DatabaseType.mysql

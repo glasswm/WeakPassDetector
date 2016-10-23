@@ -129,6 +129,8 @@ class NewSysDialog(wx.Dialog):
                 cyp_type = EncryptAlgorithmType.md5
             elif self.m_Choice_Cyptype.GetSelection() == 1:
                 cyp_type = EncryptAlgorithmType.sha1
+            elif self.m_Choice_Cyptype.GetSelection() == 2:
+                cyp_type = EncryptAlgorithmType.isc
 
             if self.m_Choice_DBType.GetSelection() == 0:
                 db_type = DatabaseType.mysql

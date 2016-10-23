@@ -3,7 +3,7 @@ __author__ = 'glasswm'
 import ConfigParser
 
 config = ConfigParser.RawConfigParser()
-config.read('main.cfg')
+config.read('../main.cfg')
 
 LOCAL_DB_File = config.get('Crack', 'local_db')
 

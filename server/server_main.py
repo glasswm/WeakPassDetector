@@ -20,7 +20,8 @@ def foobar(**kwargs):
 
 @dispatcher.add_method
 def check_weak_pass(**kwargs):
-    support_encrypt_algorithm = ('md5', 'sha1')
+    print "enter"
+    support_encrypt_algorithm = ('md5', 'sha1', 'isc', 'oracle10', 'oracle11', 'sapg', 'sapb')
     if ('encrypt_algorithm' not in kwargs or 'cipher_list' not in kwargs):
         logging.warning('invalid params')
         return 'invalid params'
@@ -36,10 +37,10 @@ def check_weak_pass(**kwargs):
         return 'cipher list is empty'
     else:
         cipher_list_low = []
+        print len(cipher_list)
         for i in cipher_list:
             cipher_list_low.append(i.lower())
         return ask_db(cipher_list_low, encrypt_algorithm)
-
 
 @Request.application
 def application(request):

@@ -7,7 +7,7 @@ __author__ = 'wm'
 from enum import Enum
 
 db_type_list = ['mysql', 'oracle']
-crypt_type_list = ['md5', 'sha1']
+crypt_type_list = ['md5', 'sha1', 'isc']
 
 def singleton(cls, *args, **kw):
     instances = {}
@@ -27,6 +27,7 @@ class EncryptAlgorithmType(Enum):
     md5 = 'md5'
     sha1 = 'sha1'
     sha256 = 'sha256'
+    isc = 'isc'
     plaintext = 'plaintext'
 
 
