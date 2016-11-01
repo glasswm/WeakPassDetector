@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from client.__setting__ import wp_server, proxies, reg_server, serial_key, TOP_N, STRONG, USER_CUSTOM, LENGTH_8_SPECIAL, \
-    LENGTH_8_CHAR, LENGTH_8_NUM, LESS_THAN_8
+    LENGTH_8_CHAR, LENGTH_8_NUM, LESS_THAN_8, EASY_CRACK
 
 __author__ = 'wm'
 
@@ -53,6 +53,8 @@ def weakt2str(wt):
         return u'8位纯特殊字符'
     elif wt == USER_CUSTOM:
         return u'自定义字典'
+    elif wt == EASY_CRACK:
+        return u'易破解口令'
     elif wt == STRONG:
         return u'健壮'
     else:
@@ -114,7 +116,7 @@ def check_weakpass(encrypt_algorithm, cipher_list):
             unknown_count = unknown_count + res[3]
         except Exception as e:
             print e.message
-            dlg = wx.MessageDialog(None, u"无法连接到弱口令鉴定服务器", u"提示", wx.OK | wx.ICON_QUESTION)
+            dlg = wx.MessageDialog(None, u"无法连接到弱口令鉴定服务器，请确保服务端的10.1.87.207的4000端口已开通", u"提示", wx.OK | wx.ICON_QUESTION)
             if dlg.ShowModal() == wx.ID_YES:
                 dlg.Destroy()
 

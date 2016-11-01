@@ -10,11 +10,13 @@ class EditSysDialog(wx.Dialog):
     cur_sys_info = None
 
     def __init__(
-            self, parent, ID, title, idx, size=wx.DefaultSize, pos=wx.DefaultPosition,
+            self, parent, ID, title, info, size=wx.DefaultSize, pos=wx.DefaultPosition,
             style=wx.DEFAULT_DIALOG_STYLE,
             useMetal=False
             ):
- 
+
+        self.cur_sys_info = info
+
         # Instead of calling wx.Dialog.__init__ we precreate the dialog
         # so we can set an extra style that must be set before
         # creation, and then we create the GUI object using the Create
@@ -118,8 +120,6 @@ class EditSysDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.OK_button, bt_Ok)
         self.Bind(wx.EVT_BUTTON, self.Cancel_Button, bt_Cancel)
 
-        db_util = DBUtil()
-        self.cur_sys_info = db_util.get_system_by_id(idx)
         self.m_Text_SysName.SetValue(self.cur_sys_info.sys_name)
         self.m_Text_IP.SetValue(self.cur_sys_info.db_ip)
         self.m_Text_Port.SetValue(self.cur_sys_info.db_port)
@@ -137,6 +137,14 @@ class EditSysDialog(wx.Dialog):
             self.m_Choice_Cyptype.SetSelection(1)
         elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.isc:
             self.m_Choice_Cyptype.SetSelection(2)
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.oracle10:
+            self.m_Choice_Cyptype.SetSelection(3)
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.oracle11:
+            self.m_Choice_Cyptype.SetSelection(4)
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sapg:
+            self.m_Choice_Cyptype.SetSelection(5)
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sapb:
+            self.m_Choice_Cyptype.SetSelection(6)
 
         
     def OK_button(self, evt):
@@ -153,6 +161,14 @@ class EditSysDialog(wx.Dialog):
                 cyp_type = EncryptAlgorithmType.sha1
             elif self.m_Choice_Cyptype.GetSelection() == 2:
                 cyp_type = EncryptAlgorithmType.isc
+            elif self.m_Choice_Cyptype.GetSelection() == 3:
+                cyp_type = EncryptAlgorithmType.oracle10
+            elif self.m_Choice_Cyptype.GetSelection() == 4:
+                cyp_type = EncryptAlgorithmType.oracle11
+            elif self.m_Choice_Cyptype.GetSelection() == 5:
+                cyp_type = EncryptAlgorithmType.sapg
+            elif self.m_Choice_Cyptype.GetSelection() == 6:
+                cyp_type = EncryptAlgorithmType.sapb
 
             if self.m_Choice_DBType.GetSelection() == 0:
                 db_type = DatabaseType.mysql

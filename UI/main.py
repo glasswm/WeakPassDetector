@@ -17,8 +17,10 @@ from verifDlg import VerifDialog
 import logging
 from timer import timer
 import datetime
-
-
+from ChooseInfoSysDlg import ChooseInfoSysDlg
+from client.common import EncryptAlgorithmType, DatabaseType, crypt_type_list, db_type_list
+from client.models import DBUtil, SystemInfo
+from editSysDlg2 import EditSysDialog2
 #---------------------------------------------------------------------------
 # Create and set a help provider.  Normally you would do this in
 # the app's OnInit as it must be done before any SetHelpText calls.
@@ -138,7 +140,7 @@ class TestPanel(wx.Panel):
         
         self.bt_Stop = wx.Button(m_Panel21,wx.ID_ANY,label=u"停止检测")
         self.bt_Wstart = wx.Button(m_Panel21,wx.ID_ANY,label=u"弱口令检测")
-        bt_Export = wx.Button(m_Panel21,wx.ID_ANY,label=u"导出报表")
+        bt_Export = wx.Button(m_Panel21,wx.ID_ANY,label=u"生成报表")
 
         bSizer_Panel21 = wx.GridBagSizer(0, 10)
         #bSizer_Panel21.Add(self.bt_Rstart, pos=(0,6), span=(1,3), flag = wx.ALIGN_CENTER)
@@ -197,7 +199,7 @@ class TestPanel(wx.Panel):
 
         m_Label_copyright = wx.StaticText(m_Panel4, wx.ID_ANY, u"© 2015-2016 国网信通 All rights reserved.")
         #m_Label_vdays = wx.StaticText(m_Panel4, wx.ID_ANY, u"使用期限剩余：" + str(self.vdays) + u"天")
-        m_Label_vdays = wx.StaticText(m_Panel4, wx.ID_ANY, u"技术支持：010-60617804")
+        m_Label_vdays = wx.StaticText(m_Panel4, wx.ID_ANY, u"技术支持：15001081686")
         bSizer_Panel4 = wx.GridBagSizer(1,10)
         bSizer_Panel4.Add(m_Label_copyright, pos=(0, 1), span=(1, 1), flag=wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
         bSizer_Panel4.Add(m_Label_vdays, pos=(0, 4), span=(1, 1), flag=wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
@@ -217,12 +219,16 @@ class TestPanel(wx.Panel):
         useMetal = False
         if 'wxMac' in wx.PlatformInfo:
             useMetal = self.cb.IsChecked()
-             
-        dlg = NewSysDialog(self, -1, u"新增信息系统", size=(350, 200),
+
+        dlg = ChooseInfoSysDlg(self, -1, u"新增信息系统", size=(350, 200),
                          #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
                          style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-                         useMetal=useMetal,
-                         )
+                         useMetal=useMetal,)
+        # dlg = NewSysDialog(self, -1, u"新增信息系统", size=(350, 200),
+        #                  #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+        #                  style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+        #                  useMetal=useMetal,
+        #                  )
         dlg.CenterOnScreen()
  
         # this does not return until the dialog is closed.
@@ -247,7 +253,18 @@ class TestPanel(wx.Panel):
             useMetal = False
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
-            dlg = EditSysDialog(self, -1, u"编辑信息系统", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
+
+            db_util = DBUtil()
+            idx = self.idList[self.listBox.GetSelection()]
+            cur_sys_info = db_util.get_system_by_id(idx)
+            dlg = None
+            if cur_sys_info.db_type == DatabaseType.file:
+                dlg = EditSysDialog2(self, -1, u"编辑信息系统", cur_sys_info, size=(350, 200),
+                             style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                             useMetal=useMetal
+                             )
+            else:
+                dlg = EditSysDialog(self, -1, u"编辑信息系统", cur_sys_info, size=(350, 200),
                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                              useMetal=useMetal
                              )
@@ -322,18 +339,22 @@ class TestPanel(wx.Panel):
             if 'wxMac' in wx.PlatformInfo:
                 useMetal = self.cb.IsChecked()
 
+            db_util = DBUtil()
+            idx = self.idList[self.listBox.GetSelection()]
+            cur_sys_info = db_util.get_system_by_id(idx)
+            dlg = None
             self.thread = timer(self, idx=self.idList[self.listBox.GetSelection()])
-            dlg = VerifDialog(self, -1, u"输入数据库口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
-                              style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
-                              useMetal=useMetal,
-                              )
-            dlg.CenterOnScreen()
-            val = dlg.ShowModal()
-            # if val == wx.ID_OK:
-            #     print("You pressed OK\n")
-            # else:
-            #     print("You pressed Cancel\n")
-            dlg.Destroy()
+            print cur_sys_info.db_type
+            if cur_sys_info.db_type is DatabaseType.file:
+                self.thread.start()
+            else:
+                dlg = VerifDialog(self, -1, u"输入数据库口令", idx=self.idList[self.listBox.GetSelection()], size=(350, 200),
+                                  style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
+                                  useMetal=useMetal,
+                                  )
+                dlg.CenterOnScreen()
+                dlg.ShowModal()
+                dlg.Destroy()
 
     def RegularModifyTestButton(self):
         # self.m_ListCtrl.DeleteColumn(1)
@@ -470,7 +491,7 @@ if __name__ == '__main__':
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()
     elif vdays > 0:
-        frame = wx.Frame(None, -1, u'弱口令检测工具' + 'v0.9 beta',size=(600,650))
+        frame = wx.Frame(None, -1, u'弱口令检测工具' + 'v1.1 beta',size=(600,650))
         win = TestPanel(frame, None, vdays=vdays)
         frame.Show()
         app.MainLoop()

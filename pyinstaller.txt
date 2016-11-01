@@ -1,0 +1,1 @@
+pyinstaller --onefile -p D:\WeakPassDetector;D:\WeakPassDetector\client;D:\Python27\Lib;D:\Python27\Lib\site-packages;C:\Users\Dieuroi\AppData\Roaming\Python\Python27;C:\Users\Dieuroi\AppData\Roaming\Python\Python27\site-packages main.spec

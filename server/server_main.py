@@ -21,7 +21,7 @@ def foobar(**kwargs):
 @dispatcher.add_method
 def check_weak_pass(**kwargs):
     print "enter"
-    support_encrypt_algorithm = ('md5', 'sha1', 'isc', 'oracle10', 'oracle11', 'sapg', 'sapb')
+    support_encrypt_algorithm = ('md5', 'sha1', 'isc', 'oracle 7-10', 'oracle11', 'sapg', 'sapb')
     if ('encrypt_algorithm' not in kwargs or 'cipher_list' not in kwargs):
         logging.warning('invalid params')
         return 'invalid params'

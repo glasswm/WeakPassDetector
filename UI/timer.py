@@ -7,6 +7,7 @@ from datetime import datetime
 from client.client_test import check_weakpass, add_log
 from client.common import EncryptAlgorithmType
 from client.models import DBUtil
+from client.common import DatabaseType
 import wx
 
 num_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -45,6 +46,37 @@ def is_isc_crypt(crypt):
         return False
     return True
 
+def is_oracle10_crypt(crypt):
+    if crypt == None:
+        return False
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 16:
+        return False
+    return True
+
+def is_oracle11_crypt(crypt):
+    if crypt == None:
+        return False
+    if len(crypt) <= 2:
+        return False
+    else:
+        crypt = crypt[2:] #remove "S:"
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 60:
+        return False
+    return True
+
+def is_sapg_crypt(crypt):
+    if crypt == None:
+        return False
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 40:
+        return False
+    return True
+
+def is_sapb_crypt(crypt):
+    if crypt == None:
+        return False
+    if not string_all_in_set(crypt, char_set) or len(crypt) != 16:
+        return False
+    return True
 
 
 class timer(threading.Thread): #The timer class is derived from the class threading.Thread
@@ -64,7 +96,19 @@ class timer(threading.Thread): #The timer class is derived from the class thread
     def run(self): #Overwrite run() method, put what you want the thread do here
         #print 'db user: ', self.db_user_name, ', db_passwd: ', self.db_pass_wd
         self.parent.weak_List = []
-        up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
+        if self.cur_sys_info.db_type is DatabaseType.file:
+            up_pair = self.cur_sys_info.get_csv_data(self.cur_sys_info.db_name)
+        else:
+            up_pair = self.cur_sys_info.get_account_data(username=self.db_user_name, password=self.db_pass_wd)
+        if len(up_pair) < 1:
+            dlg = wx.MessageDialog(None, u"没有获取到待破解数据", u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+            return
+        if len(up_pair) > 1000:
+            dlg = wx.MessageDialog(None, u"试用版最多仅支持1000条口令!", u"提示", wx.OK | wx.ICON_QUESTION)
+            dlg.ShowModal()
+            dlg.Destroy()
         print 'First 3 records:'
         for i in up_pair[0:3]:
             print 'username: ' + i[0] + ', password_encrypt: ' + i[1]
@@ -97,6 +141,34 @@ class timer(threading.Thread): #The timer class is derived from the class thread
                     crypt_list.append(i[1])
                 else:
                     invalid_crypt_count += 1
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.oracle10:
+            for i in up_pair:
+                if is_oracle10_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append("%s:%s" % (i[1],i[0]))
+                else:
+                    invalid_crypt_count += 1
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.oracle11:
+            for i in up_pair:
+                if is_oracle11_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append("%s:%s" % (i[1][2:42],i[1][-20:]))
+                else:
+                    invalid_crypt_count += 1
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sapg:
+            for i in up_pair:
+                if is_sapg_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append("%s$%s" % (i[0],i[1]))
+                else:
+                    invalid_crypt_count += 1
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sapb:
+            for i in up_pair:
+                if is_sapb_crypt(i[1]):
+                    username_list.append(i[0])
+                    crypt_list.append("%s$%s" % (i[0],i[1]))
+                else:
+                    invalid_crypt_count += 1
         print '%d invalid crypts found' % invalid_crypt_count
 
         if float(invalid_crypt_count) / float(len(up_pair)) > 1.0/3.0:
@@ -114,6 +186,14 @@ class timer(threading.Thread): #The timer class is derived from the class thread
             crypt_type = 'sha1'
         elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.isc:
             crypt_type = 'isc'
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.oracle10:
+            crypt_type = 'oracle 7-10'
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.oracle11:
+            crypt_type = 'oracle11'
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sapg:
+            crypt_type = 'sapg'
+        elif self.cur_sys_info.db_password_encrypt_algorithm == EncryptAlgorithmType.sapb:
+            crypt_type = 'sapb'
 
         while(self.stopped() != True):
             self.parent.m_ListCtrl.DeleteAllItems()

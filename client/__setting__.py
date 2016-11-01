@@ -16,13 +16,13 @@ serial_key = 'adc9c08d7c'
 
 proxies = {
     "http": "http://127.0.0.1:8080",
-    "https": "http://127.0.0.1:8080",
+    "https": "http://127.0.0.1:8080"
 }
 
 # detect_period = 10
 detect_period = config.get('Crack', 'detect_period')
 
-account_limit = config.get('Crack', 'account_limit')
+account_limit = 1000
 
 TOP_N = 0
 LESS_THAN_8 = 1
@@ -30,5 +30,6 @@ LENGTH_8_NUM = 2
 LENGTH_8_CHAR = 3
 LENGTH_8_SPECIAL = 4
 USER_CUSTOM = 5
+EASY_CRACK = 8
 
 STRONG = 9

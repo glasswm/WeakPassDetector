@@ -131,6 +131,14 @@ class NewSysDialog(wx.Dialog):
                 cyp_type = EncryptAlgorithmType.sha1
             elif self.m_Choice_Cyptype.GetSelection() == 2:
                 cyp_type = EncryptAlgorithmType.isc
+            elif self.m_Choice_Cyptype.GetSelection() == 3:
+                cyp_type = EncryptAlgorithmType.oracle10
+            elif self.m_Choice_Cyptype.GetSelection() == 4:
+                cyp_type = EncryptAlgorithmType.oracle11
+            elif self.m_Choice_Cyptype.GetSelection() == 5:
+                cyp_type = EncryptAlgorithmType.sapg
+            elif self.m_Choice_Cyptype.GetSelection() == 6:
+                cyp_type = EncryptAlgorithmType.sapb
 
             if self.m_Choice_DBType.GetSelection() == 0:
                 db_type = DatabaseType.mysql
@@ -146,7 +154,7 @@ class NewSysDialog(wx.Dialog):
                 dlg.Destroy()
                 print '111'
                 self.Destroy()
-            self.parent.RefreshSysList()
+            self.parent.parent.RefreshSysList()
 
     def Cancel_Button(self, evt):
         print("cancel!")

@@ -15,12 +15,15 @@ def test_hash_type(data_list):
     dbo = dboperator()
     is_md5 = True
     is_sha1 = True
+    is_isc = True
     for data in data_list:
         if not dbo.string_all_in_set(data, char_set) or len(data) != 32:
             is_md5 = False
         if not dbo.string_all_in_set(data, char_set) or len(data) != 40:
             is_sha1 = False
-    return is_md5, is_sha1
+        if not dbo.string_all_in_set(data, char_set) or len(data) != 56:
+            is_isc = False
+    return is_md5, is_sha1, is_isc
 
 
 def ask_db(data_list, data_type):
@@ -30,7 +33,7 @@ def ask_db(data_list, data_type):
         return dbo.ask_md5table(data_list)
     elif data_type == "sha1":
         return dbo.ask_sha1table(data_list)
-    elif data_type == "oracle10":
+    elif data_type == "oracle 7-10":
         return dbo.ask_decode_table('oracle10', 'oracle10table', data_list)
     elif data_type == "oracle11":
         return dbo.ask_decode_table('oracle11', 'oracle11table', data_list)
@@ -179,6 +182,11 @@ def start_digger(data_type, count):
 
 
 if __name__ == "__main__":
-    start_digger("md5", 5)
-    start_digger("sha1", 5)
+    start_digger("md5", 100)
+    start_digger("sha1", 100)
     start_digger("isc", 5)
+    start_digger("oracle10", 5)
+    start_digger("oracle11", 5)
+    start_digger("sapg", 5)
+    start_digger("sapb", 5)
+

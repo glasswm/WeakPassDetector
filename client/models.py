@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import wx
+import csv
 
 __author__ = 'wm'
 
@@ -19,19 +20,56 @@ class SystemInfo(Base):
     __tablename__ = 'systems'
     id = Column(Integer, Sequence('system_id_seq'), primary_key=True)
     sys_name = Column(String(30), nullable=False)
-    db_type = Column(EnumType(DatabaseType), nullable=False)
-    db_ip = Column(String(15), nullable=False)
-    db_port = Column(String(8), nullable=False)
+    db_type = Column(EnumType(DatabaseType), nullable=True)
+    db_ip = Column(String(15), nullable=True)
+    db_port = Column(String(8), nullable=True)
     db_name = Column(String(15), nullable=False)
-    db_table_name = Column(String(15), nullable=False)
-    db_column_username = Column(String(15), nullable=False)
-    db_column_password = Column(String(15), nullable=False)
+    db_table_name = Column(String(15), nullable=True)
+    db_column_username = Column(String(15), nullable=True)
+    db_column_password = Column(String(15), nullable=True)
     db_password_encrypt_algorithm = Column(EnumType(EncryptAlgorithmType), nullable=False)
     last_update_time = Column(DateTime, nullable=True)
 
     def __repr__(self):
         res =  u"<SystemInfo(id=%d, sys_name='%s', db_type='%s', db_name='%s', encrypt_alogorithm='%s')>" % (self.id, self.sys_name, self.db_type, self.db_name, self.db_password_encrypt_algorithm)
         return res.encode('utf-8')
+
+
+    def get_csv_data(self, path):
+        try:
+            print 'Getting account data from csv file'
+            csvfile = file(path, 'rb')
+            reader = csv.reader(csvfile)
+            res = []
+            counter = 0
+            if account_limit == -1:
+                for line in reader:
+                    if len(line) != 2:
+                        pass
+                    else:
+                        res.append((line[0], line[1]))
+            else:
+                for line in reader:
+                    if counter > account_limit:
+                        break
+                    if len(line) != 2:
+                        pass
+                    else:
+                        res.append((line[0], line[1]))
+                        counter += 1
+            csvfile.close()
+            print 'Get ' + str(len(res)) + ' records from csv file.'
+        except Exception as e:
+            print e.strerror
+            warningStr = u"找不到对应的文件！"
+            if e.strerror == 'No such file or directory':
+                dlg = wx.MessageDialog(None, warningStr, u"提示", wx.OK | wx.ICON_QUESTION)
+            else:
+                dlg = wx.MessageDialog(None, e.strerror, u"提示", wx.OK | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+            res = []
+        return res
 
 
     def get_account_data(self, username, password):

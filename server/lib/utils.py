@@ -3,7 +3,7 @@ import time
 import psycopg2
 import hashlib
 import traceback
-import MySQLdb
+# import MySQLdb
 from binascii import b2a_hex, a2b_hex
 
 
@@ -13,6 +13,7 @@ LENGTH_8_NUM = 2
 LENGTH_8_CHAR = 3
 LENGTH_8_SPECIAL = 4
 USER_CUSTOM = 5
+EASY_CRACK = 8
 
 STRONG = 9
 
@@ -74,9 +75,9 @@ class dboperator:
     fo = fileoperator()
 
     def __init__(self):
-        # self.conn = psycopg2.connect(database="hashdb", user="root", password="a123456", host="127.0.0.1",
-        #                             port="3306")
-        self.conn = MySQLdb.connect(host='localhost', port=3306, user='root', passwd='a123456', db='weakdetect')
+        self.conn = psycopg2.connect(database="hashdb", user="postgres", password="wpdWPD123456", host="127.0.0.1",
+                                     port="5432")
+        #self.conn = MySQLdb.connect(host='localhost', port=3306, user='root', passwd='a123456', db='weakdetect')
         self.cur = self.conn.cursor()
 
     def append_knowledge(self, data_list, note):
@@ -172,7 +173,11 @@ class dboperator:
 		
     def append_record_to_decode_table(self, tablename, encry_str):
         sql = "insert into %s values('%s', 'u', current_date, -1, '')" % (tablename, encry_str.lower())
-
+        self.cur.execute(sql)
+        self.fo.write_log("excute:" + sql)
+        print(sql)
+        self.conn.commit()
+        self.fo.write_log("excute:commit")
 
     def append_record_to_isctable(self, isc_str):
         sql = "insert into isctable values('" + isc_str.lower() + "','u',current_date,-1,'')"
@@ -262,9 +267,9 @@ class dboperator:
             elif self.string_all_in_set(weak_pl, xxx_list):
                 return LENGTH_8_SPECIAL
             else:
-                return STRONG
+                return EASY_CRACK
         else:
-            return STRONG
+            return EASY_CRACK
 
     def refresh_md5table(self, weak_en_list, weak_pl_list, strong_en_list):
         if len(weak_en_list) != len(weak_pl_list):
@@ -328,13 +333,14 @@ class dboperator:
             self.fo.write_log("excute:" + sql)
             self.conn.commit()
             self.fo.write_log("excute:commit")
+
     def refresh_decode_table(self, column, tablename, weak_en_list, weak_pl_list, strong_en_list):
         if len(weak_en_list) != len(weak_pl_list):
             self.fo.write_log("the length of weak_en_list and weak_pl_list is not equal")
             return
         for i in range(0, len(weak_en_list)):
             weak_type = self.get_weak_type(weak_pl_list[i])
-            sql = "update %s set isweak='y', updatetime=current_date, weaktype=%d, text='%s\ where %s='%s'" % (
+            sql = "update %s set isweak='y', updatetime=current_date, weaktype=%d, text='%s' where %s='%s'" % (
                     tablename, weak_type, weak_pl_list[i], column, weak_en_list[i])
             print(sql)
             self.cur.execute(sql)
@@ -342,8 +348,8 @@ class dboperator:
             self.conn.commit()
             self.fo.write_log("excute:commit")
         for strong in strong_en_list:
-            sql = "update %s set isweak='n', updatetime=current_date, weaktype=%d where %s='strong'" % (
-                    tablename, STRONG, column)
+            sql = "update %s set isweak='n', updatetime=current_date, weaktype=%d where %s='%s'" % (
+                    tablename, STRONG, column, strong)
             print(sql)
             self.cur.execute(sql)
             self.fo.write_log("excute:" + sql)
@@ -418,8 +424,7 @@ class dboperator:
         strong_list = []
         unknown_list = []
         for i in range(0, len(data_list)):
-            code = self.process_hashcode_with_salt(column, data_list[i])
-            sql = "select isweak,weaktype from %s where %s='%s'" % (tablename, column, code)
+            sql = "select isweak,weaktype from %s where %s='%s'" % (tablename, column, data_list[i])
             self.cur.execute(sql)
             resultSet = self.cur.fetchall()
             if len(resultSet) > 0:
@@ -437,28 +442,6 @@ class dboperator:
                 unknown_list.append(i)
                 self.append_record_to_decode_table(tablename, data_list[i])
         return weak_list, weak_type_list, strong_list, len(unknown_list)
-
-    def process_hashcode_with_salt(self, column, hashcode):
-        assert hashcode
-        if column == 'oracle10':
-            return hashcode
-        elif column == 'oracle11':
-            codes = hashcode.split(':')
-            passwd = None
-            if 2 == len(codes):
-                passwd = codes[0]   #S:encrypt code: username
-            elif 3 == len(codes):
-                passwd = codes[1]   #encrypt code : username
-            else:
-                raise AttributeError('hashcode should be split by ":"')
-            result = '%s:%s' % (passwd[:40], passwd[-20:])
-            return result
-        elif column == 'sapg' or column == 'sapb':
-            codes = hashcode.split(':')
-            if 2 != len(codes):
-                raise AttributeError('hashcode should be split by ":"')
-            result = '%s$%s' % (codes[1], codes[0])
-            return result
 
 
     def ask_isctable(self, data_list):
@@ -551,22 +534,22 @@ class raintableoperator:
         self.md5_file_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\dic\\md5*"
         self.sha1_file_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\dic\\sha1*"
         self.bin_file_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\bin\\rcrack.exe"
+        self.md5_temp_data_file_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\tmp\\temp_data_of_md5_dig.data"
+        self.sha1_temp_data_file_name = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\tmp\\temp_data_of_sha1_dig.data"
 
     def get_md5_dig_command(self):
-        command_line_str = self.bin_file_name + " " + self.md5_file_name + " -l ./tmp/temp_data_of_md5_dig.data" + "|find \"plaintext of\" "
+        command_line_str = self.bin_file_name + " " + self.md5_file_name + " -l " + self.md5_temp_data_file_name + "|find \"plaintext of\" "
         return command_line_str
 
     def get_sha1_dig_command(self):
-        command_line_str = self.bin_file_name + " " + self.sha1_file_name + " -l ./tmp/temp_data_of_sha1_dig.data" + "|find \"plaintext of\" "
+        command_line_str = self.bin_file_name + " " + self.sha1_file_name + " -l " + self.sha1_temp_data_file_name + "|find \"plaintext of\" "
         return command_line_str
 
     def ask_raintable(self, data_list, hash_type):
         weak_en_list = []
         weak_pl_list = []
-        md5_temp_data_file_name = "./tmp/temp_data_of_md5_dig.data"
-        sha1_temp_data_file_name = "./tmp/temp_data_of_sha1_dig.data"
         if hash_type == "md5":
-            self.fo.write_list_to_file(data_list, md5_temp_data_file_name)
+            self.fo.write_list_to_file(data_list, self.md5_temp_data_file_name)
             cmd_str = self.get_md5_dig_command()
             self.fo.write_log("excete:" + cmd_str)
             result_list = os.popen(cmd_str).readlines()
@@ -576,7 +559,7 @@ class raintableoperator:
                 weak_en_list.append(elements[2])
                 weak_pl_list.append(elements[4].replace("\n", ""))
         elif hash_type == "sha1":
-            self.fo.write_list_to_file(data_list, sha1_temp_data_file_name)
+            self.fo.write_list_to_file(data_list, self.sha1_temp_data_file_name)
             cmd_str = self.get_sha1_dig_command()
             self.fo.write_log("excete:" + cmd_str)
             result_list = os.popen(cmd_str).readlines()
